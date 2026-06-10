@@ -147,7 +147,7 @@ html, body {
   margin-bottom: 12px;
 }
 
-/* ── Morning Gate Modal ── */
+/* ── Wake Gate（起床打刻ページ）── */
 #morning-gate {
   display: none;
   position: fixed;
@@ -155,156 +155,87 @@ html, body {
   z-index: 200;
   background: var(--kinari);
   flex-direction: column;
-  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   padding: 48px 28px calc(48px + env(safe-area-inset-bottom));
 }
 #morning-gate.open { display: flex; }
 
-.gate-eyebrow {
-  font-family: var(--font-latin);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: var(--ki);
-  text-transform: uppercase;
+.wake-date {
+  font-family: var(--font-mincho);
+  font-size: 17px;
+  color: var(--sumi-soft);
+  letter-spacing: 0.08em;
   opacity: 0;
   animation: fadeUp 0.5s 0.1s var(--ease-struct) forwards;
 }
 
-.gate-quote {
-  margin: 20px 0 8px;
-  font-family: var(--font-mincho);
-  font-weight: 500;
-  font-size: clamp(18px, 5.5vw, 24px);
-  line-height: 1.7;
-  color: var(--sumi);
-  letter-spacing: 0.06em;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.25s var(--ease-struct) forwards;
-}
-
-.gate-author {
+.wake-clock {
   font-family: var(--font-latin);
-  font-size: 12px;
-  color: var(--sumi-muted);
-  letter-spacing: 0.06em;
-  opacity: 0;
-  animation: fadeUp 0.5s 0.4s var(--ease-struct) forwards;
-  margin-bottom: 32px;
-}
-
-.gate-divider {
-  width: 40px;
-  height: 1px;
-  background: var(--ki);
-  margin: 0 0 28px;
-  opacity: 0;
-  animation: fadeUp 0.4s 0.5s ease forwards;
-}
-
-.gate-streak {
-  opacity: 0;
-  animation: fadeUp 0.5s 0.55s var(--ease-struct) forwards;
-  margin-bottom: 28px;
-}
-
-.streak-label {
-  font-family: var(--font-latin);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--sumi-muted);
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.streak-towers {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 48px;
-}
-
-.streak-tower {
-  width: 8px;
-  background: var(--ki-pale);
-  border-radius: 1px 1px 0 0;
-  animation: growUp 0.4s var(--ease-struct) forwards;
-  transform-origin: bottom;
-  transform: scaleY(0);
-}
-.streak-tower.lit { background: var(--ki); }
-.streak-tower.today { background: var(--take); }
-
-.streak-count {
-  font-family: var(--font-latin);
-  font-size: 28px;
   font-weight: 600;
-  color: var(--take);
+  font-size: clamp(52px, 19vw, 92px);
+  color: var(--sumi);
   font-feature-settings: "tnum";
   line-height: 1;
-  margin-top: 8px;
+  letter-spacing: 0.01em;
+  margin: 14px 0 6px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s var(--ease-struct) forwards;
 }
-.streak-count span {
-  font-size: 13px;
+.wake-clock .sec {
+  color: var(--ki);
+  font-size: 0.46em;
   font-weight: 400;
-  color: var(--sumi-muted);
-  margin-left: 4px;
+  margin-left: 3px;
 }
 
-.gate-intent {
-  opacity: 0;
-  animation: fadeUp 0.5s 0.7s var(--ease-struct) forwards;
-  margin-bottom: 32px;
-}
-
-.gate-intent label {
-  display: block;
+.wake-sub {
   font-family: var(--font-mincho);
-  font-size: 14px;
-  color: var(--sumi-soft);
-  margin-bottom: 8px;
-}
-
-.intent-input {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--kinari-3);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r2);
-  font-family: var(--font-gothic);
   font-size: 15px;
-  color: var(--sumi);
-  outline: none;
-  transition: border-color 0.2s;
-}
-.intent-input:focus { border-color: var(--ki); }
-.intent-input::placeholder { color: var(--sumi-muted); }
-
-.gate-btn {
+  letter-spacing: 0.1em;
+  color: var(--sumi-muted);
+  margin-bottom: 56px;
   opacity: 0;
-  animation: fadeUp 0.5s 0.85s var(--ease-struct) forwards;
-  width: 100%;
-  padding: 16px;
+  animation: fadeUp 0.5s 0.35s var(--ease-struct) forwards;
+}
+
+.wake-btn {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
   background: var(--sumi);
   color: var(--kinari);
   font-family: var(--font-mincho);
-  font-size: 16px;
+  font-size: 26px;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   border: none;
-  border-radius: var(--r2);
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s var(--ease-snap);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 10px 36px rgba(28,28,26,0.20);
+  transition: transform 0.2s var(--ease-snap), background 0.2s;
   -webkit-appearance: none;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.5s var(--ease-struct) forwards;
 }
-.gate-btn:active { transform: scale(0.98); background: var(--sumi-soft); }
+.wake-btn:active { transform: scale(0.93); background: var(--ki); }
+.wake-btn .wake-btn-sub {
+  font-family: var(--font-latin);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes growUp {
-  to { transform: scaleY(1); }
 }
 
 /* ── Home View ── */
@@ -452,6 +383,32 @@ html, body {
   font-size: 15px;
   color: #fff;
   letter-spacing: 0.04em;
+}
+
+/* ── Wake Chart（起床リズム）── */
+.wake-chart-svg { width: 100%; height: auto; display: block; }
+.wake-chart-empty {
+  color: var(--sumi-muted);
+  font-size: 13px;
+  font-family: var(--font-mincho);
+  line-height: 1.8;
+  text-align: center;
+  padding: 18px 0;
+}
+.wake-today-line {
+  font-family: var(--font-gothic);
+  font-size: 13px;
+  color: var(--sumi-soft);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.wake-today-line b {
+  font-family: var(--font-latin);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ki-deep);
+  margin-left: 4px;
 }
 
 /* ── Habit Stack View ── */
@@ -833,22 +790,15 @@ html, body {
 </head>
 <body>
 <div id="app">
-  <!-- Morning Gate -->
+  <!-- Wake Gate（起床打刻ページ）-->
   <div id="morning-gate">
-    <div class="gate-eyebrow">Cascade — 今日も積み上げる</div>
-    <p class="gate-quote" id="gate-quote-text"></p>
-    <p class="gate-author" id="gate-quote-author"></p>
-    <div class="gate-divider"></div>
-    <div class="gate-streak">
-      <div class="streak-label">連続起動</div>
-      <div class="streak-towers" id="streak-towers"></div>
-      <div class="streak-count" id="streak-count">0<span>日</span></div>
-    </div>
-    <div class="gate-intent">
-      <label for="intent-input">今日の意図を一言で</label>
-      <input class="intent-input" id="intent-input" type="text" placeholder="今日の最重要テーマを一言で..." autocomplete="off">
-    </div>
-    <button class="gate-btn" id="gate-close-btn">今日も積み上げる</button>
+    <div class="wake-date" id="wake-date"></div>
+    <div class="wake-clock" id="wake-clock">--:--<span class="sec">--</span></div>
+    <div class="wake-sub">おはようございます</div>
+    <button class="wake-btn" id="wake-btn">
+      起床
+      <span class="wake-btn-sub">tap to record</span>
+    </button>
   </div>
 
   <!-- Views -->
@@ -875,6 +825,12 @@ html, body {
           <div class="ring-info-title">今日の意図</div>
           <div id="ring-intent-text" class="ring-intent-empty">Morning Gateで入力しましょう</div>
         </div>
+      </div>
+
+      <div class="card reveal" id="wake-chart-card">
+        <div class="label" style="margin-bottom:14px">起床リズム — 直近14日</div>
+        <div id="wake-chart"></div>
+        <div class="wake-today-line" id="wake-today-line"></div>
       </div>
 
       <div class="home-quote-card reveal" id="home-quote-card">
@@ -1002,18 +958,40 @@ const DEFAULT_HABITS = [
   {id:'h8',label:'日記振り返り',icon:'📓'},
 ];
 
-function loadStore() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
+function freshStore() {
   return {
-    settings: { lastMorningGateDate: '', lastQuoteIndex: 0 },
+    settings: { lastMorningGateDate: '', lastWakeDate: '', lastQuoteIndex: 0 },
     habits: { definitions: DEFAULT_HABITS, logs: {} },
     daily: {},
     tasks: { items: [] },
     streak: { current: 0, longest: 0, lastDate: '' },
+    wakeLog: [],
   };
+}
+
+// 既存の localStorage に新フィールドを補完（後方互換マイグレーション）
+function migrate(s) {
+  if (!s || typeof s !== 'object') return freshStore();
+  s.settings = s.settings || {};
+  if (s.settings.lastWakeDate === undefined) s.settings.lastWakeDate = '';
+  if (s.settings.lastQuoteIndex === undefined) s.settings.lastQuoteIndex = 0;
+  s.habits = s.habits || { definitions: DEFAULT_HABITS, logs: {} };
+  if (!s.habits.definitions) s.habits.definitions = DEFAULT_HABITS;
+  if (!s.habits.logs) s.habits.logs = {};
+  s.daily = s.daily || {};
+  s.tasks = s.tasks || { items: [] };
+  if (!Array.isArray(s.tasks.items)) s.tasks.items = [];
+  s.streak = s.streak || { current: 0, longest: 0, lastDate: '' };
+  if (!Array.isArray(s.wakeLog)) s.wakeLog = [];
+  return s;
+}
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return migrate(JSON.parse(raw));
+  } catch(e) {}
+  return freshStore();
 }
 
 function saveStore() {
@@ -1062,50 +1040,51 @@ function updateStreak() {
   saveStore();
 }
 
-// ── Morning Gate ──
-function showMorningGate() {
+// ── Wake Gate（起床打刻ページ）──
+let wakeClockTimer = null;
+
+function showWakeGate() {
   const gate = document.getElementById('morning-gate');
   gate.classList.add('open');
-
-  const qi = (store.settings.lastQuoteIndex + 1) % QUOTES.length;
-  store.settings.lastQuoteIndex = qi;
-  const q = QUOTES[qi];
-  document.getElementById('gate-quote-text').textContent = q.text;
-  document.getElementById('gate-quote-author').textContent = q.author ? `— ${q.author}` : '';
-
-  renderStreakTowers();
-
-  const intent = store.daily[todayStr()]?.morningIntent || '';
-  document.getElementById('intent-input').value = intent;
+  const d = new Date();
+  const DAYS = ['日','月','火','水','木','金','土'];
+  document.getElementById('wake-date').textContent =
+    `${d.getMonth()+1}月${d.getDate()}日（${DAYS[d.getDay()]}）`;
+  updateWakeClock();
+  if (wakeClockTimer) clearInterval(wakeClockTimer);
+  wakeClockTimer = setInterval(updateWakeClock, 1000);
 }
 
-function renderStreakTowers() {
-  const sc = store.streak.current;
-  const count = Math.min(sc, 14);
-  const container = document.getElementById('streak-towers');
-  container.innerHTML = '';
-  const maxH = 42;
-  for (let i = 0; i < 14; i++) {
-    const tower = document.createElement('div');
-    tower.className = 'streak-tower';
-    const h = Math.max(6, Math.round((maxH / 14) * (i + 1)));
-    tower.style.height = h + 'px';
-    tower.style.animationDelay = (i * 30) + 'ms';
-    if (i < count - 1) tower.classList.add('lit');
-    if (i === count - 1) tower.classList.add('today');
-    container.appendChild(tower);
-  }
-  document.getElementById('streak-count').innerHTML = `${sc}<span>日連続</span>`;
+function updateWakeClock() {
+  const d = new Date();
+  const p = n => String(n).padStart(2,'0');
+  const el = document.getElementById('wake-clock');
+  if (el) el.innerHTML = `${p(d.getHours())}:${p(d.getMinutes())}<span class="sec">${p(d.getSeconds())}</span>`;
 }
 
-document.getElementById('gate-close-btn').addEventListener('click', () => {
-  const intent = document.getElementById('intent-input').value.trim();
-  const t = todayStr();
-  store.daily[t].morningIntent = intent;
-  store.settings.lastMorningGateDate = t;
-  saveStore();
+function closeWakeGate() {
+  if (wakeClockTimer) { clearInterval(wakeClockTimer); wakeClockTimer = null; }
   document.getElementById('morning-gate').classList.remove('open');
-  renderHome();
+}
+
+document.getElementById('wake-btn').addEventListener('click', () => {
+  const t = todayStr();
+  const d = new Date();
+  const p = n => String(n).padStart(2,'0');
+  const hh = d.getHours(), mm = d.getMinutes();
+  const time = `${p(hh)}:${p(mm)}`;
+  // その日の最初の打刻のみ採用（重複追加しない）
+  if (!store.wakeLog.some(w => w.date === t)) {
+    store.wakeLog.push({ date: t, time, minutes: hh * 60 + mm });
+  }
+  store.settings.lastWakeDate = t;
+  // 1日1回、ホームの格言を進める
+  store.settings.lastQuoteIndex = (store.settings.lastQuoteIndex + 1) % QUOTES.length;
+  saveStore();
+  if ('vibrate' in navigator) navigator.vibrate([20, 30, 40]);
+  closeWakeGate();
+  navigate('home');
+  showToast(`${time} に起床を記録しました`);
 });
 
 // ── Navigation ──
@@ -1175,6 +1154,70 @@ function renderHome() {
   const prompt = document.getElementById('evening-prompt');
   if (h >= 17) prompt.classList.add('show');
   else prompt.classList.remove('show');
+
+  renderWakeChart();
+}
+
+// ── Wake Chart（起床時刻の折れ線グラフ・SVG直接描画）──
+function renderWakeChart() {
+  const container = document.getElementById('wake-chart');
+  const todayLine = document.getElementById('wake-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.wakeLog || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
+  const log = all.slice(-14);
+  const todayRec = all.find(w => w.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の起床<b>${todayRec.time}</b>`
+    : '今日はまだ起床を記録していません';
+
+  if (log.length === 0) {
+    container.innerHTML = '<div class="wake-chart-empty">まだ記録がありません。<br>明日の朝、起床ボタンを押してみましょう。</div>';
+    return;
+  }
+
+  const W = 320, H = 168, padL = 42, padR = 14, padT = 14, padB = 28;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const mins = log.map(w => w.minutes);
+  let lo = Math.min(...mins), hi = Math.max(...mins);
+  if (lo === hi) { lo -= 60; hi += 60; }
+  else { const pad = Math.max(15, (hi - lo) * 0.25); lo -= pad; hi += pad; }
+  const n = log.length;
+  const xAt = i => n === 1 ? padL + plotW / 2 : padL + plotW * i / (n - 1);
+  const yAt = m => padT + (m - lo) / (hi - lo) * plotH;   // 早い時刻ほど上
+  const fmt = m => {
+    m = Math.round(m);
+    let hh = Math.floor(m / 60), mm = ((m % 60) + 60) % 60;
+    hh = ((hh % 24) + 24) % 24;
+    return `${hh}:${String(mm).padStart(2, '0')}`;
+  };
+
+  let grid = '';
+  for (let g = 0; g <= 2; g++) {
+    const m = lo + (hi - lo) * g / 2;
+    const y = (padT + plotH * g / 2).toFixed(1);
+    grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="rgba(28,28,26,0.10)" stroke-width="1"/>`;
+    grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-family="'Space Grotesk',sans-serif" font-size="9" fill="#7A776E">${fmt(m)}</text>`;
+  }
+
+  const pts = log.map((w, i) => `${xAt(i).toFixed(1)},${yAt(w.minutes).toFixed(1)}`).join(' ');
+  const line = n > 1
+    ? `<polyline points="${pts}" fill="none" stroke="#C4833A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+    : '';
+
+  let dots = '', xlabels = '';
+  log.forEach((w, i) => {
+    const cx = xAt(i).toFixed(1), cy = yAt(w.minutes).toFixed(1);
+    const isToday = w.date === t;
+    dots += `<circle cx="${cx}" cy="${cy}" r="${isToday ? 4.5 : 3}" fill="${isToday ? '#4A5C42' : '#9E6228'}"/>`;
+    if (i === 0 || i === n - 1 || (n > 4 && i === Math.floor((n - 1) / 2))) {
+      const md = w.date.slice(5).replace('-', '/');
+      xlabels += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="9" fill="#7A776E">${md}</text>`;
+    }
+  });
+
+  container.innerHTML =
+    `<svg class="wake-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="起床時刻の推移">${grid}${line}${dots}${xlabels}</svg>`;
 }
 
 // ── Habits ──
@@ -1392,8 +1435,8 @@ function init() {
   activateReveal();
 
   const t = todayStr();
-  if (store.settings.lastMorningGateDate !== t) {
-    setTimeout(showMorningGate, 300);
+  if (store.settings.lastWakeDate !== t) {
+    setTimeout(showWakeGate, 200);
   }
 }
 
