@@ -1,0 +1,24 @@
+{
+  "name": "Cascade",
+  "short_name": "Cascade",
+  "description": "小さな習慣を積み上げる、一日の自己管理アプリ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F5F0E8",
+  "theme_color": "#F5F0E8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
