@@ -328,6 +328,31 @@ html, body {
 }
 .weight-save-btn:active { transform: scale(0.96); background: var(--ki); }
 
+/* ── Data backup ── */
+.data-btn-row { display: flex; gap: 8px; }
+.data-btn {
+  flex: 1;
+  padding: 12px;
+  background: var(--kinari-3);
+  color: var(--sumi);
+  font-family: var(--font-mincho);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r2);
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s var(--ease-snap);
+}
+.data-btn:active { transform: scale(0.97); background: var(--ki-pale); border-color: var(--ki); }
+.data-hint {
+  font-family: var(--font-gothic);
+  font-size: 11px;
+  color: var(--sumi-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
 /* ── Habit Stack View ── */
 .habit-item {
   background: var(--kinari-2);
@@ -492,6 +517,15 @@ html, body {
         </div>
         <div id="weight-chart"></div>
         <div class="chart-today-line" id="weight-today-line"></div>
+      </div>
+
+      <div class="card reveal" id="data-card">
+        <div class="label" style="margin-bottom:12px">データのバックアップ</div>
+        <div class="data-btn-row">
+          <button class="data-btn" id="export-btn">書き出す</button>
+          <button class="data-btn" id="import-btn">読み込む</button>
+        </div>
+        <div class="data-hint">端末を変える前や、念のための保存に。JSON ファイルとして書き出し・復元できます。</div>
       </div>
     </section>
 
@@ -801,6 +835,62 @@ function saveWeight() {
 
 document.getElementById('weight-save-btn').addEventListener('click', saveWeight);
 document.getElementById('weight-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWeight(); });
+
+// ── Data backup（エクスポート / インポート）──
+async function exportData() {
+  const json = JSON.stringify(store, null, 2);
+  const filename = `cascade-backup-${todayStr()}.json`;
+  // iOS PWA はファイルのダウンロードが不安定なため Web Share API を優先
+  if (navigator.canShare) {
+    try {
+      const file = new File([json], filename, { type: 'application/json' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Cascade バックアップ' });
+        return;
+      }
+    } catch (e) {
+      if (e.name === 'AbortError') return;   // 共有をキャンセルした場合は何もしない
+    }
+  }
+  // フォールバック: ダウンロード
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('バックアップを書き出しました');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json,.json';
+  input.addEventListener('change', () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      let data;
+      try { data = JSON.parse(reader.result); }
+      catch (e) { showToast('ファイルを読み込めませんでした'); return; }
+      if (!data || typeof data !== 'object') { showToast('対応していないファイルです'); return; }
+      if (!confirm('現在のデータを、選んだバックアップで上書きします。よろしいですか？')) return;
+      store = migrate(data);
+      saveStore();
+      renderHome();
+      showToast('バックアップから復元しました');
+    };
+    reader.readAsText(file);
+  });
+  input.click();
+}
+
+document.getElementById('export-btn').addEventListener('click', exportData);
+document.getElementById('import-btn').addEventListener('click', importData);
 
 // ── Habits ──
 function renderHabits() {
