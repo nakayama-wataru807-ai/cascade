@@ -256,138 +256,9 @@ html, body {
   margin-bottom: 24px;
 }
 
-.home-ring-card {
-  background: var(--kinari-2);
-  border-radius: var(--r3);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.ring-wrap {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  flex-shrink: 0;
-}
-.ring-wrap svg { transform: rotate(-90deg); }
-.ring-bg { fill: none; stroke: var(--kinari-3); stroke-width: 6; }
-.ring-fill {
-  fill: none;
-  stroke: var(--ki);
-  stroke-width: 6;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.8s var(--ease-struct);
-}
-.ring-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.ring-num {
-  font-family: var(--font-latin);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--sumi);
-  font-feature-settings: "tnum";
-  line-height: 1;
-}
-.ring-denom {
-  font-family: var(--font-latin);
-  font-size: 10px;
-  color: var(--sumi-muted);
-}
-
-.ring-info { flex: 1; }
-.ring-info-title {
-  font-family: var(--font-mincho);
-  font-size: 13px;
-  color: var(--sumi-muted);
-  letter-spacing: 0.04em;
-  margin-bottom: 4px;
-}
-.ring-intent {
-  font-family: var(--font-gothic);
-  font-size: 14px;
-  color: var(--sumi);
-  line-height: 1.5;
-}
-.ring-intent-empty {
-  font-family: var(--font-gothic);
-  font-size: 13px;
-  color: var(--sumi-muted);
-  font-style: italic;
-}
-
-.home-quote-card {
-  background: var(--sumi);
-  color: var(--kinari);
-  border-radius: var(--r3);
-  padding: 20px;
-  margin-bottom: 12px;
-  position: relative;
-  overflow: hidden;
-}
-.home-quote-card::before {
-  content: '"';
-  position: absolute;
-  top: -10px; right: 12px;
-  font-family: var(--font-mincho);
-  font-size: 80px;
-  color: rgba(245,240,232,0.08);
-  line-height: 1;
-  pointer-events: none;
-}
-.home-quote-text {
-  font-family: var(--font-mincho);
-  font-size: clamp(13px, 3.8vw, 15px);
-  line-height: 1.8;
-  letter-spacing: 0.04em;
-  color: var(--kinari);
-  margin-bottom: 8px;
-}
-.home-quote-author {
-  font-family: var(--font-latin);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: rgba(245,240,232,0.5);
-}
-
-.evening-prompt {
-  display: none;
-  background: linear-gradient(135deg, var(--ki-deep) 0%, var(--ki) 100%);
-  border-radius: var(--r3);
-  padding: 16px 20px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: transform 0.15s var(--ease-snap);
-}
-.evening-prompt:active { transform: scale(0.98); }
-.evening-prompt.show { display: block; }
-.evening-prompt-label {
-  font-family: var(--font-latin);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 4px;
-}
-.evening-prompt-text {
-  font-family: var(--font-mincho);
-  font-size: 15px;
-  color: #fff;
-  letter-spacing: 0.04em;
-}
-
-/* ── Wake Chart（起床リズム）── */
-.wake-chart-svg { width: 100%; height: auto; display: block; }
-.wake-chart-empty {
+/* ── Line Chart（起床・体重 共通）── */
+.line-chart-svg { width: 100%; height: auto; display: block; }
+.chart-empty {
   color: var(--sumi-muted);
   font-size: 13px;
   font-family: var(--font-mincho);
@@ -395,7 +266,7 @@ html, body {
   text-align: center;
   padding: 18px 0;
 }
-.wake-today-line {
+.chart-today-line {
   font-family: var(--font-gothic);
   font-size: 13px;
   color: var(--sumi-soft);
@@ -403,13 +274,59 @@ html, body {
   padding-top: 12px;
   border-top: 1px solid var(--line);
 }
-.wake-today-line b {
+.chart-today-line b {
   font-family: var(--font-latin);
   font-weight: 600;
   font-size: 16px;
   color: var(--ki-deep);
   margin-left: 4px;
 }
+
+/* ── Weight input ── */
+.weight-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.weight-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  background: var(--kinari-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r2);
+  font-family: var(--font-latin);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--sumi);
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+.weight-input:focus { border-color: var(--ki); }
+.weight-input::placeholder { font-weight: 400; color: var(--sumi-muted); }
+.weight-unit {
+  font-family: var(--font-gothic);
+  font-size: 14px;
+  color: var(--sumi-muted);
+  flex-shrink: 0;
+}
+.weight-save-btn {
+  padding: 12px 20px;
+  background: var(--sumi);
+  color: var(--kinari);
+  font-family: var(--font-mincho);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  border: none;
+  border-radius: var(--r2);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-appearance: none;
+  transition: background 0.2s, transform 0.15s var(--ease-snap);
+}
+.weight-save-btn:active { transform: scale(0.96); background: var(--ki); }
 
 /* ── Habit Stack View ── */
 .habit-item {
@@ -497,7 +414,6 @@ html, body {
   background: var(--kinari-3);
 }
 .heatmap-cell.done { background: var(--ki); }
-.heatmap-cell.partial { background: var(--ki-pale); }
 .heatmap-day-label {
   font-family: var(--font-latin);
   font-size: 9px;
@@ -505,253 +421,6 @@ html, body {
   text-align: center;
   padding-bottom: 2px;
 }
-
-/* ── Tasks View ── */
-.add-task-btn {
-  width: 100%;
-  padding: 14px;
-  background: none;
-  border: 1.5px dashed var(--line-strong);
-  border-radius: var(--r3);
-  font-family: var(--font-gothic);
-  font-size: 14px;
-  color: var(--sumi-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 16px;
-  transition: border-color 0.2s, color 0.2s;
-}
-.add-task-btn:active { border-color: var(--ki); color: var(--ki); }
-
-.task-item {
-  background: var(--kinari-2);
-  border-radius: var(--r3);
-  padding: 13px 14px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: var(--shadow);
-  transition: opacity 0.2s;
-}
-.task-item.done { opacity: 0.45; }
-.task-check-btn {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  border: 1.5px solid var(--line-strong);
-  background: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
-}
-.task-item.done .task-check-btn {
-  background: var(--take);
-  border-color: var(--take);
-}
-.task-label {
-  flex: 1;
-  font-family: var(--font-gothic);
-  font-size: 14px;
-  color: var(--sumi);
-  line-height: 1.4;
-}
-.task-item.done .task-label { text-decoration: line-through; color: var(--sumi-muted); }
-.task-delete-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--sumi-muted);
-  font-size: 16px;
-  padding: 2px 4px;
-  line-height: 1;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-}
-.task-delete-btn:active { opacity: 1; color: var(--tetsusabi); }
-
-.tasks-empty {
-  text-align: center;
-  padding: 40px 0;
-  color: var(--sumi-muted);
-  font-family: var(--font-mincho);
-  font-size: 14px;
-  letter-spacing: 0.04em;
-}
-
-/* ── Evening View ── */
-.evening-habits-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 8px;
-  min-height: 28px;
-}
-.habit-badge {
-  background: var(--ki-pale);
-  color: var(--ki-deep);
-  font-family: var(--font-gothic);
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.no-habits-msg {
-  color: var(--sumi-muted);
-  font-size: 13px;
-  font-family: var(--font-mincho);
-}
-
-.score-row {
-  display: flex;
-  gap: 8px;
-  margin: 8px 0 4px;
-}
-.score-btn {
-  flex: 1;
-  aspect-ratio: 1;
-  background: var(--kinari-3);
-  border: 1.5px solid transparent;
-  border-radius: var(--r3);
-  font-size: 22px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s, border-color 0.15s, transform 0.15s var(--ease-snap);
-}
-.score-btn:active, .score-btn.selected {
-  background: var(--ki-pale);
-  border-color: var(--ki);
-  transform: scale(1.08);
-}
-
-.evening-textarea {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--kinari-3);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r2);
-  font-family: var(--font-gothic);
-  font-size: 14px;
-  color: var(--sumi);
-  outline: none;
-  resize: none;
-  min-height: 80px;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
-}
-.evening-textarea:focus { border-color: var(--ki); }
-.evening-textarea::placeholder { color: var(--sumi-muted); }
-.evening-input {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--kinari-3);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r2);
-  font-family: var(--font-gothic);
-  font-size: 14px;
-  color: var(--sumi);
-  outline: none;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
-}
-.evening-input:focus { border-color: var(--ki); }
-.evening-input::placeholder { color: var(--sumi-muted); }
-
-.section-label {
-  font-family: var(--font-mincho);
-  font-size: 13px;
-  color: var(--sumi-soft);
-  letter-spacing: 0.04em;
-  margin-bottom: 8px;
-  margin-top: 4px;
-  display: block;
-}
-
-.save-btn {
-  width: 100%;
-  padding: 16px;
-  margin-top: 20px;
-  background: var(--sumi);
-  color: var(--kinari);
-  font-family: var(--font-mincho);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  border: none;
-  border-radius: var(--r2);
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s var(--ease-snap);
-  -webkit-appearance: none;
-}
-.save-btn:active { transform: scale(0.98); background: var(--sumi-soft); }
-.save-btn.saved { background: var(--take); }
-
-/* ── Modal overlay (task add) ── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(28,28,26,0.4);
-  z-index: 150;
-  align-items: flex-end;
-  justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal-sheet {
-  background: var(--kinari);
-  width: 100%;
-  max-width: 480px;
-  border-radius: 16px 16px 0 0;
-  padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
-  animation: slideUp 0.3s var(--ease-struct);
-}
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-.modal-title {
-  font-family: var(--font-mincho);
-  font-size: 16px;
-  color: var(--sumi);
-  margin-bottom: 16px;
-}
-.modal-input {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--kinari-3);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r2);
-  font-family: var(--font-gothic);
-  font-size: 15px;
-  color: var(--sumi);
-  outline: none;
-  margin-bottom: 12px;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
-}
-.modal-input:focus { border-color: var(--ki); }
-.modal-confirm-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--ki);
-  color: #fff;
-  font-family: var(--font-gothic);
-  font-size: 15px;
-  font-weight: 700;
-  border: none;
-  border-radius: var(--r2);
-  cursor: pointer;
-  transition: background 0.2s;
-  -webkit-appearance: none;
-}
-.modal-confirm-btn:active { background: var(--ki-deep); }
 
 /* ── Intersection Observer reveal ── */
 .reveal {
@@ -808,39 +477,21 @@ html, body {
       <div class="home-date" id="home-date"></div>
       <div class="home-weekday" id="home-weekday"></div>
 
-      <div class="home-ring-card reveal">
-        <div class="ring-wrap">
-          <svg width="80" height="80" viewBox="0 0 80 80">
-            <circle class="ring-bg" cx="40" cy="40" r="34"/>
-            <circle class="ring-fill" id="ring-fill" cx="40" cy="40" r="34"
-              stroke-dasharray="213.6"
-              stroke-dashoffset="213.6"/>
-          </svg>
-          <div class="ring-text">
-            <div class="ring-num" id="ring-num">0</div>
-            <div class="ring-denom" id="ring-denom">/8</div>
-          </div>
-        </div>
-        <div class="ring-info">
-          <div class="ring-info-title">今日の意図</div>
-          <div id="ring-intent-text" class="ring-intent-empty">Morning Gateで入力しましょう</div>
-        </div>
-      </div>
-
       <div class="card reveal" id="wake-chart-card">
         <div class="label" style="margin-bottom:14px">起床リズム — 直近14日</div>
         <div id="wake-chart"></div>
-        <div class="wake-today-line" id="wake-today-line"></div>
+        <div class="chart-today-line" id="wake-today-line"></div>
       </div>
 
-      <div class="home-quote-card reveal" id="home-quote-card">
-        <div class="home-quote-text" id="home-quote-text"></div>
-        <div class="home-quote-author" id="home-quote-author"></div>
-      </div>
-
-      <div class="evening-prompt reveal" id="evening-prompt" onclick="navigate('evening')">
-        <div class="evening-prompt-label">17:00 以降</div>
-        <div class="evening-prompt-text">今日の振り返りをしましょう →</div>
+      <div class="card reveal" id="weight-card">
+        <div class="label" style="margin-bottom:14px">体重リズム — 直近14日</div>
+        <div class="weight-input-row">
+          <input type="number" id="weight-input" class="weight-input" placeholder="今日の体重" step="0.1" min="0" inputmode="decimal" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">kg</span>
+          <button class="weight-save-btn" id="weight-save-btn">記録</button>
+        </div>
+        <div id="weight-chart"></div>
+        <div class="chart-today-line" id="weight-today-line"></div>
       </div>
     </section>
 
@@ -852,45 +503,6 @@ html, body {
         <div class="heatmap-title">今週の記録</div>
         <div class="heatmap-grid" id="heatmap-grid"></div>
       </div>
-    </section>
-
-    <!-- Tasks -->
-    <section class="view" id="view-tasks">
-      <h2 class="screen-title">タスク</h2>
-      <button class="add-task-btn" id="add-task-btn">
-        <span style="font-size:18px;line-height:1">＋</span> タスクを追加
-      </button>
-      <div id="task-list"></div>
-    </section>
-
-    <!-- Evening Close -->
-    <section class="view" id="view-evening">
-      <h2 class="screen-title">夜の記録</h2>
-      <div class="card reveal">
-        <div class="label" style="margin-bottom:10px">今日の達成習慣</div>
-        <div class="evening-habits-summary" id="evening-habits-summary"></div>
-      </div>
-      <div class="card reveal">
-        <label class="section-label" for="evening-note">今日の収穫・気づき</label>
-        <textarea class="evening-textarea" id="evening-note" rows="3"
-          placeholder="今日の収穫・気づきをひとこと..."></textarea>
-      </div>
-      <div class="card reveal">
-        <div class="section-label" style="margin-bottom:4px">今日の満足度</div>
-        <div class="score-row" id="score-row">
-          <button class="score-btn" data-score="1">😞</button>
-          <button class="score-btn" data-score="2">😐</button>
-          <button class="score-btn" data-score="3">😊</button>
-          <button class="score-btn" data-score="4">😄</button>
-          <button class="score-btn" data-score="5">🌟</button>
-        </div>
-      </div>
-      <div class="card reveal">
-        <label class="section-label" for="tomorrow-task">明日の最重要タスク</label>
-        <input class="evening-input" id="tomorrow-task" type="text"
-          placeholder="明日必ずやること...">
-      </div>
-      <button class="save-btn" id="save-evening-btn">今日の記録を保存</button>
     </section>
   </main>
 
@@ -904,53 +516,17 @@ html, body {
       <span class="nav-icon">◎</span>
       <span>習慣</span>
     </button>
-    <button class="nav-item" data-view="tasks">
-      <span class="nav-icon">☑</span>
-      <span>タスク</span>
-    </button>
-    <button class="nav-item" data-view="evening">
-      <span class="nav-icon">🌙</span>
-      <span>夜記</span>
-    </button>
   </nav>
-</div>
-
-<!-- Task Add Modal -->
-<div class="modal-overlay" id="task-modal">
-  <div class="modal-sheet">
-    <div class="modal-title">タスクを追加</div>
-    <input class="modal-input" id="modal-task-input" type="text"
-      placeholder="タスク名を入力..." autocomplete="off">
-    <button class="modal-confirm-btn" id="modal-confirm-btn">追加</button>
-  </div>
 </div>
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Quotes ──
-const QUOTES = [
-  { text: '建築は凍れる音楽である', author: 'F.W.J. シェリング' },
-  { text: 'Less is more', author: 'ミース・ファン・デル・ローエ' },
-  { text: '形は機能に従う', author: 'ルイス・サリヴァン' },
-  { text: '小さな行動が、世界を変える。', author: 'M. ガンジー' },
-  { text: '一日一日を、確実に積み上げよ。', author: 'Cascade' },
-  { text: '建物は使われるとき、建築になる。', author: '内藤廣' },
-  { text: '継続は力なり', author: '日本の格言' },
-  { text: "You don't rise to your goals,\nyou fall to your systems.", author: 'James Clear' },
-  { text: '光が差し込む隙間をつくること。\nそれが設計だ。', author: '' },
-  { text: 'すべての偉大な建築は、\n小さなスケッチから始まる。', author: '' },
-  { text: '空間は、そこに立つ人の記憶を宿す。', author: '' },
-  { text: '規律とは、自由への最短経路だ。', author: '' },
-];
-
 // ── Store ──
 const STORE_KEY = 'cascade_v1';
 const DEFAULT_HABITS = [
-  {id:'h1',label:'早起き',icon:'🌅'},
   {id:'h2',label:'筋トレ',icon:'💪'},
-  {id:'h3',label:'体重記録',icon:'⚖️'},
   {id:'h4',label:'間食増量',icon:'🍱'},
   {id:'h5',label:'建築士勉強',icon:'📐'},
   {id:'h6',label:'修論作業',icon:'✏️'},
@@ -960,29 +536,29 @@ const DEFAULT_HABITS = [
 
 function freshStore() {
   return {
-    settings: { lastMorningGateDate: '', lastWakeDate: '', lastQuoteIndex: 0 },
+    settings: { lastWakeDate: '' },
     habits: { definitions: DEFAULT_HABITS, logs: {} },
-    daily: {},
-    tasks: { items: [] },
-    streak: { current: 0, longest: 0, lastDate: '' },
     wakeLog: [],
+    weightLog: [],
   };
 }
 
-// 既存の localStorage に新フィールドを補完（後方互換マイグレーション）
+// 既存の localStorage を現行スキーマへ移行（後方互換・不要フィールド除去）
 function migrate(s) {
   if (!s || typeof s !== 'object') return freshStore();
   s.settings = s.settings || {};
   if (s.settings.lastWakeDate === undefined) s.settings.lastWakeDate = '';
-  if (s.settings.lastQuoteIndex === undefined) s.settings.lastQuoteIndex = 0;
+  delete s.settings.lastQuoteIndex;
+  delete s.settings.lastMorningGateDate;
   s.habits = s.habits || { definitions: DEFAULT_HABITS, logs: {} };
-  if (!s.habits.definitions) s.habits.definitions = DEFAULT_HABITS;
+  s.habits.definitions = DEFAULT_HABITS;            // 常に最新の習慣定義（早起き・体重は除外）
   if (!s.habits.logs) s.habits.logs = {};
-  s.daily = s.daily || {};
-  s.tasks = s.tasks || { items: [] };
-  if (!Array.isArray(s.tasks.items)) s.tasks.items = [];
-  s.streak = s.streak || { current: 0, longest: 0, lastDate: '' };
   if (!Array.isArray(s.wakeLog)) s.wakeLog = [];
+  if (!Array.isArray(s.weightLog)) s.weightLog = [];
+  // 旧バージョンの未使用フィールドを破棄
+  delete s.daily;
+  delete s.tasks;
+  delete s.streak;
   return s;
 }
 
@@ -1009,7 +585,6 @@ function todayStr() {
 function ensureToday() {
   const t = todayStr();
   if (!store.habits.logs[t]) store.habits.logs[t] = {};
-  if (!store.daily[t]) store.daily[t] = { morningIntent:'', eveningNote:'', score:0, tomorrow:'', weight:0 };
 }
 
 function getWeekDates() {
@@ -1023,22 +598,7 @@ function getWeekDates() {
   return dates;
 }
 
-// ── Streak ──
-function updateStreak() {
-  const t = todayStr();
-  if (store.streak.lastDate === t) return;
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yd = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
-  if (store.streak.lastDate === yd) {
-    store.streak.current += 1;
-  } else if (store.streak.lastDate !== t) {
-    store.streak.current = 1;
-  }
-  if (store.streak.current > store.streak.longest) store.streak.longest = store.streak.current;
-  store.streak.lastDate = t;
-  saveStore();
-}
+const byDate = (a, b) => a.date < b.date ? -1 : 1;
 
 // ── Wake Gate（起床打刻ページ）──
 let wakeClockTimer = null;
@@ -1078,8 +638,6 @@ document.getElementById('wake-btn').addEventListener('click', () => {
     store.wakeLog.push({ date: t, time, minutes: hh * 60 + mm });
   }
   store.settings.lastWakeDate = t;
-  // 1日1回、ホームの格言を進める
-  store.settings.lastQuoteIndex = (store.settings.lastQuoteIndex + 1) % QUOTES.length;
   saveStore();
   if ('vibrate' in navigator) navigator.vibrate([20, 30, 40]);
   closeWakeGate();
@@ -1095,8 +653,6 @@ function navigate(viewId) {
   document.querySelector(`.nav-item[data-view="${viewId}"]`)?.classList.add('active');
   if (viewId === 'home') renderHome();
   if (viewId === 'habits') renderHabits();
-  if (viewId === 'tasks') renderTasks();
-  if (viewId === 'evening') renderEvening();
   activateReveal();
 }
 
@@ -1118,107 +674,133 @@ function activateReveal() {
 // ── Home ──
 function renderHome() {
   ensureToday();
-  const t = todayStr();
   const d = new Date();
   const DAYS = ['日','月','火','水','木','金','土'];
   document.getElementById('home-date').textContent = `${d.getMonth()+1}月${d.getDate()}日`;
   document.getElementById('home-weekday').textContent = `${DAYS[d.getDay()]}曜日 — ${d.getFullYear()}`;
-
-  const defs = store.habits.definitions;
-  const log = store.habits.logs[t] || {};
-  const done = defs.filter(h => log[h.id]).length;
-  const total = defs.length;
-  const pct = total > 0 ? done / total : 0;
-  const circ = 213.6;
-  const offset = circ - circ * pct;
-  document.getElementById('ring-fill').style.strokeDashoffset = offset;
-  document.getElementById('ring-num').textContent = done;
-  document.getElementById('ring-denom').textContent = `/${total}`;
-
-  const intent = store.daily[t]?.morningIntent || '';
-  const intentEl = document.getElementById('ring-intent-text');
-  if (intent) {
-    intentEl.textContent = intent;
-    intentEl.className = 'ring-intent';
-  } else {
-    intentEl.textContent = 'Morning Gateで入力しましょう';
-    intentEl.className = 'ring-intent-empty';
-  }
-
-  const qi = store.settings.lastQuoteIndex;
-  const q = QUOTES[qi];
-  document.getElementById('home-quote-text').textContent = q.text;
-  document.getElementById('home-quote-author').textContent = q.author ? `— ${q.author}` : '';
-
-  const h = d.getHours();
-  const prompt = document.getElementById('evening-prompt');
-  if (h >= 17) prompt.classList.add('show');
-  else prompt.classList.remove('show');
-
   renderWakeChart();
+  renderWeightChart();
 }
 
-// ── Wake Chart（起床時刻の折れ線グラフ・SVG直接描画）──
-function renderWakeChart() {
-  const container = document.getElementById('wake-chart');
-  const todayLine = document.getElementById('wake-today-line');
-  if (!container) return;
-  const t = todayStr();
-  const all = (store.wakeLog || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
-  const log = all.slice(-14);
-  const todayRec = all.find(w => w.date === t);
-  todayLine.innerHTML = todayRec
-    ? `今日の起床<b>${todayRec.time}</b>`
-    : '今日はまだ起床を記録していません';
-
-  if (log.length === 0) {
-    container.innerHTML = '<div class="wake-chart-empty">まだ記録がありません。<br>明日の朝、起床ボタンを押してみましょう。</div>';
-    return;
-  }
-
+// ── Line Chart（起床・体重 共通の SVG 折れ線描画）──
+// invert=true: 値が小さいほど上（起床=早い時刻ほど上）
+// invert=false: 値が大きいほど上（体重=標準）
+function buildLineChartSVG(data, { fmt, invert, ariaLabel }) {
   const W = 320, H = 168, padL = 42, padR = 14, padT = 14, padB = 28;
   const plotW = W - padL - padR, plotH = H - padT - padB;
-  const mins = log.map(w => w.minutes);
-  let lo = Math.min(...mins), hi = Math.max(...mins);
-  if (lo === hi) { lo -= 60; hi += 60; }
-  else { const pad = Math.max(15, (hi - lo) * 0.25); lo -= pad; hi += pad; }
-  const n = log.length;
+  const t = todayStr();
+  const vals = data.map(d => d.value);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (lo === hi) { const m = Math.max(0.5, Math.abs(lo) * 0.03); lo -= m; hi += m; }
+  else { const pad = Math.max(0.5, (hi - lo) * 0.25); lo -= pad; hi += pad; }
+  const n = data.length;
   const xAt = i => n === 1 ? padL + plotW / 2 : padL + plotW * i / (n - 1);
-  const yAt = m => padT + (m - lo) / (hi - lo) * plotH;   // 早い時刻ほど上
-  const fmt = m => {
-    m = Math.round(m);
-    let hh = Math.floor(m / 60), mm = ((m % 60) + 60) % 60;
-    hh = ((hh % 24) + 24) % 24;
-    return `${hh}:${String(mm).padStart(2, '0')}`;
-  };
+  const yAt = v => invert
+    ? padT + (v - lo) / (hi - lo) * plotH
+    : padT + (hi - v) / (hi - lo) * plotH;
 
   let grid = '';
   for (let g = 0; g <= 2; g++) {
-    const m = lo + (hi - lo) * g / 2;
-    const y = (padT + plotH * g / 2).toFixed(1);
+    const frac = g / 2;
+    const v = invert ? lo + (hi - lo) * frac : hi - (hi - lo) * frac;
+    const y = (padT + plotH * frac).toFixed(1);
     grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="rgba(28,28,26,0.10)" stroke-width="1"/>`;
-    grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-family="'Space Grotesk',sans-serif" font-size="9" fill="#7A776E">${fmt(m)}</text>`;
+    grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-family="'Space Grotesk',sans-serif" font-size="9" fill="#7A776E">${fmt(v)}</text>`;
   }
 
-  const pts = log.map((w, i) => `${xAt(i).toFixed(1)},${yAt(w.minutes).toFixed(1)}`).join(' ');
+  const pts = data.map((d, i) => `${xAt(i).toFixed(1)},${yAt(d.value).toFixed(1)}`).join(' ');
   const line = n > 1
     ? `<polyline points="${pts}" fill="none" stroke="#C4833A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
     : '';
 
   let dots = '', xlabels = '';
-  log.forEach((w, i) => {
-    const cx = xAt(i).toFixed(1), cy = yAt(w.minutes).toFixed(1);
-    const isToday = w.date === t;
+  data.forEach((d, i) => {
+    const cx = xAt(i).toFixed(1), cy = yAt(d.value).toFixed(1);
+    const isToday = d.date === t;
     dots += `<circle cx="${cx}" cy="${cy}" r="${isToday ? 4.5 : 3}" fill="${isToday ? '#4A5C42' : '#9E6228'}"/>`;
     if (i === 0 || i === n - 1 || (n > 4 && i === Math.floor((n - 1) / 2))) {
-      const md = w.date.slice(5).replace('-', '/');
+      const md = d.date.slice(5).replace('-', '/');
       xlabels += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="9" fill="#7A776E">${md}</text>`;
     }
   });
 
-  container.innerHTML =
-    `<svg class="wake-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="起床時刻の推移">${grid}${line}${dots}${xlabels}</svg>`;
+  return `<svg class="line-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${ariaLabel}">${grid}${line}${dots}${xlabels}</svg>`;
 }
+
+function emptyChartMsg(text) {
+  return `<div class="chart-empty">まだ記録がありません。<br>${text}</div>`;
+}
+
+const fmtTime = m => {
+  m = Math.round(m);
+  let hh = Math.floor(m / 60), mm = ((m % 60) + 60) % 60;
+  hh = ((hh % 24) + 24) % 24;
+  return `${hh}:${String(mm).padStart(2, '0')}`;
+};
+const fmtKg = v => v.toFixed(1);
+
+function renderWakeChart() {
+  const container = document.getElementById('wake-chart');
+  const todayLine = document.getElementById('wake-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.wakeLog || []).slice().sort(byDate);
+  const log = all.slice(-14);
+  const todayRec = all.find(w => w.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の起床<b>${todayRec.time}</b>`
+    : '今日はまだ起床を記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('明日の朝、起床ボタンを押してみましょう。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(w => ({ date: w.date, value: w.minutes })),
+    { fmt: fmtTime, invert: true, ariaLabel: '起床時刻の推移' }
+  );
+}
+
+function renderWeightChart() {
+  const container = document.getElementById('weight-chart');
+  const todayLine = document.getElementById('weight-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.weightLog || []).slice().sort(byDate);
+  const log = all.slice(-14);
+  const todayRec = all.find(w => w.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の体重<b>${todayRec.weight.toFixed(1)} kg</b>`
+    : '今日はまだ体重を記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('上の欄に今日の体重を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(w => ({ date: w.date, value: w.weight })),
+    { fmt: fmtKg, invert: false, ariaLabel: '体重の推移' }
+  );
+}
+
+// ── Weight record ──
+function saveWeight() {
+  const input = document.getElementById('weight-input');
+  const val = parseFloat(input.value);
+  if (isNaN(val) || val <= 0 || val > 500) { showToast('正しい体重を入力してください'); return; }
+  const rounded = Math.round(val * 10) / 10;
+  const t = todayStr();
+  const ex = store.weightLog.find(w => w.date === t);
+  if (ex) ex.weight = rounded;
+  else store.weightLog.push({ date: t, weight: rounded });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderWeightChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`体重 ${rounded.toFixed(1)}kg を記録しました`);
+}
+
+document.getElementById('weight-save-btn').addEventListener('click', saveWeight);
+document.getElementById('weight-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWeight(); });
 
 // ── Habits ──
 function renderHabits() {
@@ -1258,19 +840,6 @@ function toggleHabit(id, el) {
   void el.offsetWidth;
   el.classList.add('bounce');
   if ('vibrate' in navigator) navigator.vibrate(30);
-  updateRingFromHabits();
-}
-
-function updateRingFromHabits() {
-  const t = todayStr();
-  const defs = store.habits.definitions;
-  const log = store.habits.logs[t] || {};
-  const done = defs.filter(h => log[h.id]).length;
-  const total = defs.length;
-  const pct = total > 0 ? done / total : 0;
-  const circ = 213.6;
-  document.getElementById('ring-fill').style.strokeDashoffset = circ - circ * pct;
-  document.getElementById('ring-num').textContent = done;
 }
 
 function renderHeatmap() {
@@ -1306,119 +875,6 @@ function renderHeatmap() {
   });
 }
 
-// ── Tasks ──
-function renderTasks() {
-  const items = store.tasks.items;
-  const list = document.getElementById('task-list');
-  list.innerHTML = '';
-  if (items.length === 0) {
-    list.innerHTML = '<div class="tasks-empty">タスクはまだありません</div>';
-    return;
-  }
-  items.forEach((task, i) => {
-    const el = document.createElement('div');
-    el.className = 'task-item reveal' + (task.done ? ' done' : '');
-    el.innerHTML = `
-      <button class="task-check-btn" data-i="${i}" aria-label="完了切替">
-        ${task.done ? '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 3.5L4 6.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
-      </button>
-      <span class="task-label">${escapeHtml(task.label)}</span>
-      <button class="task-delete-btn" data-i="${i}" aria-label="削除">✕</button>
-    `;
-    el.querySelector('.task-check-btn').addEventListener('click', () => {
-      store.tasks.items[i].done = !store.tasks.items[i].done;
-      saveStore(); renderTasks();
-    });
-    el.querySelector('.task-delete-btn').addEventListener('click', () => {
-      store.tasks.items.splice(i, 1);
-      saveStore(); renderTasks();
-    });
-    list.appendChild(el);
-  });
-}
-
-function escapeHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-document.getElementById('add-task-btn').addEventListener('click', () => {
-  document.getElementById('task-modal').classList.add('open');
-  setTimeout(() => document.getElementById('modal-task-input').focus(), 100);
-});
-
-document.getElementById('modal-confirm-btn').addEventListener('click', addTask);
-document.getElementById('modal-task-input').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
-
-function addTask() {
-  const val = document.getElementById('modal-task-input').value.trim();
-  if (!val) return;
-  store.tasks.items.push({ label: val, done: false, createdAt: new Date().toISOString() });
-  saveStore();
-  document.getElementById('modal-task-input').value = '';
-  document.getElementById('task-modal').classList.remove('open');
-  renderTasks();
-}
-
-document.getElementById('task-modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('task-modal')) {
-    document.getElementById('task-modal').classList.remove('open');
-  }
-});
-
-// ── Evening ──
-let selectedScore = 0;
-
-function renderEvening() {
-  ensureToday();
-  const t = todayStr();
-  const defs = store.habits.definitions;
-  const log = store.habits.logs[t] || {};
-  const summary = document.getElementById('evening-habits-summary');
-  summary.innerHTML = '';
-  const done = defs.filter(h => log[h.id]);
-  if (done.length === 0) {
-    summary.innerHTML = '<span class="no-habits-msg">まだ習慣が完了していません</span>';
-  } else {
-    done.forEach(h => {
-      const badge = document.createElement('div');
-      badge.className = 'habit-badge';
-      badge.textContent = `${h.icon} ${h.label}`;
-      summary.appendChild(badge);
-    });
-  }
-
-  const day = store.daily[t];
-  document.getElementById('evening-note').value = day.eveningNote || '';
-  document.getElementById('tomorrow-task').value = day.tomorrow || '';
-  selectedScore = day.score || 0;
-  document.querySelectorAll('.score-btn').forEach(btn => {
-    btn.classList.toggle('selected', parseInt(btn.dataset.score) === selectedScore);
-  });
-  document.getElementById('save-evening-btn').classList.remove('saved');
-}
-
-document.querySelectorAll('.score-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    selectedScore = parseInt(btn.dataset.score);
-    document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  });
-});
-
-document.getElementById('save-evening-btn').addEventListener('click', () => {
-  const t = todayStr();
-  store.daily[t].eveningNote = document.getElementById('evening-note').value.trim();
-  store.daily[t].tomorrow = document.getElementById('tomorrow-task').value.trim();
-  store.daily[t].score = selectedScore;
-  saveStore();
-  const btn = document.getElementById('save-evening-btn');
-  btn.textContent = '保存しました ✓';
-  btn.classList.add('saved');
-  showToast('今日の記録を保存しました');
-  if ('vibrate' in navigator) navigator.vibrate([30, 20, 30]);
-  setTimeout(() => { btn.textContent = '今日の記録を保存'; btn.classList.remove('saved'); }, 2500);
-});
-
 // ── Toast ──
 function showToast(msg) {
   const toast = document.getElementById('toast');
@@ -1430,7 +886,6 @@ function showToast(msg) {
 // ── Init ──
 function init() {
   ensureToday();
-  updateStreak();
   renderHome();
   activateReveal();
 
