@@ -504,6 +504,10 @@ html, body {
 
       <div class="card reveal" id="wake-chart-card">
         <div class="label" style="margin-bottom:14px">起床リズム — 直近14日</div>
+        <div class="weight-input-row">
+          <input type="time" id="wake-input" class="weight-input">
+          <button class="weight-save-btn" id="wake-save-btn">記録</button>
+        </div>
         <div id="wake-chart"></div>
         <div class="chart-today-line" id="wake-today-line"></div>
       </div>
@@ -517,6 +521,17 @@ html, body {
         </div>
         <div id="weight-chart"></div>
         <div class="chart-today-line" id="weight-today-line"></div>
+      </div>
+
+      <div class="card reveal" id="study-card">
+        <div class="label" style="margin-bottom:14px">建築士勉強 — 直近14日</div>
+        <div class="weight-input-row">
+          <input type="number" id="study-input" class="weight-input" placeholder="今日の勉強時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">分</span>
+          <button class="weight-save-btn" id="study-save-btn">記録</button>
+        </div>
+        <div id="study-chart"></div>
+        <div class="chart-today-line" id="study-today-line"></div>
       </div>
 
       <div class="card reveal" id="data-card">
@@ -562,7 +577,6 @@ const STORE_KEY = 'cascade_v1';
 const DEFAULT_HABITS = [
   {id:'h2',label:'筋トレ',icon:'💪'},
   {id:'h4',label:'間食増量',icon:'🍱'},
-  {id:'h5',label:'建築士勉強',icon:'📐'},
   {id:'h6',label:'修論作業',icon:'✏️'},
   {id:'h7',label:'読書',icon:'📚'},
   {id:'h8',label:'日記振り返り',icon:'📓'},
@@ -574,6 +588,7 @@ function freshStore() {
     habits: { definitions: DEFAULT_HABITS, logs: {} },
     wakeLog: [],
     weightLog: [],
+    studyLog: [],
   };
 }
 
@@ -589,6 +604,7 @@ function migrate(s) {
   if (!s.habits.logs) s.habits.logs = {};
   if (!Array.isArray(s.wakeLog)) s.wakeLog = [];
   if (!Array.isArray(s.weightLog)) s.weightLog = [];
+  if (!Array.isArray(s.studyLog)) s.studyLog = [];
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -714,6 +730,7 @@ function renderHome() {
   document.getElementById('home-weekday').textContent = `${DAYS[d.getDay()]}曜日 — ${d.getFullYear()}`;
   renderWakeChart();
   renderWeightChart();
+  renderStudyChart();
 }
 
 // ── Line Chart（起床・体重 共通の SVG 折れ線描画）──
@@ -772,6 +789,7 @@ const fmtTime = m => {
   return `${hh}:${String(mm).padStart(2, '0')}`;
 };
 const fmtKg = v => v.toFixed(1);
+const fmtMin = v => `${Math.round(v)}`;
 
 function renderWakeChart() {
   const container = document.getElementById('wake-chart');
@@ -815,6 +833,27 @@ function renderWeightChart() {
   );
 }
 
+function renderStudyChart() {
+  const container = document.getElementById('study-chart');
+  const todayLine = document.getElementById('study-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.studyLog || []).slice().sort(byDate);
+  const log = all.slice(-14);
+  const todayRec = all.find(s => s.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の勉強<b>${todayRec.minutes} 分</b>`
+    : '今日はまだ勉強時間を記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('上の欄に今日の勉強時間を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(s => ({ date: s.date, value: s.minutes })),
+    { fmt: fmtMin, invert: false, ariaLabel: '勉強時間の推移' }
+  );
+}
+
 // ── Weight record ──
 function saveWeight() {
   const input = document.getElementById('weight-input');
@@ -835,6 +874,50 @@ function saveWeight() {
 
 document.getElementById('weight-save-btn').addEventListener('click', saveWeight);
 document.getElementById('weight-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWeight(); });
+
+// ── 起床時刻の入力・修正（ホームから上書き可能）──
+function saveWakeTime() {
+  const input = document.getElementById('wake-input');
+  const v = input.value;
+  if (!v || !/^\d{1,2}:\d{2}$/.test(v)) { showToast('時刻を入力してください'); return; }
+  const [hh, mm] = v.split(':').map(Number);
+  if (hh > 23 || mm > 59) { showToast('正しい時刻を入力してください'); return; }
+  const t = todayStr();
+  const p = n => String(n).padStart(2, '0');
+  const time = `${p(hh)}:${p(mm)}`;
+  const minutes = hh * 60 + mm;
+  const ex = store.wakeLog.find(w => w.date === t);
+  if (ex) { ex.time = time; ex.minutes = minutes; }       // 既存を上書き（修正）
+  else store.wakeLog.push({ date: t, time, minutes });
+  store.settings.lastWakeDate = t;
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderWakeChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`起床 ${time} を記録しました`);
+}
+
+// ── 勉強時間の入力・記録 ──
+function saveStudy() {
+  const input = document.getElementById('study-input');
+  const val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 0 || val > 1440) { showToast('正しい勉強時間を入力してください'); return; }
+  const t = todayStr();
+  const ex = store.studyLog.find(s => s.date === t);
+  if (ex) ex.minutes = val;
+  else store.studyLog.push({ date: t, minutes: val });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderStudyChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`勉強 ${val}分 を記録しました`);
+}
+
+document.getElementById('wake-save-btn').addEventListener('click', saveWakeTime);
+document.getElementById('study-save-btn').addEventListener('click', saveStudy);
+document.getElementById('study-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveStudy(); });
 
 // ── Data backup（エクスポート / インポート）──
 async function exportData() {
