@@ -65,7 +65,9 @@ html, body {
 .view {
   display: none;
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 24px 20px;
   padding-bottom: calc(var(--nav-h) + 16px);
   overscroll-behavior-y: contain;
@@ -496,7 +498,7 @@ html, body {
   </div>
 
   <!-- Views -->
-  <main id="views" style="flex:1;overflow:hidden;position:relative;">
+  <main id="views" style="flex:1;min-height:0;overflow:hidden;position:relative;display:flex;flex-direction:column;">
     <!-- Home -->
     <section class="view active" id="view-home">
       <div class="home-date" id="home-date"></div>
