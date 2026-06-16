@@ -527,6 +527,7 @@ html, body {
 
       <div class="card reveal" id="study-card">
         <div class="label" style="margin-bottom:14px">建築士勉強 — 直近14日</div>
+        <div id="study-menu"></div>
         <div class="weight-input-row">
           <input type="number" id="study-input" class="weight-input" placeholder="今日の勉強時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
           <span class="weight-unit">分</span>
@@ -1063,11 +1064,32 @@ function init() {
   ensureToday();
   renderHome();
   activateReveal();
+  loadStudyMenu();
 
   const t = todayStr();
   if (store.settings.lastWakeDate !== t) {
     setTimeout(showWakeGate, 200);
   }
+}
+
+// 一級建築士: schedule.json から本日の学習メニューを表示
+function loadStudyMenu() {
+  const el = document.getElementById('study-menu');
+  if (!el) return;
+  fetch('./schedule.json?v=' + Date.now()).then(r => r.json()).then(sched => {
+    const m = sched[todayStr()];
+    if (!m) { el.innerHTML = ''; return; }
+    const rest = m.problems === 0;
+    el.innerHTML =
+      '<div style="display:flex;gap:10px;align-items:center;padding:12px 14px;margin-bottom:14px;'
+      + 'border-radius:12px;background:' + (rest ? 'rgba(255,255,255,.04)' : 'rgba(120,170,255,.10)')
+      + ';border:1px solid ' + (rest ? 'rgba(255,255,255,.08)' : 'rgba(120,170,255,.22)') + ';">'
+      + '<span style="font-size:22px;line-height:1">' + m.icon + '</span>'
+      + '<span style="font-size:13px;line-height:1.45">'
+      + '<b>本日の学習</b><br>' + m.menu
+      + (rest ? '' : '<span style="opacity:.6"> ・' + m.problems + '問 / 約' + m.time + '分</span>')
+      + '</span></div>';
+  }).catch(() => { el.innerHTML = ''; });
 }
 
 init();

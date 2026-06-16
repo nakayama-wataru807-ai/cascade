@@ -1,4 +1,4 @@
-const CACHE = 'cascade-v6';
+const CACHE = 'cascade-v7';
 const PRECACHE = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
