@@ -1096,6 +1096,13 @@ init();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
+  // 新しい Service Worker が制御を取ったら一度だけ自動リロード（更新を即反映）
+  let swReloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (swReloaded) return;
+    swReloaded = true;
+    location.reload();
+  });
 }
 </script>
 </body>
