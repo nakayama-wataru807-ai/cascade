@@ -395,6 +395,13 @@ html, body {
   font-weight: 700;
 }
 .habit-item.done .habit-label { color: var(--ki-deep); }
+.habit-streak {
+  font-family: var(--font-latin);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--take);
+  flex-shrink: 0;
+}
 .habit-check {
   width: 22px; height: 22px;
   border-radius: 50%;
@@ -515,7 +522,7 @@ html, body {
       <div class="home-weekday" id="home-weekday"></div>
 
       <div class="card reveal" id="wake-chart-card">
-        <div class="label" style="margin-bottom:14px">起床リズム — 直近14日</div>
+        <div class="label" style="margin-bottom:14px">起床リズム — 全記録</div>
         <div class="weight-input-row">
           <input type="time" id="wake-input" class="weight-input">
           <button class="weight-save-btn" id="wake-save-btn">記録</button>
@@ -525,7 +532,7 @@ html, body {
       </div>
 
       <div class="card reveal" id="weight-card">
-        <div class="label" style="margin-bottom:14px">体重リズム — 直近14日</div>
+        <div class="label" style="margin-bottom:14px">体重リズム — 全記録</div>
         <div class="weight-input-row">
           <input type="number" id="weight-input" class="weight-input" placeholder="今日の体重" step="0.1" min="0" inputmode="decimal" enterkeyhint="done" autocomplete="off">
           <span class="weight-unit">kg</span>
@@ -536,7 +543,7 @@ html, body {
       </div>
 
       <div class="card reveal" id="study-card">
-        <div class="label" style="margin-bottom:14px">建築士勉強 — 直近14日</div>
+        <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
         <div id="study-menu"></div>
         <div class="weight-input-row">
           <input type="number" id="study-input" class="weight-input" placeholder="今日の勉強時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
@@ -645,6 +652,23 @@ let store = loadStore();
 function todayStr() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function dateToStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// 習慣の連続達成日数。今日が未達成なら昨日から遡る（今日はまだ猶予扱い）
+function habitStreak(id) {
+  const logs = store.habits.logs;
+  let count = 0;
+  const d = new Date();
+  if (!(logs[dateToStr(d)] && logs[dateToStr(d)][id])) d.setDate(d.getDate() - 1);
+  while (logs[dateToStr(d)] && logs[dateToStr(d)][id]) {
+    count++;
+    d.setDate(d.getDate() - 1);
+  }
+  return count;
 }
 
 function ensureToday() {
@@ -812,7 +836,7 @@ function renderWakeChart() {
   if (!container) return;
   const t = todayStr();
   const all = (store.wakeLog || []).slice().sort(byDate);
-  const log = all.slice(-14);
+  const log = all;
   const todayRec = all.find(w => w.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の起床<b>${todayRec.time}</b>`
@@ -833,7 +857,7 @@ function renderWeightChart() {
   if (!container) return;
   const t = todayStr();
   const all = (store.weightLog || []).slice().sort(byDate);
-  const log = all.slice(-14);
+  const log = all;
   const todayRec = all.find(w => w.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の体重<b>${todayRec.weight.toFixed(1)} kg</b>`
@@ -854,7 +878,7 @@ function renderStudyChart() {
   if (!container) return;
   const t = todayStr();
   const all = (store.studyLog || []).slice().sort(byDate);
-  const log = all.slice(-14);
+  const log = all;
   const todayRec = all.find(s => s.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の勉強<b>${todayRec.minutes} 分</b>`
@@ -1003,9 +1027,11 @@ function renderHabits() {
     const item = document.createElement('div');
     item.className = 'habit-item reveal' + (log[h.id] ? ' done' : '');
     item.dataset.id = h.id;
+    const s = habitStreak(h.id);
     item.innerHTML = `
       <span class="habit-icon">${h.icon}</span>
       <span class="habit-label">${h.label}</span>
+      <span class="habit-streak">${s > 0 ? s + '日' : ''}</span>
       <div class="habit-check">
         <svg class="habit-check-svg" width="12" height="9" viewBox="0 0 12 9" fill="none">
           <path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1028,6 +1054,9 @@ function toggleHabit(id, el) {
   void el.offsetWidth;
   el.classList.add('bounce');
   if ('vibrate' in navigator) navigator.vibrate(30);
+  const s = habitStreak(id);
+  const streakEl = el.querySelector('.habit-streak');
+  if (streakEl) streakEl.textContent = s > 0 ? `${s}日` : '';
 }
 
 function renderHeatmap() {
