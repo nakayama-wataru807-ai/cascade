@@ -258,6 +258,35 @@ html, body {
   margin-bottom: 24px;
 }
 
+/* ── 期間切替セグメント ── */
+.range-seg {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: var(--kinari-2);
+  border-radius: var(--r3);
+  padding: 4px;
+}
+.range-seg button {
+  flex: 1;
+  padding: 8px;
+  background: none;
+  border: none;
+  border-radius: var(--r2);
+  font-family: var(--font-gothic);
+  font-size: 13px;
+  color: var(--sumi-muted);
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: background 0.2s, color 0.2s;
+}
+.range-seg button.active {
+  background: var(--kinari);
+  color: var(--sumi);
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
 /* ── Line Chart（起床・体重 共通）── */
 .line-chart-svg { width: 100%; height: auto; display: block; }
 .chart-empty {
@@ -521,6 +550,12 @@ html, body {
       <div class="home-date" id="home-date"></div>
       <div class="home-weekday" id="home-weekday"></div>
 
+      <div class="range-seg" id="range-seg">
+        <button data-range="14">14日</button>
+        <button data-range="30">30日</button>
+        <button data-range="all">全期間</button>
+      </div>
+
       <div class="card reveal" id="wake-chart-card">
         <div class="label" style="margin-bottom:14px">起床リズム — 全記録</div>
         <div class="weight-input-row">
@@ -606,7 +641,7 @@ const DEFAULT_HABITS = [
 
 function freshStore() {
   return {
-    settings: { lastWakeDate: '' },
+    settings: { lastWakeDate: '', chartRange: 'all' },
     habits: { definitions: DEFAULT_HABITS, logs: {} },
     wakeLog: [],
     weightLog: [],
@@ -689,6 +724,16 @@ function getWeekDates() {
 
 const byDate = (a, b) => a.date < b.date ? -1 : 1;
 
+function getChartRange() { return store.settings.chartRange || 'all'; }
+function sliceByRange(arr) {
+  const r = getChartRange();
+  return r === 'all' ? arr : arr.slice(-r);
+}
+function updateRangeSeg() {
+  const r = String(getChartRange());
+  document.querySelectorAll('.range-seg button').forEach(b => b.classList.toggle('active', b.dataset.range === r));
+}
+
 // ── Wake Gate（起床打刻ページ）──
 let wakeClockTimer = null;
 
@@ -767,6 +812,7 @@ function renderHome() {
   const DAYS = ['日','月','火','水','木','金','土'];
   document.getElementById('home-date').textContent = `${d.getMonth()+1}月${d.getDate()}日`;
   document.getElementById('home-weekday').textContent = `${DAYS[d.getDay()]}曜日 — ${d.getFullYear()}`;
+  updateRangeSeg();
   renderWakeChart();
   renderWeightChart();
   renderStudyChart();
@@ -836,7 +882,7 @@ function renderWakeChart() {
   if (!container) return;
   const t = todayStr();
   const all = (store.wakeLog || []).slice().sort(byDate);
-  const log = all;
+  const log = sliceByRange(all);
   const todayRec = all.find(w => w.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の起床<b>${todayRec.time}</b>`
@@ -857,7 +903,7 @@ function renderWeightChart() {
   if (!container) return;
   const t = todayStr();
   const all = (store.weightLog || []).slice().sort(byDate);
-  const log = all;
+  const log = sliceByRange(all);
   const todayRec = all.find(w => w.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の体重<b>${todayRec.weight.toFixed(1)} kg</b>`
@@ -878,7 +924,7 @@ function renderStudyChart() {
   if (!container) return;
   const t = todayStr();
   const all = (store.studyLog || []).slice().sort(byDate);
-  const log = all;
+  const log = sliceByRange(all);
   const todayRec = all.find(s => s.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の勉強<b>${todayRec.minutes} 分</b>`
@@ -957,6 +1003,19 @@ function saveStudy() {
 document.getElementById('wake-save-btn').addEventListener('click', saveWakeTime);
 document.getElementById('study-save-btn').addEventListener('click', saveStudy);
 document.getElementById('study-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveStudy(); });
+
+// 期間切替セグメント（3グラフ共通）
+document.querySelectorAll('.range-seg button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const r = btn.dataset.range;
+    store.settings.chartRange = r === 'all' ? 'all' : parseInt(r, 10);
+    saveStore();
+    updateRangeSeg();
+    renderWakeChart();
+    renderWeightChart();
+    renderStudyChart();
+  });
+});
 
 // ── Data backup（エクスポート / インポート）──
 async function exportData() {
@@ -1057,6 +1116,7 @@ function toggleHabit(id, el) {
   const s = habitStreak(id);
   const streakEl = el.querySelector('.habit-streak');
   if (streakEl) streakEl.textContent = s > 0 ? `${s}日` : '';
+  renderHeatmap();
 }
 
 function renderHeatmap() {
