@@ -312,6 +312,13 @@ html, body {
   color: var(--ki-deep);
   margin-left: 4px;
 }
+.chart-total {
+  font-family: var(--font-latin);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--sumi-muted);
+  margin-top: 4px;
+}
 
 /* ── Weight input ── */
 .weight-input-row {
@@ -876,6 +883,12 @@ const fmtTime = m => {
 };
 const fmtKg = v => v.toFixed(1);
 const fmtMin = v => `${Math.round(v)}`;
+function fmtTotalMin(m) {
+  const h = Math.floor(m / 60), mm = m % 60;
+  if (h > 0 && mm > 0) return `${h}時間${mm}分`;
+  if (h > 0) return `${h}時間`;
+  return `${mm}分`;
+}
 
 function renderWakeChart() {
   const container = document.getElementById('wake-chart');
@@ -927,9 +940,12 @@ function renderStudyChart() {
   const all = (store.studyLog || []).slice().sort(byDate);
   const log = sliceByRange(all);
   const todayRec = all.find(s => s.date === t);
-  todayLine.innerHTML = todayRec
+  const totalMin = all.reduce((sum, s) => sum + (s.minutes || 0), 0);
+  let line = todayRec
     ? `今日の勉強<b>${todayRec.minutes} 分</b>`
     : '今日はまだ勉強時間を記録していません';
+  if (all.length > 0) line += `<div class="chart-total">累計 ${fmtTotalMin(totalMin)}</div>`;
+  todayLine.innerHTML = line;
   if (log.length === 0) {
     container.innerHTML = emptyChartMsg('上の欄に今日の勉強時間を入力してください。');
     return;
