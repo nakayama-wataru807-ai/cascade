@@ -650,14 +650,14 @@ html, body {
 // ── Store ──
 const STORE_KEY = 'cascade_v1';
 const DEFAULT_HABITS = [
-  {id:'h2',label:'筋トレ',icon:'💪'},
-  {id:'h4',label:'間食増量',icon:'🍱'},
-  {id:'h6',label:'修論作業',icon:'✏️'},
   {id:'h7',label:'読書',icon:'📚'},
   {id:'h8',label:'日記振り返り',icon:'📓'},
-  {id:'h9',label:'建築士アプリ',icon:'📱'},
-  {id:'h10',label:'散歩',icon:'🚶'},
   {id:'h11',label:'表情筋トレ',icon:'😀'},
+  {id:'h6',label:'修論作業',icon:'✏️'},
+  {id:'h9',label:'建築士アプリ',icon:'📱'},
+  {id:'h4',label:'間食増量',icon:'🍱'},
+  {id:'h10',label:'散歩',icon:'🚶'},
+  {id:'h2',label:'筋トレ',icon:'💪'},
 ];
 
 function freshStore() {
@@ -837,9 +837,9 @@ function renderHome() {
   document.getElementById('home-weekday').textContent = `${DAYS[d.getDay()]}曜日 — ${d.getFullYear()}`;
   updateRangeSeg();
   renderWakeChart();
-  renderWeightChart();
-  renderWorkoutChart();
   renderStudyChart();
+  renderWorkoutChart();
+  renderWeightChart();
 }
 
 // ── Line Chart（起床・体重 共通の SVG 折れ線描画）──
