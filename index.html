@@ -584,6 +584,17 @@ html, body {
         <div class="chart-today-line" id="weight-today-line"></div>
       </div>
 
+      <div class="card reveal" id="workout-card">
+        <div class="label" style="margin-bottom:14px">筋トレ — 全記録</div>
+        <div class="weight-input-row">
+          <input type="number" id="workout-input" class="weight-input" placeholder="今日のワークアウト時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">分</span>
+          <button class="weight-save-btn" id="workout-save-btn">記録</button>
+        </div>
+        <div id="workout-chart"></div>
+        <div class="chart-today-line" id="workout-today-line"></div>
+      </div>
+
       <div class="card reveal" id="study-card">
         <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
         <div id="study-menu"></div>
@@ -656,6 +667,7 @@ function freshStore() {
     wakeLog: [],
     weightLog: [],
     studyLog: [],
+    workoutLog: [],
   };
 }
 
@@ -672,6 +684,7 @@ function migrate(s) {
   if (!Array.isArray(s.wakeLog)) s.wakeLog = [];
   if (!Array.isArray(s.weightLog)) s.weightLog = [];
   if (!Array.isArray(s.studyLog)) s.studyLog = [];
+  if (!Array.isArray(s.workoutLog)) s.workoutLog = [];
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -825,6 +838,7 @@ function renderHome() {
   updateRangeSeg();
   renderWakeChart();
   renderWeightChart();
+  renderWorkoutChart();
   renderStudyChart();
 }
 
@@ -934,6 +948,27 @@ function renderWeightChart() {
   );
 }
 
+function renderWorkoutChart() {
+  const container = document.getElementById('workout-chart');
+  const todayLine = document.getElementById('workout-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.workoutLog || []).slice().sort(byDate);
+  const log = sliceByRange(all);
+  const todayRec = all.find(w => w.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日のワークアウト<b>${todayRec.minutes} 分</b>`
+    : '今日はまだワークアウトを記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('上の欄に今日のワークアウト時間を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(w => ({ date: w.date, value: w.minutes })),
+    { fmt: fmtMin, invert: false, ariaLabel: 'ワークアウト時間の推移' }
+  );
+}
+
 function renderStudyChart() {
   const container = document.getElementById('study-chart');
   const todayLine = document.getElementById('study-today-line');
@@ -1023,6 +1058,26 @@ document.getElementById('wake-save-btn').addEventListener('click', saveWakeTime)
 document.getElementById('study-save-btn').addEventListener('click', saveStudy);
 document.getElementById('study-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveStudy(); });
 
+// ── ワークアウト時間の入力・記録 ──
+function saveWorkout() {
+  const input = document.getElementById('workout-input');
+  const val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 0 || val > 1440) { showToast('正しいワークアウト時間を入力してください'); return; }
+  const t = todayStr();
+  const ex = store.workoutLog.find(w => w.date === t);
+  if (ex) ex.minutes = val;
+  else store.workoutLog.push({ date: t, minutes: val });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderWorkoutChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`ワークアウト ${val}分 を記録しました`);
+}
+
+document.getElementById('workout-save-btn').addEventListener('click', saveWorkout);
+document.getElementById('workout-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWorkout(); });
+
 // 期間切替セグメント（3グラフ共通）
 document.querySelectorAll('.range-seg button').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1032,6 +1087,7 @@ document.querySelectorAll('.range-seg button').forEach(btn => {
     updateRangeSeg();
     renderWakeChart();
     renderWeightChart();
+    renderWorkoutChart();
     renderStudyChart();
   });
 });
