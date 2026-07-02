@@ -605,6 +605,13 @@ html, body {
         </div>
         <div id="study-chart"></div>
         <div class="chart-today-line" id="study-today-line"></div>
+
+        <div class="chart-today-line" id="arrival-today-line" style="margin-top:24px;"></div>
+        <div id="arrival-chart"></div>
+        <div class="weight-input-row" style="margin-top:16px;">
+          <input type="time" id="arrival-input" class="weight-input" placeholder="帰宅時刻" enterkeyhint="done" autocomplete="off">
+          <button class="weight-save-btn" id="arrival-save-btn">記録</button>
+        </div>
       </div>
 
       <div class="card reveal" id="data-card">
@@ -668,6 +675,7 @@ function freshStore() {
     weightLog: [],
     studyLog: [],
     workoutLog: [],
+    arrivalLog: [],
   };
 }
 
@@ -685,6 +693,7 @@ function migrate(s) {
   if (!Array.isArray(s.weightLog)) s.weightLog = [];
   if (!Array.isArray(s.studyLog)) s.studyLog = [];
   if (!Array.isArray(s.workoutLog)) s.workoutLog = [];
+  if (!Array.isArray(s.arrivalLog)) s.arrivalLog = [];
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -838,6 +847,7 @@ function renderHome() {
   updateRangeSeg();
   renderWakeChart();
   renderStudyChart();
+  renderArrivalChart();
   renderWorkoutChart();
   renderWeightChart();
 }
@@ -993,6 +1003,27 @@ function renderStudyChart() {
   );
 }
 
+function renderArrivalChart() {
+  const container = document.getElementById('arrival-chart');
+  const todayLine = document.getElementById('arrival-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.arrivalLog || []).slice().sort(byDate);
+  const log = sliceByRange(all);
+  const todayRec = all.find(a => a.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の帰宅<b>${todayRec.time}</b>`
+    : '今日はまだ帰宅時刻を記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('下の欄に今日の帰宅時刻を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(a => ({ date: a.date, value: a.minutes })),
+    { fmt: fmtTime, invert: true, ariaLabel: '帰宅時刻の推移' }
+  );
+}
+
 // ── Weight record ──
 function saveWeight() {
   const input = document.getElementById('weight-input');
@@ -1054,9 +1085,30 @@ function saveStudy() {
   showToast(`勉強 ${val}分 を記録しました`);
 }
 
+function saveArrivalTime() {
+  const input = document.getElementById('arrival-input');
+  const v = input.value;
+  if (!v || !/^\d{1,2}:\d{2}$/.test(v)) { showToast('時刻を入力してください'); return; }
+  const [hh, mm] = v.split(':').map(Number);
+  if (hh < 0 || hh > 23 || mm < 0 || mm > 59) { showToast('有効な時刻を入力してください'); return; }
+  const minutes = hh * 60 + mm;
+  const t = todayStr();
+  const ex = store.arrivalLog.find(a => a.date === t);
+  if (ex) { ex.time = v; ex.minutes = minutes; }
+  else store.arrivalLog.push({ date: t, time: v, minutes: minutes });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderArrivalChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`帰宅 ${v} を記録しました`);
+}
+
 document.getElementById('wake-save-btn').addEventListener('click', saveWakeTime);
 document.getElementById('study-save-btn').addEventListener('click', saveStudy);
 document.getElementById('study-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveStudy(); });
+document.getElementById('arrival-save-btn').addEventListener('click', saveArrivalTime);
+document.getElementById('arrival-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveArrivalTime(); });
 
 // ── ワークアウト時間の入力・記録 ──
 function saveWorkout() {
