@@ -573,6 +573,28 @@ html, body {
         <div class="chart-today-line" id="wake-today-line"></div>
       </div>
 
+      <div class="card reveal" id="study-card">
+        <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
+        <div id="study-menu"></div>
+        <div class="weight-input-row">
+          <input type="number" id="study-input" class="weight-input" placeholder="今日の勉強時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">分</span>
+          <button class="weight-save-btn" id="study-save-btn">記録</button>
+        </div>
+        <div id="study-chart"></div>
+        <div class="chart-today-line" id="study-today-line"></div>
+      </div>
+
+      <div class="card reveal" id="arrival-card">
+        <div class="label" style="margin-bottom:14px">帰宅リズム — 全記録</div>
+        <div class="weight-input-row">
+          <input type="time" id="arrival-input" class="weight-input" placeholder="帰宅時刻" enterkeyhint="done" autocomplete="off">
+          <button class="weight-save-btn" id="arrival-save-btn">記録</button>
+        </div>
+        <div id="arrival-chart"></div>
+        <div class="chart-today-line" id="arrival-today-line"></div>
+      </div>
+
       <div class="card reveal" id="weight-card">
         <div class="label" style="margin-bottom:14px">体重リズム — 全記録</div>
         <div class="weight-input-row">
@@ -593,25 +615,6 @@ html, body {
         </div>
         <div id="workout-chart"></div>
         <div class="chart-today-line" id="workout-today-line"></div>
-      </div>
-
-      <div class="card reveal" id="study-card">
-        <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
-        <div id="study-menu"></div>
-        <div class="weight-input-row">
-          <input type="number" id="study-input" class="weight-input" placeholder="今日の勉強時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
-          <span class="weight-unit">分</span>
-          <button class="weight-save-btn" id="study-save-btn">記録</button>
-        </div>
-        <div id="study-chart"></div>
-        <div class="chart-today-line" id="study-today-line"></div>
-
-        <div class="chart-today-line" id="arrival-today-line" style="margin-top:24px;"></div>
-        <div id="arrival-chart"></div>
-        <div class="weight-input-row" style="margin-top:16px;">
-          <input type="time" id="arrival-input" class="weight-input" placeholder="帰宅時刻" enterkeyhint="done" autocomplete="off">
-          <button class="weight-save-btn" id="arrival-save-btn">記録</button>
-        </div>
       </div>
 
       <div class="card reveal" id="data-card">
@@ -1138,9 +1141,10 @@ document.querySelectorAll('.range-seg button').forEach(btn => {
     saveStore();
     updateRangeSeg();
     renderWakeChart();
-    renderWeightChart();
-    renderWorkoutChart();
     renderStudyChart();
+    renderArrivalChart();
+    renderWorkoutChart();
+    renderWeightChart();
   });
 });
 
