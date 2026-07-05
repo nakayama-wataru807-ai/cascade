@@ -391,6 +391,32 @@ html, body {
   line-height: 1.5;
 }
 
+.today-menu {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: var(--r3);
+  background: var(--kinari-3);
+  border: 1px solid var(--line-strong);
+}
+.today-menu-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.today-menu-text {
+  font-family: var(--font-gothic);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sumi-soft);
+}
+.today-menu-text b {
+  font-family: var(--font-mincho);
+  color: var(--sumi);
+}
+.today-menu-part {
+  color: var(--sumi-muted);
+  font-size: 12px;
+}
+
 .app-version {
   text-align: center;
   font-family: var(--font-latin);
@@ -608,6 +634,7 @@ html, body {
 
       <div class="card reveal" id="workout-card">
         <div class="label" style="margin-bottom:14px">筋トレ — 全記録</div>
+        <div id="workout-menu"></div>
         <div class="weight-input-row">
           <input type="number" id="workout-input" class="weight-input" placeholder="今日のワークアウト時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
           <span class="weight-unit">分</span>
@@ -1297,6 +1324,7 @@ function init() {
   renderHome();
   activateReveal();
   loadStudyMenu();
+  loadWorkoutMenu();
 
   const t = todayStr();
   if (store.settings.lastWakeDate !== t) {
@@ -1320,6 +1348,22 @@ function loadStudyMenu() {
       + '<span style="font-size:13px;line-height:1.45">'
       + '<b>本日の学習</b><br>' + m.menu
       + (rest ? '' : '<span style="opacity:.6"> ・' + m.problems + '問 / 約' + m.time + '分</span>')
+      + '</span></div>';
+  }).catch(() => { el.innerHTML = ''; });
+}
+
+// 筋トレ: workout_schedule.json から本日のトレーニングメニューを表示
+function loadWorkoutMenu() {
+  const el = document.getElementById('workout-menu');
+  if (!el) return;
+  fetch('./workout_schedule.json?v=' + Date.now()).then(r => r.json()).then(sched => {
+    const m = sched[todayStr()];
+    if (!m) { el.innerHTML = ''; return; }
+    el.innerHTML =
+      '<div class="today-menu">'
+      + '<span class="today-menu-icon">' + m.icon + '</span>'
+      + '<span class="today-menu-text"><b>本日のメニュー</b><br>' + m.menu
+      + (m.part ? '<span class="today-menu-part"> ・' + m.part + '</span>' : '')
       + '</span></div>';
   }).catch(() => { el.innerHTML = ''; });
 }
