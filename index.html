@@ -611,6 +611,16 @@ html, body {
         <div class="chart-today-line" id="study-today-line"></div>
       </div>
 
+      <div class="card reveal" id="departure-card">
+        <div class="label" style="margin-bottom:14px">出発リズム — 全記録</div>
+        <div class="weight-input-row">
+          <input type="time" id="departure-input" class="weight-input" placeholder="出発時刻" enterkeyhint="done" autocomplete="off">
+          <button class="weight-save-btn" id="departure-save-btn">記録</button>
+        </div>
+        <div id="departure-chart"></div>
+        <div class="chart-today-line" id="departure-today-line"></div>
+      </div>
+
       <div class="card reveal" id="arrival-card">
         <div class="label" style="margin-bottom:14px">帰宅リズム — 全記録</div>
         <div class="weight-input-row">
@@ -690,10 +700,13 @@ const DEFAULT_HABITS = [
   {id:'h7',label:'読書',icon:'📚'},
   {id:'h8',label:'日記振り返り',icon:'📓'},
   {id:'h11',label:'表情筋トレ',icon:'😀'},
+  {id:'h12',label:'朝トレ',icon:'🌅'},
+  {id:'h13',label:'Podcasts',icon:'🎧'},
   {id:'h6',label:'修論作業',icon:'✏️'},
   {id:'h9',label:'建築士アプリ',icon:'📱'},
   {id:'h4',label:'間食増量',icon:'🍱'},
   {id:'h10',label:'散歩',icon:'🚶'},
+  {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h2',label:'筋トレ',icon:'💪'},
 ];
 
@@ -706,6 +719,7 @@ function freshStore() {
     studyLog: [],
     workoutLog: [],
     arrivalLog: [],
+    departureLog: [],
   };
 }
 
@@ -724,6 +738,7 @@ function migrate(s) {
   if (!Array.isArray(s.studyLog)) s.studyLog = [];
   if (!Array.isArray(s.workoutLog)) s.workoutLog = [];
   if (!Array.isArray(s.arrivalLog)) s.arrivalLog = [];
+  if (!Array.isArray(s.departureLog)) s.departureLog = [];
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -877,6 +892,7 @@ function renderHome() {
   updateRangeSeg();
   renderWakeChart();
   renderStudyChart();
+  renderDepartureChart();
   renderArrivalChart();
   renderWorkoutChart();
   renderWeightChart();
@@ -1033,6 +1049,27 @@ function renderStudyChart() {
   );
 }
 
+function renderDepartureChart() {
+  const container = document.getElementById('departure-chart');
+  const todayLine = document.getElementById('departure-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.departureLog || []).slice().sort(byDate);
+  const log = sliceByRange(all);
+  const todayRec = all.find(a => a.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の出発<b>${todayRec.time}</b>`
+    : '今日はまだ出発時刻を記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('下の欄に今日の出発時刻を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(a => ({ date: a.date, value: a.minutes })),
+    { fmt: fmtTime, invert: true, ariaLabel: '出発時刻の推移' }
+  );
+}
+
 function renderArrivalChart() {
   const container = document.getElementById('arrival-chart');
   const todayLine = document.getElementById('arrival-today-line');
@@ -1115,6 +1152,25 @@ function saveStudy() {
   showToast(`勉強 ${val}分 を記録しました`);
 }
 
+function saveDepartureTime() {
+  const input = document.getElementById('departure-input');
+  const v = input.value;
+  if (!v || !/^\d{1,2}:\d{2}$/.test(v)) { showToast('時刻を入力してください'); return; }
+  const [hh, mm] = v.split(':').map(Number);
+  if (hh < 0 || hh > 23 || mm < 0 || mm > 59) { showToast('有効な時刻を入力してください'); return; }
+  const minutes = hh * 60 + mm;
+  const t = todayStr();
+  const ex = store.departureLog.find(a => a.date === t);
+  if (ex) { ex.time = v; ex.minutes = minutes; }
+  else store.departureLog.push({ date: t, time: v, minutes: minutes });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderDepartureChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`出発 ${v} を記録しました`);
+}
+
 function saveArrivalTime() {
   const input = document.getElementById('arrival-input');
   const v = input.value;
@@ -1137,6 +1193,8 @@ function saveArrivalTime() {
 document.getElementById('wake-save-btn').addEventListener('click', saveWakeTime);
 document.getElementById('study-save-btn').addEventListener('click', saveStudy);
 document.getElementById('study-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveStudy(); });
+document.getElementById('departure-save-btn').addEventListener('click', saveDepartureTime);
+document.getElementById('departure-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveDepartureTime(); });
 document.getElementById('arrival-save-btn').addEventListener('click', saveArrivalTime);
 document.getElementById('arrival-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveArrivalTime(); });
 
@@ -1169,6 +1227,7 @@ document.querySelectorAll('.range-seg button').forEach(btn => {
     updateRangeSeg();
     renderWakeChart();
     renderStudyChart();
+    renderDepartureChart();
     renderArrivalChart();
     renderWorkoutChart();
     renderWeightChart();
