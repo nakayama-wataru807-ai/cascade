@@ -621,6 +621,17 @@ html, body {
         <div class="chart-today-line" id="departure-today-line"></div>
       </div>
 
+      <div class="card reveal" id="work-card">
+        <div class="label" style="margin-bottom:14px">作業時間 — 全記録</div>
+        <div class="weight-input-row">
+          <input type="number" id="work-input" class="weight-input" placeholder="今日の作業時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">分</span>
+          <button class="weight-save-btn" id="work-save-btn">記録</button>
+        </div>
+        <div id="work-chart"></div>
+        <div class="chart-today-line" id="work-today-line"></div>
+      </div>
+
       <div class="card reveal" id="arrival-card">
         <div class="label" style="margin-bottom:14px">帰宅リズム — 全記録</div>
         <div class="weight-input-row">
@@ -720,6 +731,7 @@ function freshStore() {
     workoutLog: [],
     arrivalLog: [],
     departureLog: [],
+    workLog: [],
   };
 }
 
@@ -739,6 +751,7 @@ function migrate(s) {
   if (!Array.isArray(s.workoutLog)) s.workoutLog = [];
   if (!Array.isArray(s.arrivalLog)) s.arrivalLog = [];
   if (!Array.isArray(s.departureLog)) s.departureLog = [];
+  if (!Array.isArray(s.workLog)) s.workLog = [];
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -893,6 +906,7 @@ function renderHome() {
   renderWakeChart();
   renderStudyChart();
   renderDepartureChart();
+  renderWorkChart();
   renderArrivalChart();
   renderWorkoutChart();
   renderWeightChart();
@@ -1070,6 +1084,30 @@ function renderDepartureChart() {
   );
 }
 
+function renderWorkChart() {
+  const container = document.getElementById('work-chart');
+  const todayLine = document.getElementById('work-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.workLog || []).slice().sort(byDate);
+  const log = sliceByRange(all);
+  const todayRec = all.find(w => w.date === t);
+  const totalMin = all.reduce((sum, w) => sum + (w.minutes || 0), 0);
+  let line = todayRec
+    ? `今日の作業<b>${todayRec.minutes} 分</b>`
+    : '今日はまだ作業時間を記録していません';
+  if (all.length > 0) line += `<div class="chart-total">累計 ${fmtTotalMin(totalMin)}</div>`;
+  todayLine.innerHTML = line;
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('上の欄に今日の作業時間を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(w => ({ date: w.date, value: w.minutes })),
+    { fmt: fmtMin, invert: false, ariaLabel: '作業時間の推移' }
+  );
+}
+
 function renderArrivalChart() {
   const container = document.getElementById('arrival-chart');
   const todayLine = document.getElementById('arrival-today-line');
@@ -1195,6 +1233,26 @@ document.getElementById('study-save-btn').addEventListener('click', saveStudy);
 document.getElementById('study-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveStudy(); });
 document.getElementById('departure-save-btn').addEventListener('click', saveDepartureTime);
 document.getElementById('departure-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveDepartureTime(); });
+
+// ── 作業時間の入力・記録 ──
+function saveWork() {
+  const input = document.getElementById('work-input');
+  const val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 0 || val > 1440) { showToast('正しい作業時間を入力してください'); return; }
+  const t = todayStr();
+  const ex = store.workLog.find(w => w.date === t);
+  if (ex) ex.minutes = val;
+  else store.workLog.push({ date: t, minutes: val });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderWorkChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`作業 ${val}分 を記録しました`);
+}
+
+document.getElementById('work-save-btn').addEventListener('click', saveWork);
+document.getElementById('work-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWork(); });
 document.getElementById('arrival-save-btn').addEventListener('click', saveArrivalTime);
 document.getElementById('arrival-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveArrivalTime(); });
 
@@ -1228,6 +1286,7 @@ document.querySelectorAll('.range-seg button').forEach(btn => {
     renderWakeChart();
     renderStudyChart();
     renderDepartureChart();
+    renderWorkChart();
     renderArrivalChart();
     renderWorkoutChart();
     renderWeightChart();
