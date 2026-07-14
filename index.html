@@ -25,6 +25,21 @@
   --ki-deep: #9E6228;
   --take: #4A5C42;
   --tetsusabi: #5C4033;
+  /* ── 指標別アクセント（グラフ線・カード左枠・背景の淡い色づけに使用）── */
+  --c-study: #65640E;
+  --c-study-deep: #4A4300;
+  --c-departure: #863E37;
+  --c-departure-deep: #5F2323;
+  --c-work: #00929F;
+  --c-work-deep: #007076;
+  --c-arrival: #6580BF;
+  --c-arrival-deep: #446194;
+  --c-weight: #41926B;
+  --c-weight-deep: #306E4A;
+  --c-workout: #9E5379;
+  --c-workout-deep: #75385D;
+  --c-screen: #674A87;
+  --c-screen-deep: #433063;
   --line: rgba(28,28,26,0.10);
   --line-strong: rgba(28,28,26,0.22);
   --shadow: 0 2px 12px rgba(28,28,26,0.08);
@@ -145,9 +160,20 @@ html, body {
   background: var(--kinari-2);
   border-radius: var(--r3);
   padding: 16px;
+  border-left: 3px solid transparent;
   box-shadow: var(--shadow);
   margin-bottom: 12px;
 }
+
+/* 指標カードごとのアクセント（左枠線＋ごく淡い背景の色づけ）。指標が増えても見分けやすいように */
+#wake-chart-card { border-left-color: var(--ki); background: color-mix(in srgb, var(--ki) 6%, var(--kinari-2)); }
+#study-card      { border-left-color: var(--c-study); background: color-mix(in srgb, var(--c-study) 6%, var(--kinari-2)); }
+#departure-card  { border-left-color: var(--c-departure); background: color-mix(in srgb, var(--c-departure) 6%, var(--kinari-2)); }
+#work-card       { border-left-color: var(--c-work); background: color-mix(in srgb, var(--c-work) 6%, var(--kinari-2)); }
+#arrival-card    { border-left-color: var(--c-arrival); background: color-mix(in srgb, var(--c-arrival) 6%, var(--kinari-2)); }
+#weight-card     { border-left-color: var(--c-weight); background: color-mix(in srgb, var(--c-weight) 6%, var(--kinari-2)); }
+#workout-card    { border-left-color: var(--c-workout); background: color-mix(in srgb, var(--c-workout) 6%, var(--kinari-2)); }
+#screen-card     { border-left-color: var(--c-screen); background: color-mix(in srgb, var(--c-screen) 6%, var(--kinari-2)); }
 
 /* ── Wake Gate（起床打刻ページ）── */
 #morning-gate {
@@ -312,6 +338,13 @@ html, body {
   color: var(--ki-deep);
   margin-left: 4px;
 }
+#study-card .chart-today-line b     { color: var(--c-study-deep); }
+#departure-card .chart-today-line b { color: var(--c-departure-deep); }
+#work-card .chart-today-line b      { color: var(--c-work-deep); }
+#arrival-card .chart-today-line b   { color: var(--c-arrival-deep); }
+#weight-card .chart-today-line b    { color: var(--c-weight-deep); }
+#workout-card .chart-today-line b   { color: var(--c-workout-deep); }
+#screen-card .chart-today-line b    { color: var(--c-screen-deep); }
 .chart-total {
   font-family: var(--font-latin);
   font-size: 11px;
@@ -349,6 +382,10 @@ html, body {
   font-size: 14px;
   color: var(--sumi-muted);
   flex-shrink: 0;
+}
+.hm-input {
+  flex: 0 1 84px;
+  text-align: center;
 }
 .weight-save-btn {
   padding: 12px 20px;
@@ -624,7 +661,9 @@ html, body {
       <div class="card reveal" id="work-card">
         <div class="label" style="margin-bottom:14px">作業時間 — 全記録</div>
         <div class="weight-input-row">
-          <input type="number" id="work-input" class="weight-input" placeholder="今日の作業時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <input type="number" id="work-input-h" class="weight-input hm-input" placeholder="0" min="0" max="23" inputmode="numeric" enterkeyhint="next" autocomplete="off">
+          <span class="weight-unit">時間</span>
+          <input type="number" id="work-input-m" class="weight-input hm-input" placeholder="0" min="0" max="59" inputmode="numeric" enterkeyhint="done" autocomplete="off">
           <span class="weight-unit">分</span>
           <button class="weight-save-btn" id="work-save-btn">記録</button>
         </div>
@@ -674,6 +713,19 @@ html, body {
         <div class="data-hint">端末を変える前や、念のための保存に。JSON ファイルとして書き出し・復元できます。</div>
       </div>
 
+      <div class="card reveal" id="screen-card">
+        <div class="label" style="margin-bottom:14px">スクリーンタイム — 全記録</div>
+        <div class="weight-input-row">
+          <input type="number" id="screen-input-h" class="weight-input hm-input" placeholder="0" min="0" max="23" inputmode="numeric" enterkeyhint="next" autocomplete="off">
+          <span class="weight-unit">時間</span>
+          <input type="number" id="screen-input-m" class="weight-input hm-input" placeholder="0" min="0" max="59" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">分</span>
+          <button class="weight-save-btn" id="screen-save-btn">記録</button>
+        </div>
+        <div id="screen-chart"></div>
+        <div class="chart-today-line" id="screen-today-line"></div>
+      </div>
+
       <div class="app-version">Cascade · 2026-06-12 更新</div>
     </section>
 
@@ -719,6 +771,7 @@ const DEFAULT_HABITS = [
   {id:'h10',label:'散歩',icon:'🚶'},
   {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h2',label:'筋トレ',icon:'💪'},
+  {id:'h15',label:'NOドーパミン',icon:'🚫'},
 ];
 
 function freshStore() {
@@ -732,6 +785,7 @@ function freshStore() {
     arrivalLog: [],
     departureLog: [],
     workLog: [],
+    screenLog: [],
   };
 }
 
@@ -752,6 +806,7 @@ function migrate(s) {
   if (!Array.isArray(s.arrivalLog)) s.arrivalLog = [];
   if (!Array.isArray(s.departureLog)) s.departureLog = [];
   if (!Array.isArray(s.workLog)) s.workLog = [];
+  if (!Array.isArray(s.screenLog)) s.screenLog = [];
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -910,12 +965,25 @@ function renderHome() {
   renderArrivalChart();
   renderWorkoutChart();
   renderWeightChart();
+  renderScreenChart();
 }
 
-// ── Line Chart（起床・体重 共通の SVG 折れ線描画）──
+// ── 指標別グラフ配色（CSS の --c-* と対の値。カード側と揃えて手入力）──
+const CHART_COLORS = {
+  wake:      { c: '#C4833A', deep: '#9E6228' },
+  study:     { c: '#65640E', deep: '#4A4300' },
+  departure: { c: '#863E37', deep: '#5F2323' },
+  work:      { c: '#00929F', deep: '#007076' },
+  arrival:   { c: '#6580BF', deep: '#446194' },
+  weight:    { c: '#41926B', deep: '#306E4A' },
+  workout:   { c: '#9E5379', deep: '#75385D' },
+  screen:    { c: '#674A87', deep: '#433063' },
+};
+
+// ── Line Chart（8指標共通の SVG 折れ線描画）──
 // invert=true: 値が小さいほど上（起床=早い時刻ほど上）
 // invert=false: 値が大きいほど上（体重=標準）
-function buildLineChartSVG(data, { fmt, invert, ariaLabel }) {
+function buildLineChartSVG(data, { fmt, invert, ariaLabel, color = CHART_COLORS.wake.c, colorDeep = CHART_COLORS.wake.deep }) {
   const W = 320, H = 168, padL = 42, padR = 14, padT = 14, padB = 28;
   const plotW = W - padL - padR, plotH = H - padT - padB;
   const t = todayStr();
@@ -940,14 +1008,16 @@ function buildLineChartSVG(data, { fmt, invert, ariaLabel }) {
 
   const pts = data.map((d, i) => `${xAt(i).toFixed(1)},${yAt(d.value).toFixed(1)}`).join(' ');
   const line = n > 1
-    ? `<polyline points="${pts}" fill="none" stroke="#C4833A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+    ? `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
     : '';
 
   let dots = '', xlabels = '';
   data.forEach((d, i) => {
     const cx = xAt(i).toFixed(1), cy = yAt(d.value).toFixed(1);
     const isToday = d.date === t;
-    dots += `<circle cx="${cx}" cy="${cy}" r="${isToday ? 4.5 : 3}" fill="${isToday ? '#4A5C42' : '#9E6228'}"/>`;
+    // 今日の点は同系色を保ちつつ、外周のハロー（生成り色のリング）とサイズで強調する
+    const ring = isToday ? ` stroke="#F5F0E8" stroke-width="2"` : '';
+    dots += `<circle cx="${cx}" cy="${cy}" r="${isToday ? 5 : 3}" fill="${colorDeep}"${ring}/>`;
     if (i === 0 || i === n - 1 || (n > 4 && i === Math.floor((n - 1) / 2))) {
       const md = d.date.slice(5).replace('-', '/');
       xlabels += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="9" fill="#7A776E">${md}</text>`;
@@ -993,7 +1063,7 @@ function renderWakeChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(w => ({ date: w.date, value: w.minutes })),
-    { fmt: fmtTime, invert: true, ariaLabel: '起床時刻の推移' }
+    { fmt: fmtTime, invert: true, ariaLabel: '起床時刻の推移', color: CHART_COLORS.wake.c, colorDeep: CHART_COLORS.wake.deep }
   );
 }
 
@@ -1014,7 +1084,7 @@ function renderWeightChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(w => ({ date: w.date, value: w.weight })),
-    { fmt: fmtKg, invert: false, ariaLabel: '体重の推移' }
+    { fmt: fmtKg, invert: false, ariaLabel: '体重の推移', color: CHART_COLORS.weight.c, colorDeep: CHART_COLORS.weight.deep }
   );
 }
 
@@ -1035,7 +1105,7 @@ function renderWorkoutChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(w => ({ date: w.date, value: w.minutes })),
-    { fmt: fmtMin, invert: false, ariaLabel: 'ワークアウト時間の推移' }
+    { fmt: fmtMin, invert: false, ariaLabel: 'ワークアウト時間の推移', color: CHART_COLORS.workout.c, colorDeep: CHART_COLORS.workout.deep }
   );
 }
 
@@ -1059,7 +1129,7 @@ function renderStudyChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(s => ({ date: s.date, value: s.minutes })),
-    { fmt: fmtMin, invert: false, ariaLabel: '勉強時間の推移' }
+    { fmt: fmtMin, invert: false, ariaLabel: '勉強時間の推移', color: CHART_COLORS.study.c, colorDeep: CHART_COLORS.study.deep }
   );
 }
 
@@ -1080,7 +1150,7 @@ function renderDepartureChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(a => ({ date: a.date, value: a.minutes })),
-    { fmt: fmtTime, invert: true, ariaLabel: '出発時刻の推移' }
+    { fmt: fmtTime, invert: true, ariaLabel: '出発時刻の推移', color: CHART_COLORS.departure.c, colorDeep: CHART_COLORS.departure.deep }
   );
 }
 
@@ -1094,7 +1164,7 @@ function renderWorkChart() {
   const todayRec = all.find(w => w.date === t);
   const totalMin = all.reduce((sum, w) => sum + (w.minutes || 0), 0);
   let line = todayRec
-    ? `今日の作業<b>${todayRec.minutes} 分</b>`
+    ? `今日の作業<b>${fmtTotalMin(todayRec.minutes)}</b>`
     : '今日はまだ作業時間を記録していません';
   if (all.length > 0) line += `<div class="chart-total">累計 ${fmtTotalMin(totalMin)}</div>`;
   todayLine.innerHTML = line;
@@ -1104,7 +1174,7 @@ function renderWorkChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(w => ({ date: w.date, value: w.minutes })),
-    { fmt: fmtMin, invert: false, ariaLabel: '作業時間の推移' }
+    { fmt: fmtMin, invert: false, ariaLabel: '作業時間の推移', color: CHART_COLORS.work.c, colorDeep: CHART_COLORS.work.deep }
   );
 }
 
@@ -1125,7 +1195,28 @@ function renderArrivalChart() {
   }
   container.innerHTML = buildLineChartSVG(
     log.map(a => ({ date: a.date, value: a.minutes })),
-    { fmt: fmtTime, invert: true, ariaLabel: '帰宅時刻の推移' }
+    { fmt: fmtTime, invert: true, ariaLabel: '帰宅時刻の推移', color: CHART_COLORS.arrival.c, colorDeep: CHART_COLORS.arrival.deep }
+  );
+}
+
+function renderScreenChart() {
+  const container = document.getElementById('screen-chart');
+  const todayLine = document.getElementById('screen-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.screenLog || []).slice().sort(byDate);
+  const log = sliceByRange(all);
+  const todayRec = all.find(s => s.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日のスクリーンタイム<b>${fmtTotalMin(todayRec.minutes)}</b>`
+    : '今日はまだスクリーンタイムを記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('上の欄に今日のスクリーンタイムを入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(s => ({ date: s.date, value: s.minutes })),
+    { fmt: fmtMin, invert: false, ariaLabel: 'スクリーンタイムの推移', color: CHART_COLORS.screen.c, colorDeep: CHART_COLORS.screen.deep }
   );
 }
 
@@ -1234,25 +1325,31 @@ document.getElementById('study-input').addEventListener('keydown', e => { if (e.
 document.getElementById('departure-save-btn').addEventListener('click', saveDepartureTime);
 document.getElementById('departure-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveDepartureTime(); });
 
-// ── 作業時間の入力・記録 ──
+// ── 作業時間の入力・記録（時間＋分）──
 function saveWork() {
-  const input = document.getElementById('work-input');
-  const val = parseInt(input.value, 10);
-  if (isNaN(val) || val < 0 || val > 1440) { showToast('正しい作業時間を入力してください'); return; }
+  const hInput = document.getElementById('work-input-h');
+  const mInput = document.getElementById('work-input-m');
+  if (hInput.value === '' && mInput.value === '') { showToast('作業時間を入力してください'); return; }
+  const h = hInput.value === '' ? 0 : parseInt(hInput.value, 10);
+  const m = mInput.value === '' ? 0 : parseInt(mInput.value, 10);
+  const val = h * 60 + m;
+  if (isNaN(h) || isNaN(m) || h < 0 || m < 0 || m > 59 || val > 1440) { showToast('正しい作業時間を入力してください'); return; }
   const t = todayStr();
   const ex = store.workLog.find(w => w.date === t);
   if (ex) ex.minutes = val;
   else store.workLog.push({ date: t, minutes: val });
   saveStore();
-  input.value = '';
-  input.blur();
+  hInput.value = '';
+  mInput.value = '';
+  hInput.blur();
+  mInput.blur();
   renderWorkChart();
   if ('vibrate' in navigator) navigator.vibrate(30);
-  showToast(`作業 ${val}分 を記録しました`);
+  showToast(`作業 ${fmtTotalMin(val)} を記録しました`);
 }
 
 document.getElementById('work-save-btn').addEventListener('click', saveWork);
-document.getElementById('work-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWork(); });
+document.getElementById('work-input-m').addEventListener('keydown', e => { if (e.key === 'Enter') saveWork(); });
 document.getElementById('arrival-save-btn').addEventListener('click', saveArrivalTime);
 document.getElementById('arrival-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveArrivalTime(); });
 
@@ -1276,6 +1373,32 @@ function saveWorkout() {
 document.getElementById('workout-save-btn').addEventListener('click', saveWorkout);
 document.getElementById('workout-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWorkout(); });
 
+// ── スクリーンタイムの入力・記録（時間＋分）──
+function saveScreen() {
+  const hInput = document.getElementById('screen-input-h');
+  const mInput = document.getElementById('screen-input-m');
+  if (hInput.value === '' && mInput.value === '') { showToast('スクリーンタイムを入力してください'); return; }
+  const h = hInput.value === '' ? 0 : parseInt(hInput.value, 10);
+  const m = mInput.value === '' ? 0 : parseInt(mInput.value, 10);
+  const val = h * 60 + m;
+  if (isNaN(h) || isNaN(m) || h < 0 || m < 0 || m > 59 || val > 1440) { showToast('正しいスクリーンタイムを入力してください'); return; }
+  const t = todayStr();
+  const ex = store.screenLog.find(s => s.date === t);
+  if (ex) ex.minutes = val;
+  else store.screenLog.push({ date: t, minutes: val });
+  saveStore();
+  hInput.value = '';
+  mInput.value = '';
+  hInput.blur();
+  mInput.blur();
+  renderScreenChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`スクリーンタイム ${fmtTotalMin(val)} を記録しました`);
+}
+
+document.getElementById('screen-save-btn').addEventListener('click', saveScreen);
+document.getElementById('screen-input-m').addEventListener('keydown', e => { if (e.key === 'Enter') saveScreen(); });
+
 // 期間切替セグメント（3グラフ共通）
 document.querySelectorAll('.range-seg button').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1290,6 +1413,7 @@ document.querySelectorAll('.range-seg button').forEach(btn => {
     renderArrivalChart();
     renderWorkoutChart();
     renderWeightChart();
+    renderScreenChart();
   });
 });
 
