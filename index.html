@@ -636,6 +636,17 @@ html, body {
         <div class="chart-today-line" id="wake-today-line"></div>
       </div>
 
+      <div class="card reveal" id="bank-card">
+        <div class="label" style="margin-bottom:14px">口座残高 — 全記録</div>
+        <div class="weight-input-row">
+          <input type="number" id="bank-input" class="weight-input" placeholder="今日の口座残高" step="1" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">円</span>
+          <button class="weight-save-btn" id="bank-save-btn">記録</button>
+        </div>
+        <div id="bank-chart"></div>
+        <div class="chart-today-line" id="bank-today-line"></div>
+      </div>
+
       <div class="card reveal" id="study-card">
         <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
         <div id="study-menu"></div>
@@ -763,13 +774,14 @@ const DEFAULT_HABITS = [
   {id:'h7',label:'読書',icon:'📚'},
   {id:'h8',label:'日記振り返り',icon:'📓'},
   {id:'h11',label:'表情筋トレ',icon:'😀'},
+  {id:'h16',label:'顎トレ',icon:'😬'},
   {id:'h12',label:'朝トレ',icon:'🌅'},
+  {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h13',label:'Podcasts',icon:'🎧'},
   {id:'h6',label:'修論作業',icon:'✏️'},
   {id:'h9',label:'建築士アプリ',icon:'📱'},
   {id:'h4',label:'間食増量',icon:'🍱'},
   {id:'h10',label:'散歩',icon:'🚶'},
-  {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h2',label:'筋トレ',icon:'💪'},
   {id:'h15',label:'NOドーパミン',icon:'🚫'},
 ];
@@ -779,6 +791,7 @@ function freshStore() {
     settings: { lastWakeDate: '', chartRange: 'all' },
     habits: { definitions: DEFAULT_HABITS, logs: {} },
     wakeLog: [],
+    bankLog: [],
     weightLog: [],
     studyLog: [],
     workoutLog: [],
@@ -800,6 +813,7 @@ function migrate(s) {
   s.habits.definitions = DEFAULT_HABITS;            // 常に最新の習慣定義（早起き・体重は除外）
   if (!s.habits.logs) s.habits.logs = {};
   if (!Array.isArray(s.wakeLog)) s.wakeLog = [];
+  if (!Array.isArray(s.bankLog)) s.bankLog = [];
   if (!Array.isArray(s.weightLog)) s.weightLog = [];
   if (!Array.isArray(s.studyLog)) s.studyLog = [];
   if (!Array.isArray(s.workoutLog)) s.workoutLog = [];
@@ -959,6 +973,7 @@ function renderHome() {
   document.getElementById('home-weekday').textContent = `${DAYS[d.getDay()]}曜日 — ${d.getFullYear()}`;
   updateRangeSeg();
   renderWakeChart();
+  renderBankChart();
   renderStudyChart();
   renderDepartureChart();
   renderWorkChart();
@@ -971,6 +986,7 @@ function renderHome() {
 // ── 指標別グラフ配色（CSS の --c-* と対の値。カード側と揃えて手入力）──
 const CHART_COLORS = {
   wake:      { c: '#C4833A', deep: '#9E6228' },
+  bank:      { c: '#B8860B', deep: '#8B6508' },
   study:     { c: '#65640E', deep: '#4A4300' },
   departure: { c: '#863E37', deep: '#5F2323' },
   work:      { c: '#00929F', deep: '#007076' },
@@ -1038,6 +1054,7 @@ const fmtTime = m => {
   return `${hh}:${String(mm).padStart(2, '0')}`;
 };
 const fmtKg = v => v.toFixed(1);
+const fmtYen = v => Math.round(v).toLocaleString();
 const fmtMin = v => `${Math.round(v)}`;
 function fmtTotalMin(m) {
   const h = Math.floor(m / 60), mm = m % 60;
@@ -1064,6 +1081,27 @@ function renderWakeChart() {
   container.innerHTML = buildLineChartSVG(
     log.map(w => ({ date: w.date, value: w.minutes })),
     { fmt: fmtTime, invert: true, ariaLabel: '起床時刻の推移', color: CHART_COLORS.wake.c, colorDeep: CHART_COLORS.wake.deep }
+  );
+}
+
+function renderBankChart() {
+  const container = document.getElementById('bank-chart');
+  const todayLine = document.getElementById('bank-today-line');
+  if (!container) return;
+  const t = todayStr();
+  const all = (store.bankLog || []).slice().sort(byDate);
+  const log = sliceByRange(all);
+  const todayRec = all.find(b => b.date === t);
+  todayLine.innerHTML = todayRec
+    ? `今日の口座残高<b>${fmtYen(todayRec.amount)} 円</b>`
+    : '今日はまだ口座残高を記録していません';
+  if (log.length === 0) {
+    container.innerHTML = emptyChartMsg('上の欄に今日の口座残高を入力してください。');
+    return;
+  }
+  container.innerHTML = buildLineChartSVG(
+    log.map(b => ({ date: b.date, value: b.amount })),
+    { fmt: fmtYen, invert: false, ariaLabel: '口座残高の推移', color: CHART_COLORS.bank.c, colorDeep: CHART_COLORS.bank.deep }
   );
 }
 
@@ -1241,6 +1279,26 @@ function saveWeight() {
 document.getElementById('weight-save-btn').addEventListener('click', saveWeight);
 document.getElementById('weight-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveWeight(); });
 
+// ── 口座残高の入力・記録 ──
+function saveBank() {
+  const input = document.getElementById('bank-input');
+  const val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 0) { showToast('正しい口座残高を入力してください'); return; }
+  const t = todayStr();
+  const ex = store.bankLog.find(b => b.date === t);
+  if (ex) ex.amount = val;
+  else store.bankLog.push({ date: t, amount: val });
+  saveStore();
+  input.value = '';
+  input.blur();
+  renderBankChart();
+  if ('vibrate' in navigator) navigator.vibrate(30);
+  showToast(`口座残高 ${fmtYen(val)}円 を記録しました`);
+}
+
+document.getElementById('bank-save-btn').addEventListener('click', saveBank);
+document.getElementById('bank-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveBank(); });
+
 // ── 起床時刻の入力・修正（ホームから上書き可能）──
 function saveWakeTime() {
   const input = document.getElementById('wake-input');
@@ -1407,6 +1465,7 @@ document.querySelectorAll('.range-seg button').forEach(btn => {
     saveStore();
     updateRangeSeg();
     renderWakeChart();
+    renderBankChart();
     renderStudyChart();
     renderDepartureChart();
     renderWorkChart();
