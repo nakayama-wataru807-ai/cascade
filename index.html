@@ -737,6 +737,44 @@ html, body {
         <div class="data-hint">端末を変える前や、念のための保存に。JSON ファイルとして書き出し・復元できます。</div>
       </div>
 
+      <div class="card reveal" id="sync-card">
+        <div class="label" style="margin-bottom:12px">同期</div>
+        <div class="data-hint" style="margin-bottom:12px">
+          記録を private リポジトリへ自動で上げ、PC 側から読めるようにします。設定しなければ何も送信しません。
+        </div>
+        <div class="data-btn-row">
+          <button class="data-btn" id="sync-now-btn">今すぐ同期</button>
+          <button class="data-btn" id="sync-cfg-btn">設定</button>
+        </div>
+        <div class="data-hint" id="sync-state" style="margin-top:10px">未設定</div>
+        <div id="sync-cfg" style="display:none;margin-top:12px;border-top:1px solid rgba(0,0,0,.08);padding-top:12px">
+          <div class="weight-input-row">
+            <input type="text" id="sync-repo" class="weight-input" placeholder="owner/repo"
+                   autocapitalize="off" spellcheck="false" autocomplete="off">
+          </div>
+          <div class="weight-input-row" style="margin-top:8px">
+            <input type="text" id="sync-path" class="weight-input" placeholder="cascade/state.json"
+                   autocapitalize="off" spellcheck="false" autocomplete="off">
+          </div>
+          <div class="weight-input-row" style="margin-top:8px">
+            <input type="password" id="sync-token" class="weight-input" placeholder="github_pat_..."
+                   autocapitalize="off" spellcheck="false" autocomplete="off">
+          </div>
+          <label class="data-hint" style="display:flex;gap:8px;align-items:center;margin:10px 0">
+            <input type="checkbox" id="sync-auto"> 記録するたびに自動で同期する
+          </label>
+          <div class="data-btn-row">
+            <button class="data-btn" id="sync-save-btn">保存</button>
+            <button class="data-btn" id="sync-clear-btn">消去</button>
+          </div>
+          <div class="data-hint" style="margin-top:10px">
+            トークンは <b>fine-grained personal access token</b> を、対象リポジトリ1つだけ・
+            <b>Contents: Read and write</b> のみ・有効期限つきで作ってください。
+            この端末の中にのみ保存され、GitHub 以外へは送られません。
+          </div>
+        </div>
+      </div>
+
       <div class="app-version">Cascade · 2026-06-12 更新</div>
     </section>
 
@@ -839,6 +877,7 @@ function loadStore() {
 
 function saveStore() {
   localStorage.setItem(STORE_KEY, JSON.stringify(store));
+  if (typeof scheduleSync === 'function') scheduleSync();
 }
 
 let store = loadStore();
@@ -1532,6 +1571,145 @@ function importData() {
 
 document.getElementById('export-btn').addEventListener('click', exportData);
 document.getElementById('import-btn').addEventListener('click', importData);
+
+// ── GitHub 同期 ──
+// 記録を private リポジトリへ上げ、PC 側（Claude）から読めるようにする。
+// 設定しない限り外部へは一切送信しない。トークンはこの端末の localStorage にのみ置く。
+const GH_KEY = 'cascade_gh_v1';
+const GH_DEFAULT = { repo: '', path: 'cascade/state.json', token: '', auto: true, last: null };
+let gh = loadGh();
+
+function loadGh() {
+  try {
+    const raw = localStorage.getItem(GH_KEY);
+    if (raw) return Object.assign({}, GH_DEFAULT, JSON.parse(raw));
+  } catch (e) {}
+  return Object.assign({}, GH_DEFAULT);
+}
+function saveGh() {
+  localStorage.setItem(GH_KEY, JSON.stringify(gh));
+  renderSyncState();
+}
+function ghB64enc(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  const CH = 0x8000;
+  for (let i = 0; i < bytes.length; i += CH) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+  return btoa(bin);
+}
+function ghB64dec(s) {
+  const bin = atob(String(s).replace(/\s/g, ''));
+  return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+}
+async function ghApi(method, url, body) {
+  const r = await fetch(url, {
+    method,
+    headers: { 'Authorization': 'Bearer ' + gh.token,
+               'Accept': 'application/vnd.github+json',
+               'X-GitHub-Api-Version': '2022-11-28' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error('GitHub ' + r.status + ' ' + (await r.text()).slice(0, 100));
+  return r.json();
+}
+
+// 日付をキーに統合する。同じ日付が両方にあるときは、いま操作している端末（local）を採る。
+function mergeLogs(remote, local, dateKey) {
+  const m = new Map();
+  (remote || []).forEach(e => e && e[dateKey] && m.set(e[dateKey], e));
+  (local  || []).forEach(e => e && e[dateKey] && m.set(e[dateKey], e));
+  return [...m.values()].sort((a, b) => String(a[dateKey]).localeCompare(String(b[dateKey])));
+}
+function mergeStore(remote, local) {
+  if (!remote || typeof remote !== 'object') return local;
+  const out = JSON.parse(JSON.stringify(local));
+  for (const k of ['wakeLog','bankLog','weightLog','studyLog','workoutLog',
+                   'arrivalLog','departureLog','workLog','screenLog']) {
+    out[k] = mergeLogs(remote[k], local[k], 'date');
+  }
+  // habits.logs は {日付: {習慣ID: bool}}。日付単位でローカルを優先する
+  out.habits = out.habits || { definitions: DEFAULT_HABITS, logs: {} };
+  const rl = (remote.habits && remote.habits.logs) || {};
+  out.habits.logs = Object.assign({}, rl, (local.habits && local.habits.logs) || {});
+  return out;
+}
+
+let syncTimer = null;
+function scheduleSync() {
+  if (!gh.auto || !gh.token || !gh.repo) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => syncNow(true), 4000);   // 連続入力でAPIを叩きすぎない
+}
+
+async function syncNow(silent) {
+  if (!gh.token || !gh.repo) {
+    if (!silent) showToast('同期の設定が未入力です');
+    return false;
+  }
+  const url = 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path;
+  try {
+    const cur = await ghApi('GET', url);
+    let remote = null;
+    if (cur && cur.content) {
+      try { remote = JSON.parse(ghB64dec(cur.content)).store; } catch (e) { remote = null; }
+    }
+    const merged = migrate(mergeStore(remote, store));
+    const payload = { synced: new Date().toISOString(), app: 'cascade', store: merged };
+    await ghApi('PUT', url, {
+      message: '習慣記録を同期: ' + todayStr(),
+      content: ghB64enc(JSON.stringify(payload, null, 1)),
+      sha: cur ? cur.sha : undefined,
+    });
+    store = merged;
+    localStorage.setItem(STORE_KEY, JSON.stringify(store));   // saveStore だと再帰する
+    gh.last = new Date().toISOString();
+    saveGh();
+    if (!silent) { showToast('同期しました'); location.reload(); }
+    return true;
+  } catch (err) {
+    showToast('同期に失敗: ' + err.message);
+    return false;
+  }
+}
+
+function renderSyncState() {
+  const el = document.getElementById('sync-state');
+  if (!el) return;
+  const set = !!(gh.token && gh.repo);
+  const last = gh.last ? gh.last.slice(5, 16).replace('T', ' ') : '—';
+  el.textContent = set
+    ? (gh.auto ? '自動同期: ON' : '手動') + ' / ' + gh.repo + ' / 最終 ' + last
+    : '未設定';
+  const r = document.getElementById('sync-repo');
+  if (r) {
+    r.value = gh.repo;
+    document.getElementById('sync-path').value = gh.path;
+    document.getElementById('sync-token').value = gh.token ? '••••••••' : '';
+    document.getElementById('sync-auto').checked = !!gh.auto;
+  }
+}
+
+document.getElementById('sync-now-btn').addEventListener('click', () => syncNow(false));
+document.getElementById('sync-cfg-btn').addEventListener('click', () => {
+  const c = document.getElementById('sync-cfg');
+  c.style.display = c.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('sync-save-btn').addEventListener('click', () => {
+  gh.repo = document.getElementById('sync-repo').value.trim();
+  gh.path = document.getElementById('sync-path').value.trim() || GH_DEFAULT.path;
+  gh.auto = document.getElementById('sync-auto').checked;
+  const t = document.getElementById('sync-token').value.trim();
+  if (t && !/^•+$/.test(t)) gh.token = t;
+  saveGh();
+  showToast('同期設定を保存しました');
+});
+document.getElementById('sync-clear-btn').addEventListener('click', () => {
+  gh = Object.assign({}, GH_DEFAULT);
+  saveGh();
+  showToast('この端末の同期設定を消しました');
+});
+renderSyncState();
 
 // ── Habits ──
 function renderHabits() {

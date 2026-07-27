@@ -657,8 +657,10 @@ function renderLog(){
  * PC 側の /kenchikushi weak・status から読めるようにする。
  * 設定しない限り、このアプリは外部へ一切送信しない。
  */
-const GH_DEFAULT = {repo:'nakayama-wataru807-ai/1st-ClassArchitect',
-                    path:'data/app_progress.json', token:'', auto:true,
+/* 同期先は専用の private リポジトリにする。試験データを持つ 1st-ClassArchitect と
+ * 分けておけば、端末に置くトークンが問題データに触れられない。 */
+const GH_DEFAULT = {repo:'nakayama-wataru807-ai/personal-sync',
+                    path:'kenchiku/app_progress.json', token:'', auto:true,
                     last:null, lastCount:0};
 let GH = {...GH_DEFAULT};
 
