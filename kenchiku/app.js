@@ -9,6 +9,12 @@
 const EXAM_DATE = '2027-07-25';   // 令和9年 学科試験（7月第4日曜の見込み）
 const DB_NAME = 'kenchiku-drill', DB_VER = 1;
 
+/* 科目テーマカラーの対応。CSS 側に .s-<key> が定義してあり、
+ * その配下では var(--s) / var(--s-w) で科目色が引ける。 */
+const SUBJECTS = ['計画', '環境', '法規', '構造', '施工'];
+const SUBJECT_KEY = {計画:'keikaku', 環境:'kankyo', 法規:'hoki', 構造:'kozo', 施工:'seko'};
+const subjClass = s => 's-' + (SUBJECT_KEY[s] || 'kozo');
+
 /* ---------------- IndexedDB ---------------- */
 let db;
 function openDB(){
@@ -90,7 +96,8 @@ const REASONS_NG = [
   {k:'timeout',   label:'時間切れ',           q:1},
 ];
 const REASON_LABEL = Object.fromEntries(
-  [...REASONS_OK, ...REASONS_NG].map(r => [r.k, r.label]));
+  [...REASONS_OK, ...REASONS_NG].map(r => [r.k, r.label])
+    .concat([['unrecorded', '理由未記録']]));
 
 /* ---------------- 起動 ---------------- */
 async function boot(){
@@ -131,6 +138,7 @@ function wire(){
   $('#backBtn').onclick  = () => { $('#resultCard').hidden = true; $('#quizSetup').hidden = false; };
   $('#nextBtn').onclick  = () => nextQuestion();
   $('#againBtn').onclick = () => { SESSION.queue.push(SESSION.current); nextQuestion(); };
+  $('#suspendBtn').onclick = suspendSession;
   $('#exportBtn').onclick = exportProgress;
   $('#goDue').onclick = () => jumpQuiz('due');
   $('#goNew').onclick = () => jumpQuiz('new');
@@ -180,11 +188,10 @@ function updateImportState(){
 }
 
 function fillFilters(){
-  const subs = ['計画','環境','法規','構造','施工'];
   for(const sel of ['#selSubject','#uSubject']){
     const s = $(sel);
     s.innerHTML = '<option value="">全科目</option>';
-    subs.forEach(x => s.append(new Option(x, x)));
+    SUBJECTS.forEach(x => s.append(new Option(x, x)));
   }
   const y = $('#selYear');
   y.innerHTML = '<option value="">全年度</option>';
@@ -248,7 +255,8 @@ function startSession(){
     ? pool.sort((a,b) => prog(a.id).due.localeCompare(prog(b.id).due))
     : shuffle(pool.slice());
   SESSION = {queue:list.slice(0, n), done:[], total:Math.min(n,list.length),
-             current:null, t0:Date.now(), qt0:0, picked:null, answered:false, timer:null};
+             current:null, t0:Date.now(), qt0:0, picked:null,
+             answered:false, recorded:false, suspended:false, timer:null};
   $('#quizSetup').hidden = true; $('#resultCard').hidden = true; $('#quizArea').hidden = false;
   nextQuestion();
 }
@@ -256,13 +264,17 @@ function nextQuestion(){
   clearInterval(SESSION.timer);
   if(!SESSION.queue.length){ return finishSession(); }
   SESSION.current = SESSION.queue.shift();
-  SESSION.picked = null; SESSION.answered = false; SESSION.qt0 = Date.now();
+  SESSION.picked = null; SESSION.answered = false;
+  SESSION.recorded = false; SESSION.qt0 = Date.now();
   showQuestion(SESSION.current);
   SESSION.timer = setInterval(() => {
     $('#qTimer').textContent = mmss((Date.now() - SESSION.qt0)/1000);
   }, 500);
 }
 function showQuestion(q){
+  // 科目色をカードに乗せる（タグ・左帯が var(--s) を拾う）
+  const card = $('#quizCard');
+  card.className = 'card subj ' + subjClass(q.subject);
   $('#qSubject').textContent = q.subject;
   $('#qYear').textContent = `${q.wareki} No.${q.no}`;
   $('#qUnit').textContent = q.unit || '未分類';
@@ -358,11 +370,42 @@ async function record(quality, reasonKey){
   await idbPut('day', d);
 
   if(!SESSION.done.includes(q.id)) SESSION.done.push(q.id);
+  SESSION.recorded = true;
+}
+
+/* 中断。ここまでの解答は記録し、まだ解いていない問題は出題プールへ返す。
+ * 採点済みなのに理由を選ぶ前に中断した場合は「理由未記録」として残す
+ * （正解=quality3・不正解=quality1。何も残さないより復習予定が正しくなる）。 */
+async function suspendSession(){
+  if(!SESSION) return;
+  clearInterval(SESSION.timer);
+  if(SESSION.answered && !SESSION.recorded){
+    await record(SESSION.picked === SESSION.current.answer ? 3 : 1, 'unrecorded');
+  }
+  SESSION.suspended = true;
+  finishSession();
 }
 function finishSession(){
   clearInterval(SESSION.timer);
-  $('#quizArea').hidden = true; $('#resultCard').hidden = false;
   const ids = SESSION.done;
+  // 1問も解かずに中断したときは、結果を出さずに設定画面へ戻す
+  if(SESSION.suspended && !ids.length){
+    $('#quizArea').hidden = true; $('#quizSetup').hidden = false;
+    SESSION = null; render(); return;
+  }
+  $('#quizArea').hidden = true; $('#resultCard').hidden = false;
+  $('#rsTitle').textContent = SESSION.suspended ? '中断しました' : 'セッション結果';
+  const note = $('#rsNote');
+  if(SESSION.suspended){
+    const remain = SESSION.queue.length + (SESSION.answered ? 0 : 1);
+    note.textContent = `ここまでの ${ids.length} 問は記録済みです。`
+      + (remain > 0
+         ? `未解答の ${remain} 問は出題プールに戻したので、次回また出題されます。`
+         : '');
+    note.hidden = false;
+  }else{
+    note.hidden = true;
+  }
   const att = ids.map(id => lastAttempt(id)).filter(Boolean);
   const okN = att.filter(a => a.ok).length;
   const sec = att.reduce((s,a) => s + a.sec, 0);
@@ -375,7 +418,8 @@ function finishSession(){
   const cnt = {};
   att.forEach(a => { cnt[a.reason] = (cnt[a.reason]||0)+1; });
   Object.entries(cnt).sort((a,b) => b[1]-a[1]).forEach(([k,n]) => {
-    const cls = k === 'guess' ? 'warn' : (REASONS_OK.some(r=>r.k===k) ? 'ok' : 'ng');
+    const cls = (k === 'guess' || k === 'unrecorded') ? 'warn'
+              : (REASONS_OK.some(r => r.k === k) ? 'ok' : 'ng');
     br.append(el('span', 'chip '+cls, `${REASON_LABEL[k]||k} ${n}`));
   });
   render();
@@ -388,7 +432,7 @@ function render(){
 }
 function subjectAccuracy(){
   const acc = {};
-  for(const s of ['計画','環境','法規','構造','施工']) acc[s] = {ok:0, n:0};
+  for(const s of SUBJECTS) acc[s] = {ok:0, n:0};
   for(const [id,p] of PROG){
     const q = QMAP.get(id); if(!q || !p.attempts.length) continue;
     const a = p.attempts[p.attempts.length-1];
@@ -431,18 +475,20 @@ async function renderHome(){
     const max = BUNDLE.subject_max[s], tgt = BUNDLE.target[s], cut = BUNDLE.cutoff[s];
     const rate = acc[s].n ? acc[s].ok/acc[s].n : 0;
     const pt = rate * max; est += pt;
-    const row = el('div','score-row');
-    row.append(el('div','nm', s));
+    // バーの色は科目色で固定し、達成状況は右側の記号で示す
+    const row = el('div','score-row ' + subjClass(s));
+    const nm = el('div','nm', s);
+    nm.style.color = 'var(--s)';
+    row.append(nm);
     const bar = el('div','bar');
     const fill = el('span'); fill.style.width = (rate*100).toFixed(1)+'%';
-    if(pt >= tgt) fill.style.background = 'var(--ok)';
-    else if(pt < cut) fill.style.background = 'var(--ng)';
     bar.append(fill);
     const c = el('div','cut'); c.style.left = (cut/max*100)+'%'; bar.append(c);
     const g = el('div','tgt'); g.style.left = (tgt/max*100)+'%'; bar.append(g);
     row.append(bar);
+    const mark = !acc[s].n ? '' : (pt >= tgt ? '✅' : (pt >= cut ? '⚠️' : '🔴'));
     const fig = el('div','fig');
-    fig.innerHTML = `<b>${pt.toFixed(1)}</b>/${max}　目標${tgt}`;
+    fig.innerHTML = `${mark}<b>${pt.toFixed(1)}</b>/${max}　目標${tgt}`;
     row.append(fig);
     box.append(row);
   }
@@ -485,14 +531,17 @@ function renderUnits(){
                 '<th class="n">演習</th><th>正答率</th><th class="n">伸びしろ</th></tr></thead>';
   const tb = el('tbody');
   rows.forEach(r => {
-    const tr = el('tr');
-    tr.append(el('td','', (sub ? '' : r.subject + ' / ') + r.name));
+    const tr = el('tr', subjClass(r.subject));
+    const name = el('td');
+    name.append(el('span','dot'));
+    name.append(document.createTextNode((sub ? '' : r.subject + ' / ') + r.name));
+    tr.append(name);
     tr.append(el('td','n', r.avg.toFixed(1)));
     tr.append(el('td','n', r.n ? String(r.n) : '–'));
     const td = el('td');
     const m = el('div','mini'); const sp = el('span');
     sp.style.width = (r.rate*100)+'%';
-    if(r.n && r.rate < 0.6) sp.style.background = 'var(--ng)';
+    sp.style.background = (r.n && r.rate < 0.6) ? 'var(--ng)' : 'var(--s)';
     m.append(sp); td.append(m);
     td.append(el('div','note', r.n ? Math.round(r.rate*100)+'%' : '未着手'));
     tr.append(td);
@@ -513,7 +562,9 @@ function renderLog(){
   const total = Object.values(cnt).reduce((a,b)=>a+b, 0);
   if(!total){ rs.append(el('p','empty','まだ記録がありません。')); }
   else{
-    [...REASONS_NG, ...REASONS_OK].forEach(r => {
+    const ROWS = [...REASONS_NG, ...REASONS_OK,
+                  {k:'unrecorded', label:'理由未記録（中断）'}];
+    ROWS.forEach(r => {
       const n = cnt[r.k] || 0; if(!n) return;
       const row = el('div','score-row');
       row.style.gridTemplateColumns = '128px 1fr 78px';
@@ -522,7 +573,7 @@ function renderLog(){
       row.append(lab);
       const bar = el('div','bar'); const sp = el('span');
       sp.style.width = (n/total*100)+'%';
-      sp.style.background = r.k === 'guess' ? 'var(--warn)'
+      sp.style.background = (r.k === 'guess' || r.k === 'unrecorded') ? 'var(--warn)'
                           : (REASONS_OK.some(x=>x.k===r.k) ? 'var(--ok)' : 'var(--ng)');
       bar.append(sp); row.append(bar);
       const fig = el('div','fig'); fig.innerHTML = `<b>${n}</b>　${Math.round(n/total*100)}%`;
@@ -566,9 +617,12 @@ function renderLog(){
   const htb = el('tbody');
   all.slice(0, 40).forEach(a => {
     const q = QMAP.get(a.id); if(!q) return;
-    const tr = el('tr');
+    const tr = el('tr', subjClass(q.subject));
     tr.append(el('td','', a.t.slice(5,16).replace('T',' ')));
-    tr.append(el('td','', `${q.wareki} ${q.subject} No.${q.no}`));
+    const qt = el('td');
+    qt.append(el('span','dot'));
+    qt.append(document.createTextNode(`${q.wareki} ${q.subject} No.${q.no}`));
+    tr.append(qt);
     const td = el('td');
     const cls = a.ok ? (a.reason==='guess' ? 'warn' : 'ok') : 'ng';
     td.append(el('span','chip '+cls, (a.ok?'○':'×') + ' ' + (REASON_LABEL[a.reason]||'')));

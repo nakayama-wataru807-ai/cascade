@@ -17,6 +17,14 @@
   --ok:#1f7a4d; --ok-w:#e6f4ec; --ng:#b3352f; --ng-w:#fbeceb;
   --warn:#a76a00; --warn-w:#fdf3e0;
   --r:12px; --sh:0 1px 3px rgba(20,35,50,.08),0 1px 2px rgba(20,35,50,.04);
+
+  /* 科目テーマカラー。計画=赤 / 環境=紫 / 法規=黄 / 構造=青 / 施工=緑。
+     環境をグレーにしないのは、グレーがUIでは「無効」の意味に読まれるため。 */
+  --s-keikaku:#c0392b; --s-keikaku-w:#fbeceb;
+  --s-kankyo:#7b4fa8;  --s-kankyo-w:#f2ecf9;
+  --s-hoki:#8f6a00;    --s-hoki-w:#fbf3db;
+  --s-kozo:#1a5a8a;    --s-kozo-w:#e8f0f7;
+  --s-seko:#1f7a4d;    --s-seko-w:#e6f4ec;
 }
 @media (prefers-color-scheme:dark){
   :root{
@@ -25,8 +33,23 @@
     --ok:#5fd39b; --ok-w:#162a20; --ng:#f08a84; --ng-w:#2e1a19;
     --warn:#e5b25c; --warn-w:#2c2314;
     --sh:0 1px 3px rgba(0,0,0,.35);
+
+    --s-keikaku:#f0857c; --s-keikaku-w:#33201e;
+    --s-kankyo:#c79ae8;  --s-kankyo-w:#2a2136;
+    --s-hoki:#e5b84f;    --s-hoki-w:#322a15;
+    --s-kozo:#6bb3e8;    --s-kozo-w:#1b2a38;
+    --s-seko:#5fd39b;    --s-seko-w:#162a20;
   }
 }
+
+/* 科目色の適用口。要素に s-<科目> を付けると、その配下で var(--s) が使える */
+.s-keikaku{--s:var(--s-keikaku);--s-w:var(--s-keikaku-w)}
+.s-kankyo {--s:var(--s-kankyo); --s-w:var(--s-kankyo-w)}
+.s-hoki   {--s:var(--s-hoki);   --s-w:var(--s-hoki-w)}
+.s-kozo   {--s:var(--s-kozo);   --s-w:var(--s-kozo-w)}
+.s-seko   {--s:var(--s-seko);   --s-w:var(--s-seko-w)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;
+     background:var(--s,var(--sub));margin-right:6px;vertical-align:middle;flex:0 0 auto}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
@@ -71,7 +94,7 @@ nav button.on{color:var(--accent);font-weight:700}
 .score-row{display:grid;grid-template-columns:52px 1fr 92px;align-items:center;gap:9px;margin-bottom:8px}
 .score-row .nm{font-size:13px;font-weight:700}
 .bar{position:relative;height:22px;border-radius:6px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
-.bar>span{position:absolute;left:0;top:0;bottom:0;background:var(--accent);opacity:.85}
+.bar>span{position:absolute;left:0;top:0;bottom:0;background:var(--s,var(--accent));opacity:.9}
 .bar>.cut{position:absolute;top:0;bottom:0;width:2px;background:var(--ng);opacity:.75}
 .bar>.tgt{position:absolute;top:0;bottom:0;width:2px;background:var(--ok)}
 .score-row .fig{font-size:12px;color:var(--sub);text-align:right;font-variant-numeric:tabular-nums}
@@ -85,7 +108,10 @@ nav button.on{color:var(--accent);font-weight:700}
 /* ---- 演習 ---- */
 .qmeta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--sub);margin-bottom:9px}
 .tag{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 9px}
-.tag.a{background:var(--accent-w);border-color:transparent;color:var(--accent);font-weight:700}
+.tag.a{background:var(--s-w,var(--accent-w));border-color:transparent;
+       color:var(--s,var(--accent));font-weight:700}
+/* 演習カードは左端に科目色の帯を出して、一目で科目が分かるようにする */
+.card.subj{border-left:4px solid var(--s,var(--accent))}
 .stem{font-size:15.5px;line-height:1.85;margin-bottom:12px}
 .figwrap{margin:10px 0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
 .figwrap img{display:block;width:100%}
@@ -122,6 +148,9 @@ nav button.on{color:var(--accent);font-weight:700}
 .reasons button.warn.on{border-color:var(--warn);background:var(--warn-w);color:var(--warn)}
 
 .timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sub)}
+.linkbtn{color:var(--sub);text-decoration:underline;text-underline-offset:3px;
+         font-size:11px;padding:2px 4px}
+.linkbtn:active{color:var(--fg)}
 .field{display:flex;gap:8px;align-items:center;margin:9px 0}
 .field input{flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
              background:var(--bg);color:var(--fg);font:inherit;min-width:0}
@@ -236,13 +265,14 @@ select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;
   </div>
 
   <div id="quizArea" hidden>
-    <div class="card">
+    <div class="card subj" id="quizCard">
       <div class="qmeta">
         <span class="tag a" id="qSubject">–</span>
         <span class="tag" id="qYear">–</span>
         <span class="tag" id="qUnit">–</span>
         <span style="margin-left:auto" class="timer" id="qTimer">0:00</span>
         <span id="qProg">1 / 10</span>
+        <button class="linkbtn" id="suspendBtn" title="ここまでの解答を記録して設定画面に戻る">中断</button>
       </div>
       <div class="stem" id="qStem"></div>
       <div id="qFigs"></div>
@@ -271,7 +301,8 @@ select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;
   </div>
 
   <div class="card" id="resultCard" hidden>
-    <h2>セッション結果</h2>
+    <h2 id="rsTitle">セッション結果</h2>
+    <p class="note" id="rsNote" style="margin:0 0 10px" hidden></p>
     <div class="stat-grid">
       <div class="stat"><b id="rsScore">–</b><span>正答</span></div>
       <div class="stat"><b id="rsAcc">–</b><span>正答率</span></div>
