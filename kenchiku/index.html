@@ -15,7 +15,7 @@
   --bg:#f4f6f8; --card:#fff; --fg:#1c2530; --sub:#5b6b7c; --line:#dde3e9;
   --accent:#1a5a8a; --accent-w:#e8f0f7;
   --ok:#1f7a4d; --ok-w:#e6f4ec; --ng:#b3352f; --ng-w:#fbeceb;
-  --warn:#a76a00; --warn-w:#fdf3e0;
+  --warn:#9c6400; --warn-w:#fdf3e0;
   --r:12px; --sh:0 1px 3px rgba(20,35,50,.08),0 1px 2px rgba(20,35,50,.04);
 
   /* 科目テーマカラー。計画=赤 / 環境=紫 / 法規=黄 / 構造=青 / 施工=緑。
@@ -50,6 +50,11 @@
 .s-seko   {--s:var(--s-seko);   --s-w:var(--s-seko-w)}
 /* 科目名は色付きの丸ではなく、文字そのものを科目色にする */
 .sname{color:var(--s,var(--fg));font-weight:700}
+/* 達成状況は記号ではなく数字の色で示す。緑=目標達成 / 橙=足切り以上 / 赤=足切り未満 */
+.v-ok{color:var(--ok)}
+.v-warn{color:var(--warn)}
+.v-ng{color:var(--ng)}
+.v-none{color:var(--sub)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;max-width:100%}
 /* iOS が勝手に文字を拡大して幅を押し広げるのを止める */
@@ -105,6 +110,9 @@ nav button.on{color:var(--accent);font-weight:700}
 .score-row>*{min-width:0}
 .score-row .fig{font-size:12px;white-space:nowrap;color:var(--sub);text-align:right;font-variant-numeric:tabular-nums}
 .score-row .fig b{color:var(--fg);font-size:14px}
+.score-row .fig b.v-ok{color:var(--ok)}
+.score-row .fig b.v-warn{color:var(--warn)}
+.score-row .fig b.v-ng{color:var(--ng)}
 
 /* ---- 今日の予定 ---- */
 .plan-menu{display:flex;gap:11px;align-items:flex-start}

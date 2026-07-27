@@ -514,10 +514,13 @@ async function renderHome(){
     row.append(bar);
     const fig = el('div','fig');
     if(n){
-      const mark = pt >= tgt ? '✅' : (pt >= cut ? '⚠️' : '🔴');
-      fig.innerHTML = `${mark}<b>${pt.toFixed(1)}</b>/${max}　目標${tgt}`;
+      // 記号ではなく点数自体を色分けする（目標達成=緑 / 足切り以上=橙 / 足切り未満=赤）
+      const b = el('b', pt >= tgt ? 'v-ok' : (pt >= cut ? 'v-warn' : 'v-ng'), pt.toFixed(1));
+      fig.append(b);
+      fig.append(document.createTextNode(`/${max}　目標${tgt}`));
     }else{
-      fig.innerHTML = `未計測　目標${tgt}`;
+      fig.append(el('span','v-none','未計測'));
+      fig.append(document.createTextNode(`　目標${tgt}`));
     }
     row.append(fig);
     box.append(row);
@@ -539,9 +542,16 @@ async function renderHome(){
   const g2 = el('div','tgt'); g2.style.left = (95/125*100)+'%'; b2.append(g2);
   sum.append(b2);
   const fg = el('div','fig');
-  fg.innerHTML = maxMeasured
-    ? `<b>${(est/maxMeasured*125).toFixed(0)}</b>/125　目標95`
-    : '未計測　目標95';
+  if(maxMeasured){
+    const scaled = est / maxMeasured * 125;
+    const b = el('b', scaled >= 95 ? 'v-ok' : (scaled >= 88 ? 'v-warn' : 'v-ng'),
+                scaled.toFixed(0));
+    fg.append(b);
+    fg.append(document.createTextNode('/125　目標95'));
+  }else{
+    fg.append(el('span','v-none','未計測'));
+    fg.append(document.createTextNode('　目標95'));
+  }
   sum.append(fg);
   box.append(sum);
   const cov = el('p','note');
@@ -596,7 +606,14 @@ function renderUnits(){
     sp.style.width = (r.rate*100)+'%';
     sp.style.background = (r.n && r.rate < 0.6) ? 'var(--ng)' : 'var(--s)';
     m.append(sp); td.append(m);
-    td.append(el('div','note', r.n ? Math.round(r.rate*100)+'%' : '未着手'));
+    if(r.n){
+      const pc = el('div','note ' + (r.rate >= 0.8 ? 'v-ok' : (r.rate >= 0.6 ? 'v-warn' : 'v-ng')),
+                    Math.round(r.rate*100)+'%');
+      pc.style.fontWeight = '700';
+      td.append(pc);
+    }else{
+      td.append(el('div','note v-none','未着手'));
+    }
     tr.append(td);
     tr.append(el('td','n', r.gain.toFixed(2)));
     tb.append(tr);
