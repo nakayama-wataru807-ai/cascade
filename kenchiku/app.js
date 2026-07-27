@@ -659,7 +659,7 @@ function renderLog(){
  */
 /* 同期先は専用の private リポジトリにする。試験データを持つ 1st-ClassArchitect と
  * 分けておけば、端末に置くトークンが問題データに触れられない。 */
-const GH_DEFAULT = {repo:'nakayama-wataru807-ai/personal-sync',
+const GH_DEFAULT = {repo:'nakayama-wataru807-ai/personal_sync',
                     path:'kenchiku/app_progress.json', token:'', auto:true,
                     last:null, lastCount:0};
 let GH = {...GH_DEFAULT};

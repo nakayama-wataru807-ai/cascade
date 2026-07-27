@@ -1576,7 +1576,8 @@ document.getElementById('import-btn').addEventListener('click', importData);
 // 記録を private リポジトリへ上げ、PC 側（Claude）から読めるようにする。
 // 設定しない限り外部へは一切送信しない。トークンはこの端末の localStorage にのみ置く。
 const GH_KEY = 'cascade_gh_v1';
-const GH_DEFAULT = { repo: '', path: 'cascade/state.json', token: '', auto: true, last: null };
+const GH_DEFAULT = { repo: 'nakayama-wataru807-ai/personal_sync',
+                     path: 'cascade/state.json', token: '', auto: true, last: null };
 let gh = loadGh();
 
 function loadGh() {
