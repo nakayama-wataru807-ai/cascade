@@ -1,4 +1,4 @@
-const CACHE = 'cascade-v8';
+const CACHE = 'cascade-v9';
 const PRECACHE = ['./index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -22,6 +22,13 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const req = e.request;
   const url = new URL(req.url);
+
+  // 一級建築士ドリル（/kenchiku/）は自前の Service Worker を持つので一切触らない。
+  // ここで除外しないと (1) その JS が Cache First で固定され更新が届かなくなり、
+  // (2) 下の HTML 分岐がドリルのページを './index.html'（= cascade 本体のキー）に
+  // 上書き保存してしまい、オフライン時に cascade がドリル画面になる。
+  if (url.pathname.includes('/kenchiku/')) return;
+
   const isHTML = req.mode === 'navigate'
     || req.destination === 'document'
     || url.pathname.endsWith('/')

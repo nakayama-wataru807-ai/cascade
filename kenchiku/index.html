@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a3a52">
+<title>一級建築士 学科ドリル</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="学科ドリル">
+<style>
+:root{
+  --bg:#f4f6f8; --card:#fff; --fg:#1c2530; --sub:#5b6b7c; --line:#dde3e9;
+  --accent:#1a5a8a; --accent-w:#e8f0f7;
+  --ok:#1f7a4d; --ok-w:#e6f4ec; --ng:#b3352f; --ng-w:#fbeceb;
+  --warn:#a76a00; --warn-w:#fdf3e0;
+  --r:12px; --sh:0 1px 3px rgba(20,35,50,.08),0 1px 2px rgba(20,35,50,.04);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#12181f; --card:#1a222c; --fg:#e6ecf2; --sub:#96a5b5; --line:#2b3642;
+    --accent:#6bb3e8; --accent-w:#1b2a38;
+    --ok:#5fd39b; --ok-w:#162a20; --ng:#f08a84; --ng-w:#2e1a19;
+    --warn:#e5b25c; --warn-w:#2c2314;
+    --sh:0 1px 3px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+  font-size:15px;line-height:1.7;
+  padding-bottom:calc(64px + env(safe-area-inset-bottom));
+}
+h1,h2,h3{margin:0;font-weight:700;line-height:1.4}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+a{color:var(--accent)}
+
+header{
+  position:sticky;top:0;z-index:20;background:var(--card);
+  border-bottom:1px solid var(--line);padding:10px 16px;
+  padding-top:calc(10px + env(safe-area-inset-top));
+  display:flex;align-items:center;gap:10px
+}
+header h1{font-size:16px;letter-spacing:.02em}
+header .days{margin-left:auto;font-size:12px;color:var(--sub);text-align:right;line-height:1.3}
+header .days b{display:block;font-size:17px;color:var(--accent)}
+
+main{max-width:760px;margin:0 auto;padding:14px}
+.view{display:none}
+.view.on{display:block}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+      box-shadow:var(--sh);padding:14px;margin-bottom:12px}
+.card>h2{font-size:13px;color:var(--sub);letter-spacing:.06em;margin-bottom:10px}
+
+nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;
+  background:var(--card);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom)
+}
+nav button{flex:1;padding:9px 2px 8px;font-size:10.5px;color:var(--sub);
+           display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button i{font-style:normal;font-size:19px;line-height:1}
+nav button.on{color:var(--accent);font-weight:700}
+
+/* ---- 目標配点バー ---- */
+.score-row{display:grid;grid-template-columns:52px 1fr 92px;align-items:center;gap:9px;margin-bottom:8px}
+.score-row .nm{font-size:13px;font-weight:700}
+.bar{position:relative;height:22px;border-radius:6px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
+.bar>span{position:absolute;left:0;top:0;bottom:0;background:var(--accent);opacity:.85}
+.bar>.cut{position:absolute;top:0;bottom:0;width:2px;background:var(--ng);opacity:.75}
+.bar>.tgt{position:absolute;top:0;bottom:0;width:2px;background:var(--ok)}
+.score-row .fig{font-size:12px;color:var(--sub);text-align:right;font-variant-numeric:tabular-nums}
+.score-row .fig b{color:var(--fg);font-size:14px}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px}
+.stat{background:var(--bg);border-radius:9px;padding:9px 10px;text-align:center}
+.stat b{display:block;font-size:21px;line-height:1.25;font-variant-numeric:tabular-nums}
+.stat span{font-size:10.5px;color:var(--sub)}
+
+/* ---- 演習 ---- */
+.qmeta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--sub);margin-bottom:9px}
+.tag{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 9px}
+.tag.a{background:var(--accent-w);border-color:transparent;color:var(--accent);font-weight:700}
+.stem{font-size:15.5px;line-height:1.85;margin-bottom:12px}
+.figwrap{margin:10px 0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+.figwrap img{display:block;width:100%}
+.figwrap+.figwrap{margin-top:-2px}
+
+.choice{display:flex;gap:10px;width:100%;text-align:left;padding:11px 13px;
+        border:1.5px solid var(--line);border-radius:10px;background:var(--card);
+        margin-bottom:8px;line-height:1.7;transition:border-color .12s,background .12s}
+.choice:active{background:var(--bg)}
+.choice .n{flex:0 0 24px;height:24px;border-radius:50%;background:var(--bg);
+           display:grid;place-items:center;font-size:12.5px;font-weight:700;color:var(--sub)}
+.choice.sel{border-color:var(--accent)}
+.choice.sel .n{background:var(--accent);color:#fff}
+.choice.ok{border-color:var(--ok);background:var(--ok-w)}
+.choice.ok .n{background:var(--ok);color:#fff}
+.choice.ng{border-color:var(--ng);background:var(--ng-w)}
+.choice.ng .n{background:var(--ng);color:#fff}
+
+.btn{display:block;width:100%;padding:12px;border-radius:10px;background:var(--accent);
+     color:#fff;font-weight:700;font-size:15px;text-align:center}
+.btn.ghost{background:var(--bg);color:var(--fg);border:1px solid var(--line)}
+.btn:disabled{opacity:.4}
+.btn-row{display:flex;gap:8px}
+.btn-row .btn{flex:1}
+
+.verdict{border-radius:10px;padding:11px 13px;margin:10px 0;font-weight:700}
+.verdict.ok{background:var(--ok-w);color:var(--ok)}
+.verdict.ng{background:var(--ng-w);color:var(--ng)}
+.verdict small{display:block;font-weight:400;color:var(--sub);margin-top:3px;font-size:11.5px}
+
+.reasons{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
+.reasons button{border:1.5px solid var(--line);border-radius:99px;padding:6px 13px;font-size:13px}
+.reasons button.on{border-color:var(--accent);background:var(--accent-w);color:var(--accent);font-weight:700}
+.reasons button.warn.on{border-color:var(--warn);background:var(--warn-w);color:var(--warn)}
+
+.timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sub)}
+.field{display:flex;gap:8px;align-items:center;margin:9px 0}
+.field input{flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+             background:var(--bg);color:var(--fg);font:inherit;min-width:0}
+.field label{font-size:12px;color:var(--sub);white-space:nowrap}
+
+/* ---- 一覧・単元 ---- */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:6px 5px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--sub);font-size:10.5px;font-weight:700;letter-spacing:.04em}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.mini{height:6px;border-radius:99px;background:var(--bg);overflow:hidden}
+.mini>span{display:block;height:100%;background:var(--accent)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.empty{text-align:center;color:var(--sub);padding:34px 16px;font-size:13.5px}
+.note{font-size:11.5px;color:var(--sub);line-height:1.65}
+.chip{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:99px;
+      background:var(--bg);border:1px solid var(--line);color:var(--sub);margin-right:4px}
+.chip.ng{background:var(--ng-w);color:var(--ng);border-color:transparent}
+.chip.ok{background:var(--ok-w);color:var(--ok);border-color:transparent}
+.chip.warn{background:var(--warn-w);color:var(--warn);border-color:transparent}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;
+       background:var(--bg);color:var(--fg);font:inherit}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>一級建築士 学科ドリル</h1>
+  <div class="days"><b id="hdDays">–</b>本番まで</div>
+</header>
+
+<main>
+
+<!-- ============ ホーム ============ -->
+<section id="v-home" class="view on">
+  <div class="card" id="importCard" hidden>
+    <h2>初回セットアップ</h2>
+    <p class="note" style="margin:0 0 10px">
+      問題データはこのページには含まれていません。端末ごとに一度だけ読み込み、以後はオフラインで動きます。<br>
+      作り方: <code>python3 scripts/make_bundle.py</code> →
+      <code>data/bundle.json</code>（問題・約1.2MB）と
+      <code>data/figures.json</code>（図版・約7.6MB／構造の力学問題などに必要）。
+      2つとも、下のボタンから1つずつ読み込んでください。
+    </p>
+    <!-- iOS/Android のファイル選択で .json だけだと候補が出ないことがあるので広めに取る -->
+    <input type="file" id="fileIn" accept="application/json,text/json,.json" hidden>
+    <button class="btn" id="importBtn">JSON を読み込む</button>
+    <p class="note" style="margin:9px 0 0">現在: <b id="importState">–</b></p>
+    <p class="note" id="importMsg" style="margin:4px 0 0"></p>
+  </div>
+
+  <div class="card" id="todayCard">
+    <h2>今日</h2>
+    <div class="stat-grid">
+      <div class="stat"><b id="stDue">–</b><span>復習の期日</span></div>
+      <div class="stat"><b id="stNew">–</b><span>未着手</span></div>
+      <div class="stat"><b id="stToday">–</b><span>今日解いた</span></div>
+      <div class="stat"><b id="stStreak">–</b><span>連続日数</span></div>
+    </div>
+    <div class="btn-row" style="margin-top:11px">
+      <button class="btn" id="goDue">復習を始める</button>
+      <button class="btn ghost" id="goNew">新規を解く</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>目標配点への到達度</h2>
+    <div id="scoreBars"></div>
+    <p class="note" style="margin-top:9px">
+      バーは<b>直近の正答率</b>×満点。<span style="color:var(--ng)">赤線</span>＝足切り、
+      <span style="color:var(--ok)">緑線</span>＝目標。合格基準点は7年間で87〜97点を動くため、目標は総得点95点。
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>演習量</h2>
+    <div class="stat-grid">
+      <div class="stat"><b id="stSeen">–</b><span>着手した問題</span></div>
+      <div class="stat"><b id="stAtt">–</b><span>延べ解答数</span></div>
+      <div class="stat"><b id="stAcc">–</b><span>通算正答率</span></div>
+      <div class="stat"><b id="stHour">–</b><span>累計時間</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 演習 ============ -->
+<section id="v-quiz" class="view">
+  <div class="card" id="quizSetup">
+    <h2>出題設定</h2>
+    <div class="row" style="margin-bottom:9px">
+      <select id="selMode">
+        <option value="due">復習（期日到来）</option>
+        <option value="new">新規（未着手）</option>
+        <option value="wrong">間違えた問題</option>
+        <option value="guess">勘で当たった問題</option>
+        <option value="all">すべてから</option>
+      </select>
+      <select id="selSubject"><option value="">全科目</option></select>
+      <select id="selYear"><option value="">全年度</option></select>
+    </div>
+    <div class="row" style="margin-bottom:11px">
+      <select id="selUnit" style="flex:1"><option value="">全単元</option></select>
+      <select id="selCount">
+        <option value="10">10問</option><option value="15">15問</option>
+        <option value="20">20問</option><option value="30">30問</option>
+      </select>
+    </div>
+    <button class="btn" id="startBtn">開始</button>
+    <p class="note" id="poolMsg" style="margin:9px 0 0"></p>
+  </div>
+
+  <div id="quizArea" hidden>
+    <div class="card">
+      <div class="qmeta">
+        <span class="tag a" id="qSubject">–</span>
+        <span class="tag" id="qYear">–</span>
+        <span class="tag" id="qUnit">–</span>
+        <span style="margin-left:auto" class="timer" id="qTimer">0:00</span>
+        <span id="qProg">1 / 10</span>
+      </div>
+      <div class="stem" id="qStem"></div>
+      <div id="qFigs"></div>
+      <div id="qChoices"></div>
+
+      <div id="afterBox" hidden>
+        <div class="verdict" id="verdict"></div>
+
+        <div id="lawBox" hidden>
+          <div class="field">
+            <label>引いた条文</label>
+            <input id="lawInput" placeholder="例: 法27条 / 令112条">
+          </div>
+          <p class="note">法規は30問／1時間45分＝1肢52.5秒。何条を引くのに何秒かかったかを貯めると、遅い条文が見えます。</p>
+        </div>
+
+        <p class="note" style="margin:11px 0 3px">この結果の理由は？（記録すると弱点分析に使われます）</p>
+        <div class="reasons" id="reasonBox"></div>
+
+        <div class="btn-row" style="margin-top:11px">
+          <button class="btn ghost" id="againBtn">もう一度出す</button>
+          <button class="btn" id="nextBtn">次へ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="resultCard" hidden>
+    <h2>セッション結果</h2>
+    <div class="stat-grid">
+      <div class="stat"><b id="rsScore">–</b><span>正答</span></div>
+      <div class="stat"><b id="rsAcc">–</b><span>正答率</span></div>
+      <div class="stat"><b id="rsTime">–</b><span>所要</span></div>
+      <div class="stat"><b id="rsAvg">–</b><span>1問平均</span></div>
+    </div>
+    <div id="rsBreak" style="margin-top:11px"></div>
+    <button class="btn" id="backBtn" style="margin-top:11px">設定に戻る</button>
+  </div>
+</section>
+
+<!-- ============ 単元 ============ -->
+<section id="v-unit" class="view">
+  <div class="card">
+    <h2>単元別 投資対効果</h2>
+    <p class="note" style="margin:0 0 10px">
+      7年分の出題頻度（年平均）と自分の正答率から、<b>残り伸びしろ＝年平均出題数×(1−正答率)</b> を計算し、
+      大きい順に並べています。上にあるものほど、1時間あたりの得点の伸びが大きい単元です。
+    </p>
+    <div class="row" style="margin-bottom:9px">
+      <select id="uSubject"><option value="">全科目</option></select>
+    </div>
+    <div class="scroll"><table id="unitTable"></table></div>
+  </div>
+</section>
+
+<!-- ============ 記録 ============ -->
+<section id="v-log" class="view">
+  <div class="card">
+    <h2>誤答の内訳</h2>
+    <div id="reasonStats"></div>
+    <p class="note" style="margin-top:9px">
+      59点から95点へは「どの種類のミスで落としたか」の分解が要になります。
+      とくに<b>勘で当たった</b>は、正解でも実力ではないので復習の対象に入れています。
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>遅い条文（法規）</h2>
+    <div class="scroll"><table id="lawTable"></table></div>
+  </div>
+
+  <div class="card">
+    <h2>直近の解答</h2>
+    <div class="scroll"><table id="histTable"></table></div>
+  </div>
+
+  <div class="card">
+    <h2>データ</h2>
+    <div class="btn-row">
+      <button class="btn ghost" id="exportBtn">進捗を書き出す</button>
+      <button class="btn ghost" id="reimportBtn">問題データを入れ直す</button>
+    </div>
+    <p class="note" style="margin-top:9px" id="dataMsg"></p>
+  </div>
+</section>
+
+</main>
+
+<nav>
+  <button data-v="home" class="on"><i>◎</i>ホーム</button>
+  <button data-v="quiz"><i>✎</i>演習</button>
+  <button data-v="unit"><i>▤</i>単元</button>
+  <button data-v="log"><i>◔</i>記録</button>
+</nav>
+
+<script src="./app.js"></script>
+</body>
+</html>
