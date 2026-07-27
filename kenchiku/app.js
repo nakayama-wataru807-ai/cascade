@@ -110,6 +110,7 @@ async function boot(){
   if(rec && rec.v){ setBundle(rec.v); }
   else { $('#importCard').hidden = false; $('#todayCard').hidden = true; }
   updateImportState();
+  await ghLoad();
   $('#hdDays').textContent = Math.max(0, daysBetween(todayStr(), EXAM_DATE));
   wire();
   render();
@@ -140,6 +141,22 @@ function wire(){
   $('#againBtn').onclick = () => { SESSION.queue.push(SESSION.current); nextQuestion(); };
   $('#suspendBtn').onclick = suspendSession;
   $('#exportBtn').onclick = exportProgress;
+  $('#syncBtn').onclick   = () => syncNow(false);
+  $('#syCfgBtn').onclick  = () => { const c = $('#syCfg'); c.hidden = !c.hidden; };
+  $('#sySave').onclick    = async () => {
+    GH.repo = $('#syRepo').value.trim() || GH_DEFAULT.repo;
+    GH.path = $('#syPath').value.trim() || GH_DEFAULT.path;
+    GH.auto = $('#syAuto').checked;
+    const t = $('#syToken').value.trim();
+    if(t && !/^•+$/.test(t)) GH.token = t;      // 伏字のままなら既存を保持
+    await ghSave();
+    $('#syMsg').textContent = '保存しました。「今すぐ同期」で疎通を確認してください。';
+  };
+  $('#syClear').onclick   = async () => {
+    GH = {...GH_DEFAULT, token:''};
+    await ghSave();
+    $('#syMsg').textContent = 'この端末の同期設定を消しました。';
+  };
   $('#goDue').onclick = () => jumpQuiz('due');
   $('#goNew').onclick = () => jumpQuiz('new');
   ['#selMode','#selSubject','#selYear','#selUnit'].forEach(s => $(s).onchange = updatePool);
@@ -423,6 +440,8 @@ function finishSession(){
     br.append(el('span', 'chip '+cls, `${REASON_LABEL[k]||k} ${n}`));
   });
   render();
+  // 自動同期。失敗しても演習の記録は端末に残っているので黙って見送る
+  if(GH.auto && GH.token && GH.repo && ids.length) syncNow(true);
 }
 
 /* ---------------- 描画 ---------------- */
@@ -631,6 +650,136 @@ function renderLog(){
     htb.append(tr);
   });
   ht.append(htb);
+}
+
+/* ---------------- GitHub 同期 ----------------
+ * スマホの IndexedDB にある解答記録を private リポジトリへ上げ、
+ * PC 側の /kenchikushi weak・status から読めるようにする。
+ * 設定しない限り、このアプリは外部へ一切送信しない。
+ */
+const GH_DEFAULT = {repo:'nakayama-wataru807-ai/1st-ClassArchitect',
+                    path:'data/app_progress.json', token:'', auto:true,
+                    last:null, lastCount:0};
+let GH = {...GH_DEFAULT};
+
+function b64enc(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  const CH = 0x8000;                       // 一度に spread すると大きい入力で落ちる
+  for(let i = 0; i < bytes.length; i += CH)
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+  return btoa(bin);
+}
+function b64dec(s){
+  const bin = atob(String(s).replace(/\s/g, ''));
+  return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+}
+
+async function ghLoad(){
+  const rec = await idbGet('kv', 'gh');
+  GH = {...GH_DEFAULT, ...(rec ? rec.v : {})};
+  renderSync();
+}
+async function ghSave(){
+  await idbPut('kv', {k:'gh', v:GH});
+  renderSync();
+}
+async function ghApi(method, url, body){
+  const r = await fetch(url, {
+    method,
+    headers: {'Authorization': 'Bearer ' + GH.token,
+              'Accept': 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28'},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if(r.status === 404) return null;
+  if(!r.ok) throw new Error(`GitHub ${r.status} ${(await r.text()).slice(0, 120)}`);
+  return r.json();
+}
+
+/* 端末をまたいでも失われないよう、リモートとローカルを問題IDで突き合わせる。
+ * 解答履歴は時刻で重複を除いて統合し、SRS 状態は最後に解いた側を採る。 */
+function mergeProgress(remote, local){
+  const byId = new Map(remote.map(p => [p.id, p]));
+  for(const p of local){
+    const r = byId.get(p.id);
+    if(!r){ byId.set(p.id, p); continue; }
+    const seen = new Set(r.attempts.map(a => a.t));
+    const attempts = r.attempts
+      .concat(p.attempts.filter(a => !seen.has(a.t)))
+      .sort((a, b) => String(a.t).localeCompare(String(b.t)));
+    const lastOf = x => (x.attempts.length ? x.attempts[x.attempts.length-1].t : '');
+    const base = lastOf(p) > lastOf(r) ? p : r;
+    byId.set(p.id, {...base, attempts});
+  }
+  return [...byId.values()];
+}
+/* 日別集計は解答履歴から作り直す。別々に持つと端末間でずれるため。 */
+function daysFromProgress(progress){
+  const m = {};
+  for(const p of progress) for(const a of p.attempts){
+    const d = String(a.t).slice(0, 10);
+    const r = m[d] || (m[d] = {d, count:0, sec:0});
+    r.count += 1; r.sec += a.sec || 0;
+  }
+  return Object.values(m).sort((a,b) => a.d.localeCompare(b.d));
+}
+
+async function syncNow(silent){
+  const msg = $('#syMsg');
+  if(!GH.token || !GH.repo){
+    if(!silent) msg.textContent = '設定が未入力です。リポジトリとトークンを保存してください。';
+    return false;
+  }
+  const url = `https://api.github.com/repos/${GH.repo}/contents/${GH.path}`;
+  try{
+    if(!silent) msg.textContent = '同期中…';
+    const cur = await ghApi('GET', url);
+    let remote = [];
+    if(cur && cur.content){
+      try{ remote = (JSON.parse(b64dec(cur.content)).progress) || []; }
+      catch(e){ remote = []; }
+    }
+    const merged = mergeProgress(remote, [...PROG.values()]);
+    const days = daysFromProgress(merged);
+    const payload = {
+      synced: new Date().toISOString(),
+      exam_date: EXAM_DATE,
+      device: navigator.userAgent.slice(0, 80),
+      progress: merged,
+      days,
+    };
+    await ghApi('PUT', url, {
+      message: `学習記録を同期: ${merged.length}問 (${todayStr()})`,
+      content: b64enc(JSON.stringify(payload, null, 1)),
+      sha: cur ? cur.sha : undefined,
+    });
+
+    // 統合結果を手元にも反映（他端末で解いた分がこちらにも入る）
+    for(const p of merged){ PROG.set(p.id, p); await idbPut('prog', p); }
+    for(const d of days) await idbPut('day', d);
+
+    GH.last = new Date().toISOString();
+    GH.lastCount = merged.length;
+    await ghSave();
+    if(!silent) msg.textContent = `同期しました（${merged.length}問）。`;
+    render();
+    return true;
+  }catch(err){
+    msg.textContent = '同期に失敗: ' + err.message;
+    return false;
+  }
+}
+
+function renderSync(){
+  const set = !!(GH.token && GH.repo);
+  $('#syState').textContent = set ? (GH.auto ? '自動' : '手動') : '未設定';
+  $('#syLast').textContent = GH.last ? GH.last.slice(5,16).replace('T',' ') : '–';
+  $('#syCount').textContent = GH.lastCount || '–';
+  $('#syRepo').value = GH.repo;
+  $('#syPath').value = GH.path;
+  $('#syToken').value = GH.token ? '••••••••' : '';
+  $('#syAuto').checked = !!GH.auto;
 }
 
 /* ---------------- 書き出し ---------------- */

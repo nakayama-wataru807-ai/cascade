@@ -351,6 +351,51 @@ select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;
   </div>
 
   <div class="card">
+    <h2>同期（GitHub）</h2>
+    <p class="note" style="margin:0 0 9px">
+      解答の記録を private リポジトリへ自動で上げ、PC 側の <code>/kenchikushi weak</code> から
+      読めるようにします。設定しなければ何も送信しません。
+    </p>
+    <div class="stat-grid" style="margin-bottom:10px">
+      <div class="stat"><b id="syState">未設定</b><span>状態</span></div>
+      <div class="stat"><b id="syLast">–</b><span>最終同期</span></div>
+      <div class="stat"><b id="syCount">–</b><span>送った問題数</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="syncBtn">今すぐ同期</button>
+      <button class="btn ghost" id="syCfgBtn">設定</button>
+    </div>
+    <p class="note" id="syMsg" style="margin:9px 0 0"></p>
+
+    <div id="syCfg" hidden style="margin-top:11px;border-top:1px solid var(--line);padding-top:11px">
+      <div class="field">
+        <label>リポジトリ</label>
+        <input id="syRepo" placeholder="owner/repo" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label>パス</label>
+        <input id="syPath" placeholder="data/app_progress.json" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label>トークン</label>
+        <input id="syToken" type="password" placeholder="github_pat_..." autocapitalize="off" spellcheck="false">
+      </div>
+      <label class="note" style="display:flex;gap:8px;align-items:center;margin:6px 0">
+        <input type="checkbox" id="syAuto"> 演習を終えたら自動で同期する
+      </label>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn" id="sySave">保存</button>
+        <button class="btn ghost" id="syClear">消去</button>
+      </div>
+      <p class="note" style="margin-top:9px">
+        トークンは <b>fine-grained personal access token</b> を、
+        対象リポジトリ1つだけ・<b>Contents: Read and write</b> のみ・有効期限つきで作ってください。
+        この端末の中（IndexedDB）にのみ保存され、GitHub 以外へは送られません。
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>データ</h2>
     <div class="btn-row">
       <button class="btn ghost" id="exportBtn">進捗を書き出す</button>
