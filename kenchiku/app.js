@@ -111,6 +111,7 @@ async function boot(){
   else { $('#importCard').hidden = false; $('#todayCard').hidden = true; }
   updateImportState();
   await ghLoad();
+  loadPlan();
   $('#hdDays').textContent = Math.max(0, daysBetween(todayStr(), EXAM_DATE));
   wire();
   render();
@@ -579,8 +580,14 @@ function renderUnits(){
   rows.forEach(r => {
     const tr = el('tr', subjClass(r.subject));
     const name = el('td');
-    name.append(el('span','dot'));
-    name.append(document.createTextNode((sub ? '' : r.subject + ' / ') + r.name));
+    if(sub){
+      // 科目で絞っているときは単元名そのものを科目色にする
+      const u = el('span','sname', r.name);
+      name.append(u);
+    }else{
+      name.append(el('span','sname', r.subject));
+      name.append(document.createTextNode(' / ' + r.name));
+    }
     tr.append(name);
     tr.append(el('td','n', r.avg.toFixed(1)));
     tr.append(el('td','n', r.n ? String(r.n) : '–'));
@@ -666,8 +673,9 @@ function renderLog(){
     const tr = el('tr', subjClass(q.subject));
     tr.append(el('td','', a.t.slice(5,16).replace('T',' ')));
     const qt = el('td');
-    qt.append(el('span','dot'));
-    qt.append(document.createTextNode(`${q.wareki} ${q.subject} No.${q.no}`));
+    qt.append(document.createTextNode(q.wareki + ' '));
+    qt.append(el('span','sname', q.subject));
+    qt.append(document.createTextNode(' No.' + q.no));
     tr.append(qt);
     const td = el('td');
     const cls = a.ok ? (a.reason==='guess' ? 'warn' : 'ok') : 'ng';
@@ -677,6 +685,63 @@ function renderLog(){
     htb.append(tr);
   });
   ht.append(htb);
+}
+
+/* ---------------- 今日の学習予定 ----------------
+ * 年間計画（gen_plan.py が書き出す schedule.json）を読んで、その日のメニューを出す。
+ * このアプリは cascade の配下（/cascade/kenchiku/）で配信しているので、
+ * 同一オリジンの ../schedule.json をそのまま読める。
+ * 取れた内容は IndexedDB に控え、オフラインでも前回分を表示する。
+ */
+let PLAN = null;
+
+async function loadPlan(){
+  const cached = await idbGet('kv', 'plan');
+  if(cached && cached.v){ PLAN = cached.v; renderPlan(); }
+  for(const url of ['../schedule.json', './schedule.json']){
+    try{
+      const r = await fetch(url + '?v=' + Date.now(), {cache:'no-store'});
+      if(!r.ok) continue;
+      const j = await r.json();
+      if(j && typeof j === 'object' && Object.keys(j).length){
+        PLAN = j;
+        await idbPut('kv', {k:'plan', v:j});
+        renderPlan();
+        return;
+      }
+    }catch(e){ /* オフラインや配置違いは黙って諦め、キャッシュを使う */ }
+  }
+}
+
+function renderPlan(){
+  if(!PLAN){ $('#planCard').hidden = true; return; }
+  const t = todayStr();
+  const v = PLAN[t];
+  $('#planCard').hidden = false;
+  if(v){
+    $('#planIcon').textContent = v.icon || '📖';
+    $('#planText').textContent = v.menu || '';
+    const bits = [];
+    if(v.subject && v.subject !== '休') bits.push(v.subject);
+    if(v.problems) bits.push(`${v.problems}問`);
+    if(v.time) bits.push(`約${v.time}分`);
+    $('#planMeta').textContent = bits.join('　/　');
+  }else{
+    $('#planIcon').textContent = '—';
+    $('#planText').textContent = '今日の予定はありません';
+    $('#planMeta').textContent = '';
+  }
+  $('#planPhase').textContent = v && v.phase ? v.phase : '';
+
+  const wk = $('#planWeek'); wk.innerHTML = '';
+  for(let i = 0; i < 7; i++){
+    const d = addDays(t, i), e = PLAN[d];
+    if(!e) continue;
+    const row = el('div', 'plan-day' + (i === 0 ? ' today' : ''));
+    row.append(el('span', 'd', d.slice(5) + ' ' + (e.icon || '')));
+    row.append(el('span', 'm', e.menu || ''));
+    wk.append(row);
+  }
 }
 
 /* ---------------- GitHub 同期 ----------------
