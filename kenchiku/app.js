@@ -489,40 +489,67 @@ async function renderHome(){
 
   const acc = subjectAccuracy(), box = $('#scoreBars');
   box.innerHTML = '';
-  let est = 0;
+  // 未着手の科目は「0点」ではなく「未計測」。0.0/30 と出すと実力を過小に見せてしまう
+  let est = 0, maxMeasured = 0;
   for(const s of ['法規','構造','施工','環境','計画']){
     const max = BUNDLE.subject_max[s], tgt = BUNDLE.target[s], cut = BUNDLE.cutoff[s];
-    const rate = acc[s].n ? acc[s].ok/acc[s].n : 0;
-    const pt = rate * max; est += pt;
-    // バーの色は科目色で固定し、達成状況は右側の記号で示す
+    const n = acc[s].n;
+    const rate = n ? acc[s].ok/n : 0;
+    const pt = rate * max;
+    if(n){ est += pt; maxMeasured += max; }
     const row = el('div','score-row ' + subjClass(s));
     const nm = el('div','nm', s);
     nm.style.color = 'var(--s)';
     row.append(nm);
     const bar = el('div','bar');
-    const fill = el('span'); fill.style.width = (rate*100).toFixed(1)+'%';
-    bar.append(fill);
+    if(n){
+      const fill = el('span'); fill.style.width = (rate*100).toFixed(1)+'%';
+      bar.append(fill);
+    }else{
+      bar.style.opacity = '.45';
+    }
     const c = el('div','cut'); c.style.left = (cut/max*100)+'%'; bar.append(c);
     const g = el('div','tgt'); g.style.left = (tgt/max*100)+'%'; bar.append(g);
     row.append(bar);
-    const mark = !acc[s].n ? '' : (pt >= tgt ? '✅' : (pt >= cut ? '⚠️' : '🔴'));
     const fig = el('div','fig');
-    fig.innerHTML = `${mark}<b>${pt.toFixed(1)}</b>/${max}　目標${tgt}`;
+    if(n){
+      const mark = pt >= tgt ? '✅' : (pt >= cut ? '⚠️' : '🔴');
+      fig.innerHTML = `${mark}<b>${pt.toFixed(1)}</b>/${max}　目標${tgt}`;
+    }else{
+      fig.innerHTML = `未計測　目標${tgt}`;
+    }
     row.append(fig);
     box.append(row);
   }
+  // 合計は「計測済みの科目だけ」で出す。全科目に手を付けるまでは推定にならない
   const sum = el('div','score-row');
   sum.append(el('div','nm','合計'));
   const b2 = el('div','bar');
-  const f2 = el('span'); f2.style.width = (est/125*100).toFixed(1)+'%';
-  f2.style.background = est >= 95 ? 'var(--ok)' : (est >= 88 ? 'var(--warn)' : 'var(--ng)');
-  b2.append(f2);
+  if(maxMeasured){
+    const f2 = el('span');
+    const scaled = est / maxMeasured * 125;      // 計測済み範囲の正答率を125点に引き伸ばす
+    f2.style.width = (scaled/125*100).toFixed(1)+'%';
+    f2.style.background = scaled >= 95 ? 'var(--ok)' : (scaled >= 88 ? 'var(--warn)' : 'var(--ng)');
+    b2.append(f2);
+  }else{
+    b2.style.opacity = '.45';
+  }
   const c2 = el('div','cut'); c2.style.left = (88/125*100)+'%'; b2.append(c2);
   const g2 = el('div','tgt'); g2.style.left = (95/125*100)+'%'; b2.append(g2);
   sum.append(b2);
-  const fg = el('div','fig'); fg.innerHTML = `<b>${est.toFixed(0)}</b>/125　目標95`;
+  const fg = el('div','fig');
+  fg.innerHTML = maxMeasured
+    ? `<b>${(est/maxMeasured*125).toFixed(0)}</b>/125　目標95`
+    : '未計測　目標95';
   sum.append(fg);
   box.append(sum);
+  const cov = el('p','note');
+  cov.style.margin = '6px 0 0';
+  cov.textContent = maxMeasured
+    ? `※ 合計は演習済みの範囲（${maxMeasured}点分）の正答率を125点に引き伸ばした推定です。`
+      + (maxMeasured < 125 ? '未着手の科目は含みません。' : '')
+    : '※ まだ演習の記録がありません。';
+  box.append(cov);
 }
 function renderUnits(){
   if(!BUNDLE) return;
