@@ -169,6 +169,17 @@ nav button.on{color:var(--accent);font-weight:700}
 .verdict.ng{background:var(--ng-w);color:var(--ng)}
 .verdict small{display:block;font-weight:400;color:var(--sub);margin-top:3px;font-size:11.5px}
 
+/* ---- 解説表示 ---- */
+.choice-note{display:block;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);
+             font-size:12px;line-height:1.7;color:var(--sub);font-weight:400}
+.choice.ok .choice-note{color:var(--fg)}
+.explain-box{border:1px solid var(--line);border-left:3px solid var(--accent);
+             border-radius:10px;padding:11px 13px;margin:10px 0;
+             font-size:13.5px;line-height:1.8;background:var(--bg)}
+.explain-title{font-size:11px;font-weight:700;color:var(--accent);
+               letter-spacing:.08em;margin-bottom:4px}
+.explain-src{margin-top:6px;font-size:10.5px}
+
 .reasons{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
 .reasons button{border:1.5px solid var(--line);border-radius:99px;padding:6px 13px;font-size:13px}
 .reasons button.on{border-color:var(--accent);background:var(--accent-w);color:var(--accent);font-weight:700}
@@ -326,6 +337,7 @@ main,.card,.view{max-width:100%}
 
       <div id="afterBox" hidden>
         <div class="verdict" id="verdict"></div>
+        <div class="explain-box" id="explainBox" hidden></div>
 
         <div id="lawBox" hidden>
           <div class="field">

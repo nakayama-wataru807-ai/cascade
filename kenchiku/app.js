@@ -349,6 +349,12 @@ function answer(pick, btn){
     b.disabled = true;
     if(i+1 === q.answer) b.classList.add('ok');
     else if(i+1 === pick) b.classList.add('ng');
+    // 肢別の解説があれば、採点後にそれぞれの肢の下に出す
+    const note = (q.choice_notes || [])[i];
+    if(note){
+      const body = b.children[1];
+      if(body) body.append(el('span','choice-note', note));
+    }
   });
 
   const v = $('#verdict');
@@ -356,8 +362,20 @@ function answer(pick, btn){
   v.innerHTML = '';
   v.append(document.createTextNode(ok ? `正解（肢${q.answer}）` : `不正解 — 正答は肢${q.answer}`));
   const s = el('small','', `${mmss(SESSION.sec)} で解答` +
-    (q.explain ? '' : ' ／ 解説は未作成（/kenchikushi explain で生成できます）'));
+    (q.explain ? '' : ' ／ 解説は未作成'));
   v.append(s);
+
+  // 問題全体の解説
+  const ex = $('#explainBox');
+  if(q.explain){
+    ex.hidden = false;
+    ex.innerHTML = '';
+    ex.append(el('div','explain-title','解説'));
+    ex.append(el('div','', q.explain));
+    if(q.explain_src) ex.append(el('div','note explain-src', q.explain_src));
+  }else{
+    ex.hidden = true;
+  }
 
   const rb = $('#reasonBox'); rb.innerHTML = '';
   (ok ? REASONS_OK : REASONS_NG).forEach(r => {
