@@ -345,9 +345,10 @@ function answer(pick, btn){
   const q = SESSION.current, ok = pick === q.answer;
   SESSION.sec = (Date.now() - SESSION.qt0)/1000;
 
+  let correctBtn = null;
   document.querySelectorAll('#qChoices .choice').forEach((b,i) => {
     b.disabled = true;
-    if(i+1 === q.answer) b.classList.add('ok');
+    if(i+1 === q.answer){ b.classList.add('ok'); correctBtn = b; }
     else if(i+1 === pick) b.classList.add('ng');
     // 肢別の解説があれば、採点後にそれぞれの肢の下に出す
     const note = (q.choice_notes || [])[i];
@@ -388,7 +389,7 @@ function answer(pick, btn){
     rb.append(b);
   });
   $('#afterBox').hidden = false;
-  $('#nextBtn').scrollIntoView({behavior:'smooth', block:'nearest'});
+  (correctBtn || $('#verdict')).scrollIntoView({behavior:'smooth', block:'center'});
 }
 async function record(quality, reasonKey){
   const q = SESSION.current;
