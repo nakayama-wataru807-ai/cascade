@@ -327,12 +327,25 @@ function showQuestion(q){
       row.append(b);
     });
     box.append(row);
-  }else{
+  }else if(q.choices.length){
     q.choices.forEach((c,i) => {
       const b = el('button','choice');
       b.append(el('span','n', String(i+1)));
       b.append(el('span','', c));
       b.onclick = () => answer(i+1, b);
+      box.append(b);
+    });
+  }else{
+    // 表組みが複雑で本文を取り込めなかった問題は、資料画像を見て1〜3を選ぶ
+    figs.hidden = false;
+    if(!shown){
+      figs.append(el('p','note','※この問題は本文を取り込めていません。上の資料画像を参照してください。'));
+    }
+    [1,2,3].forEach(i => {
+      const b = el('button','choice');
+      b.append(el('span','n', String(i)));
+      b.append(el('span','', `肢 ${i}`));
+      b.onclick = () => answer(i, b);
       box.append(b);
     });
   }
