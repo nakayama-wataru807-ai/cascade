@@ -23,11 +23,12 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   const url = new URL(req.url);
 
-  // 一級建築士ドリル（/kenchiku/）は自前の Service Worker を持つので一切触らない。
-  // ここで除外しないと (1) その JS が Cache First で固定され更新が届かなくなり、
-  // (2) 下の HTML 分岐がドリルのページを './index.html'（= cascade 本体のキー）に
-  // 上書き保存してしまい、オフライン時に cascade がドリル画面になる。
-  if (url.pathname.includes('/kenchiku/')) return;
+  // 一級建築士ドリル（/kenchiku/）と FP3ドリル（/fp3/）は自前の Service Worker を
+  // 持つので一切触らない。ここで除外しないと (1) その JS が Cache First で固定され
+  // 更新が届かなくなり、(2) 下の HTML 分岐がドリルのページを './index.html'
+  // （= cascade 本体のキー）に上書き保存してしまい、オフライン時に cascade が
+  // ドリル画面になる。
+  if (url.pathname.includes('/kenchiku/') || url.pathname.includes('/fp3/')) return;
 
   const isHTML = req.mode === 'navigate'
     || req.destination === 'document'
