@@ -243,6 +243,12 @@ function buildPool(){
   const sit = $('#selSitting').value, unit = $('#selUnit').value;
   const exam = $('#selExam').value;
   const t = todayStr();
+  if(mode === 'mock'){
+    if(!sit || !exam) return [];
+    return BUNDLE.questions
+      .filter(q => q.sitting === sit && q.exam === exam && q.law_status !== 'excluded')
+      .sort((a,b) => a.no - b.no);   // 原順・全問（模試は分野/単元/期日で絞らない）
+  }
   return BUNDLE.questions.filter(q => {
     if(q.law_status === 'excluded') return false;   // 法改正で成立しない問題は常に除外
     if(exam && q.exam !== exam) return false;
@@ -259,8 +265,16 @@ function buildPool(){
 }
 function updatePool(){
   if(!BUNDLE) return;
+  const mock = $('#selMode').value === 'mock';
+  $('#selCount').closest('.row').style.display = mock ? 'none' : '';
+  $('#mockNote').hidden = !mock;
   const pool = buildPool();
-  $('#poolMsg').textContent = `該当 ${pool.length} 問`;
+  if(mock && pool.length){
+    const exam = $('#selExam').value;
+    $('#poolMsg').textContent = `${exam} ${pool.length}問（制限時間 ${exam === '学科' ? 90 : 60}分）で模試を開始します`;
+  }else{
+    $('#poolMsg').textContent = `該当 ${pool.length} 問`;
+  }
   $('#startBtn').disabled = pool.length === 0;
 }
 
@@ -270,17 +284,20 @@ function shuffle(a){
   return a;
 }
 function startSession(){
-  const n = +$('#selCount').value;
+  const mode = $('#selMode').value;
+  const mock = mode === 'mock';
   const pool = buildPool();
   if(!pool.length) return;
-  const mode = $('#selMode').value;
-  let list = mode === 'due'
-    ? pool.sort((a,b) => prog(a.id).due.localeCompare(prog(b.id).due))
+  const n = +$('#selCount').value;
+  let list = mock ? pool.slice()
+    : mode === 'due' ? pool.sort((a,b) => prog(a.id).due.localeCompare(prog(b.id).due))
     : shuffle(pool.slice());
-  SESSION = {queue:list.slice(0, n), done:[], total:Math.min(n,list.length),
+  SESSION = {queue:mock ? list : list.slice(0, n), done:[], total:mock ? list.length : Math.min(n,list.length),
              current:null, t0:Date.now(), qt0:0, picked:null,
-             answered:false, recorded:false, suspended:false, timer:null};
+             answered:false, recorded:false, suspended:false, timer:null,
+             mock, mockDeadline: mock ? Date.now() + (pool[0].exam === '学科' ? 90 : 60) * 60000 : null};
   $('#quizSetup').hidden = true; $('#resultCard').hidden = true; $('#quizArea').hidden = false;
+  $('#mockBar').hidden = !mock;
   nextQuestion();
 }
 function nextQuestion(){
@@ -292,6 +309,12 @@ function nextQuestion(){
   showQuestion(SESSION.current);
   SESSION.timer = setInterval(() => {
     $('#qTimer').textContent = mmss((Date.now() - SESSION.qt0)/1000);
+    if(SESSION.mock){
+      const left = (SESSION.mockDeadline - Date.now()) / 1000;
+      const mt = $('#mockTimer');
+      mt.textContent = (left < 0 ? '-' : '') + mmss(Math.abs(left));
+      mt.classList.toggle('over', left < 0);
+    }
   }, 500);
 }
 function showQuestion(q){
@@ -381,6 +404,21 @@ function answer(pick, btn){
   const s = el('small','', `${mmss(SESSION.sec)} で解答` +
     (q.explain ? '' : ' ／ 解説は未作成'));
   v.append(s);
+
+  // 模試モード: 解説・理由タグは出さず、既定の理由で即記録して次へ進めるだけにする
+  // （本番で誤答理由を都度考えることはないため。分野別の内訳は結果画面で見せる）
+  if(SESSION.mock){
+    $('#lawNoteBox').hidden = true;
+    $('#explainBox').hidden = true;
+    $('#reasonSection').hidden = true;
+    $('#afterBox').hidden = false;
+    $('#againBtn').hidden = true;
+    record(ok ? 5 : 0, ok ? 'sure' : 'knowledge');
+    $('#nextBtn').scrollIntoView({behavior:'smooth', block:'nearest'});
+    return;
+  }
+  $('#reasonSection').hidden = false;
+  $('#againBtn').hidden = false;
 
   // 法改正の注記（ペーパー時代の問題）
   const ln = $('#lawNoteBox');
@@ -474,6 +512,34 @@ function finishSession(){
   $('#rsAvg').textContent = att.length ? mmss(sec/att.length) : '–';
 
   const br = $('#rsBreak'); br.innerHTML = '';
+  const rsMock = $('#rsMock');
+  if(SESSION.mock && !SESSION.suspended){
+    rsMock.hidden = false;
+    const exam = (QMAP.get(ids[0]) || {}).exam || '学科';
+    const total = BUNDLE.exam_total[exam], cut = BUNDLE.cutoff[exam], tgt = BUNDLE.target[exam];
+    $('#rsMockPass').innerHTML = '';
+    scoreRow($('#rsMockPass'), exam, att.length ? okN/att.length : 0, att.length, total, cut, tgt);
+    const bySubj = {};
+    ids.forEach(id => {
+      const q = QMAP.get(id), a = lastAttempt(id);
+      if(!q || !a) return;
+      const o = bySubj[q.subject] || (bySubj[q.subject] = {ok:0, n:0});
+      o.n++; if(a.ok) o.ok++;
+    });
+    const sd = $('#rsMockSubj'); sd.innerHTML = '';
+    sd.append(el('p','note','分野別内訳'));
+    SUBJECTS.filter(s => bySubj[s]).forEach(s => {
+      const o = bySubj[s];
+      const row = el('div','score-row ' + subjClass(s));
+      row.append(el('div','nm', s));
+      const bar = el('div','bar'); const fill = el('span');
+      fill.style.width = (o.ok/o.n*100)+'%'; bar.append(fill); row.append(bar);
+      row.append(el('div','fig', `${o.ok}/${o.n}`));
+      sd.append(row);
+    });
+  }else{
+    rsMock.hidden = true;
+  }
   const cnt = {};
   att.forEach(a => { cnt[a.reason] = (cnt[a.reason]||0)+1; });
   Object.entries(cnt).sort((a,b) => b[1]-a[1]).forEach(([k,n]) => {
