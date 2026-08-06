@@ -26,6 +26,8 @@
   --take: #4A5C42;
   --tetsusabi: #5C4033;
   /* ── 指標別アクセント（グラフ線・カード左枠・背景の淡い色づけに使用）── */
+  --c-bank: #B8860B;
+  --c-bank-deep: #8B6508;
   --c-study: #65640E;
   --c-study-deep: #4A4300;
   --c-departure: #863E37;
@@ -167,6 +169,7 @@ html, body {
 
 /* 指標カードごとのアクセント（左枠線＋ごく淡い背景の色づけ）。指標が増えても見分けやすいように */
 #wake-chart-card { border-left-color: var(--ki); background: color-mix(in srgb, var(--ki) 6%, var(--kinari-2)); }
+#bank-card       { border-left-color: var(--c-bank); background: color-mix(in srgb, var(--c-bank) 6%, var(--kinari-2)); }
 #study-card      { border-left-color: var(--c-study); background: color-mix(in srgb, var(--c-study) 6%, var(--kinari-2)); }
 #departure-card  { border-left-color: var(--c-departure); background: color-mix(in srgb, var(--c-departure) 6%, var(--kinari-2)); }
 #work-card       { border-left-color: var(--c-work); background: color-mix(in srgb, var(--c-work) 6%, var(--kinari-2)); }
@@ -338,6 +341,7 @@ html, body {
   color: var(--ki-deep);
   margin-left: 4px;
 }
+#bank-card .chart-today-line b      { color: var(--c-bank-deep); }
 #study-card .chart-today-line b     { color: var(--c-study-deep); }
 #departure-card .chart-today-line b { color: var(--c-departure-deep); }
 #work-card .chart-today-line b      { color: var(--c-work-deep); }
@@ -647,6 +651,18 @@ html, body {
         <div class="chart-today-line" id="bank-today-line"></div>
       </div>
 
+      <div class="card reveal" id="workout-card">
+        <div class="label" style="margin-bottom:14px">筋トレ — 全記録</div>
+        <div id="workout-menu"></div>
+        <div class="weight-input-row">
+          <input type="number" id="workout-input" class="weight-input" placeholder="今日のワークアウト時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
+          <span class="weight-unit">分</span>
+          <button class="weight-save-btn" id="workout-save-btn">記録</button>
+        </div>
+        <div id="workout-chart"></div>
+        <div class="chart-today-line" id="workout-today-line"></div>
+      </div>
+
       <div class="card reveal" id="study-card">
         <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
         <div id="study-menu"></div>
@@ -701,18 +717,6 @@ html, body {
         </div>
         <div id="weight-chart"></div>
         <div class="chart-today-line" id="weight-today-line"></div>
-      </div>
-
-      <div class="card reveal" id="workout-card">
-        <div class="label" style="margin-bottom:14px">筋トレ — 全記録</div>
-        <div id="workout-menu"></div>
-        <div class="weight-input-row">
-          <input type="number" id="workout-input" class="weight-input" placeholder="今日のワークアウト時間" step="5" min="0" inputmode="numeric" enterkeyhint="done" autocomplete="off">
-          <span class="weight-unit">分</span>
-          <button class="weight-save-btn" id="workout-save-btn">記録</button>
-        </div>
-        <div id="workout-chart"></div>
-        <div class="chart-today-line" id="workout-today-line"></div>
       </div>
 
       <div class="card reveal" id="screen-card">
@@ -817,13 +821,13 @@ const DEFAULT_HABITS = [
   {id:'h18',label:'3Dプリント',icon:'🖨️'},
   {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h13',label:'Podcasts',icon:'🎧'},
+  {id:'h20',label:'FP',icon:'💰'},
   {id:'h19',label:'建築士勉強',icon:'📐'},
   {id:'h6',label:'修論作業',icon:'✏️'},
   {id:'h9',label:'建築士アプリ',icon:'📱'},
   {id:'h4',label:'間食増量',icon:'🍱'},
   {id:'h17',label:'Vlog',icon:'🎥'},
   {id:'h10',label:'散歩',icon:'🚶'},
-  {id:'h2',label:'筋トレ',icon:'💪'},
   {id:'h15',label:'NOドーパミン',icon:'🚫'},
 ];
 
