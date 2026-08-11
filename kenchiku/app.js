@@ -97,7 +97,7 @@ const REASONS_NG = [
 ];
 const REASON_LABEL = Object.fromEntries(
   [...REASONS_OK, ...REASONS_NG].map(r => [r.k, r.label])
-    .concat([['unrecorded', '理由未記録']]));
+    .concat([['unrecorded', '理由未記録'], ['paper', '紙演習']]));
 
 /* ---------------- 起動 ---------------- */
 async function boot(){
@@ -163,6 +163,11 @@ function wire(){
   ['#selMode','#selSubject','#selYear','#selUnit'].forEach(s => $(s).onchange = updatePool);
   $('#selSubject').addEventListener('change', fillUnitFilter);
   $('#uSubject').onchange = renderUnits;
+  ['#mkYear','#mkSubject'].forEach(s => $(s).onchange = updateMarkInfo);
+  $('#mkStart').onclick  = startMark;
+  $('#mkCancel').onclick = cancelMark;
+  $('#mkGrade').onclick  = gradeMark;
+  $('#mkBack').onclick   = cancelMark;
 }
 function jumpQuiz(mode){
   document.querySelector('nav button[data-v="quiz"]').click();
@@ -219,6 +224,18 @@ function fillFilters(){
   });
   fillUnitFilter();
   updatePool();
+
+  // マークシート一括入力の年度・科目（こちらは「全○○」なしの必須選択）
+  const my = $('#mkYear');
+  my.innerHTML = '';
+  [...BUNDLE.years].reverse().forEach(v => {
+    const q = BUNDLE.questions.find(q => q.year === v);
+    my.append(new Option(q ? `${q.wareki}（${v}）` : v, v));
+  });
+  const ms = $('#mkSubject');
+  ms.innerHTML = '';
+  SUBJECTS.forEach(x => ms.append(new Option(x, x)));
+  updateMarkInfo();
 }
 function fillUnitFilter(){
   const sub = $('#selSubject').value;
@@ -345,10 +362,9 @@ function answer(pick, btn){
   const q = SESSION.current, ok = pick === q.answer;
   SESSION.sec = (Date.now() - SESSION.qt0)/1000;
 
-  let correctBtn = null;
   document.querySelectorAll('#qChoices .choice').forEach((b,i) => {
     b.disabled = true;
-    if(i+1 === q.answer){ b.classList.add('ok'); correctBtn = b; }
+    if(i+1 === q.answer) b.classList.add('ok');
     else if(i+1 === pick) b.classList.add('ng');
     // 肢別の解説があれば、採点後にそれぞれの肢の下に出す
     const note = (q.choice_notes || [])[i];
@@ -389,7 +405,7 @@ function answer(pick, btn){
     rb.append(b);
   });
   $('#afterBox').hidden = false;
-  (correctBtn || $('#verdict')).scrollIntoView({behavior:'smooth', block:'center'});
+  $('#nextBtn').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 async function record(quality, reasonKey){
   const q = SESSION.current;
@@ -462,6 +478,153 @@ function finishSession(){
   render();
   // 自動同期。失敗しても演習の記録は端末に残っているので黙って見送る
   if(GH.auto && GH.token && GH.repo && ids.length) syncNow(true);
+}
+
+/* ---------------- マークシート一括入力 ----------------
+ * 机で年度別・科目別にまとめて解いたあと、解答だけをマークシートの要領で入力する。
+ * 記録の形式はアプリ内演習と同一（attempts + SM-2）なので、正答率・間違えた問題・
+ * 復習予定・GitHub 同期はそのまま流れる。誤答理由は 'paper' で区別し、
+ * 所要時間は測れないので sec:0 とする。
+ */
+let MARK = null;   // {list, picks:Map(id->1..4), graded}
+
+function markPool(){
+  const yr = +$('#mkYear').value, sub = $('#mkSubject').value;
+  return BUNDLE.questions
+    .filter(q => q.year === yr && q.subject === sub)
+    .sort((a,b) => a.no - b.no);
+}
+function updateMarkInfo(){
+  if(!BUNDLE) return;
+  const list = markPool();
+  const noAns = list.filter(q => q.answer == null).length;
+  const done = list.filter(q => {
+    const p = PROG.get(q.id); return p && p.attempts.length;
+  }).length;
+  $('#mkInfo').textContent = list.length
+    ? `${$('#mkSubject').value} ${list.length}問`
+      + (done ? `（うち解答記録あり ${done}問）` : '')
+      + (noAns ? `／正答未収録 ${noAns}問は採点対象外` : '')
+    : 'この年度・科目の問題がありません';
+  $('#mkStart').disabled = !list.length;
+}
+function startMark(){
+  const list = markPool();
+  if(!list.length) return;
+  MARK = {list, picks:new Map(), graded:false};
+  const sub = $('#mkSubject').value;
+  $('#mkSheet').className = 'card subj ' + subjClass(sub);
+  $('#mkSubjTag').textContent = sub;
+  $('#mkYearTag').textContent = $('#mkYear').selectedOptions[0].textContent;
+  renderMarkRows();
+  $('#mkSetup').hidden = true; $('#mkResult').hidden = true; $('#mkSheet').hidden = false;
+  window.scrollTo({top:0, behavior:'instant'});
+}
+function cancelMark(){
+  MARK = null;
+  $('#mkSheet').hidden = true; $('#mkResult').hidden = true; $('#mkSetup').hidden = false;
+  updateMarkInfo();
+}
+function renderMarkRows(){
+  const box = $('#mkRows'); box.innerHTML = '';
+  MARK.list.forEach(q => {
+    const row = el('div','mk-row'); row.dataset.id = q.id;
+    row.append(el('span','no', 'No.' + q.no));
+    const btns = el('div','mk-btns');
+    if(q.answer == null){
+      row.append(el('span','note','正答未収録のため採点できません'));
+    }else{
+      [1,2,3,4].forEach(n => {
+        const b = el('button','mk-c', String(n));
+        b.onclick = () => {
+          if(MARK.graded) return;
+          MARK.picks.set(q.id, n);
+          btns.querySelectorAll('.mk-c').forEach((x,i) => x.classList.toggle('sel', i+1 === n));
+          row.classList.add('done');
+          updateMarkProg();
+        };
+        btns.append(b);
+      });
+      row.append(btns);
+    }
+    row.append(el('span','res',''));
+    box.append(row);
+  });
+  updateMarkProg();
+}
+function updateMarkProg(){
+  const total = MARK.list.filter(q => q.answer != null).length;
+  $('#mkProg').textContent = `入力 ${MARK.picks.size} / ${total}`;
+  $('#mkGrade').disabled = MARK.graded || !MARK.picks.size;
+}
+async function gradeMark(){
+  if(!MARK || MARK.graded || !MARK.picks.size) return;
+  const total = MARK.list.filter(q => q.answer != null).length;
+  const left = total - MARK.picks.size;
+  if(left > 0 && !confirm(`${left}問が未入力です。入力済みの ${MARK.picks.size}問だけ採点・記録しますか？`))
+    return;
+  MARK.graded = true;
+
+  // 記録。時刻は 1ms ずつずらし、同期のときの重複除去キー（t）が衝突しないようにする
+  const base = Date.now();
+  let i = 0, okN = 0;
+  const wrong = [];
+  for(const q of MARK.list){
+    const pick = MARK.picks.get(q.id);
+    if(pick == null) continue;
+    const ok = pick === q.answer;
+    if(ok) okN++; else wrong.push({q, pick});
+    const p = PROG.get(q.id) || newProg(q.id);
+    p.attempts.push({t:new Date(base + i++).toISOString(), pick, ok,
+                     reason:'paper', sec:0, law:null});
+    applySM2(p, ok ? 4 : 1);
+    PROG.set(q.id, p);
+    await idbPut('prog', p);
+  }
+  const t = todayStr();
+  const d = (await idbGet('day', t)) || {d:t, count:0, sec:0};
+  d.count += MARK.picks.size;
+  await idbPut('day', d);
+
+  // 各行に採点結果を出す（正答=緑・誤答の選択=赤・正答の位置=緑の輪）
+  document.querySelectorAll('#mkRows .mk-row').forEach(row => {
+    const q = QMAP.get(row.dataset.id);
+    if(!q || q.answer == null) return;
+    const pick = MARK.picks.get(q.id);
+    const cs = row.querySelectorAll('.mk-c');
+    cs.forEach(b => b.disabled = true);
+    if(pick == null) return;
+    const res = row.querySelector('.res');
+    if(pick === q.answer){
+      cs[pick-1].className = 'mk-c ok';
+      res.textContent = '○'; res.className = 'res ok';
+    }else{
+      cs[pick-1].className = 'mk-c ng';
+      cs[q.answer-1].className = 'mk-c miss';
+      res.textContent = '×'; res.className = 'res ng';
+    }
+  });
+
+  $('#mkScore').textContent = `${okN} / ${MARK.picks.size}`;
+  $('#mkAcc').textContent = Math.round(okN / MARK.picks.size * 100) + '%';
+  const wb = $('#mkWrong'); wb.innerHTML = '';
+  if(wrong.length){
+    wb.append(el('p','note','間違えた問題:'));
+    wrong.forEach(({q, pick}) => {
+      const p = el('p','note');
+      p.style.margin = '3px 0';
+      p.append(el('span','sname', `No.${q.no}`));
+      p.append(document.createTextNode(
+        `　${q.unit || '未分類'}　自分=肢${pick} → 正答=肢${q.answer}`));
+      wb.append(p);
+    });
+  }
+  $('#mkResult').hidden = false;
+  $('#mkGrade').disabled = true;
+  render();
+  $('#mkResult').scrollIntoView({behavior:'smooth', block:'nearest'});
+  // アプリ内演習と同じく、設定済みなら自動同期。失敗しても記録は端末に残る
+  if(GH.auto && GH.token && GH.repo) syncNow(true);
 }
 
 /* ---------------- 描画 ---------------- */
@@ -652,7 +815,8 @@ function renderLog(){
   if(!total){ rs.append(el('p','empty','まだ記録がありません。')); }
   else{
     const ROWS = [...REASONS_NG, ...REASONS_OK,
-                  {k:'unrecorded', label:'理由未記録（中断）'}];
+                  {k:'unrecorded', label:'理由未記録（中断）'},
+                  {k:'paper', label:'紙演習（マーク入力）'}];
     ROWS.forEach(r => {
       const n = cnt[r.k] || 0; if(!n) return;
       const row = el('div','score-row');
@@ -663,6 +827,7 @@ function renderLog(){
       const bar = el('div','bar'); const sp = el('span');
       sp.style.width = (n/total*100)+'%';
       sp.style.background = (r.k === 'guess' || r.k === 'unrecorded') ? 'var(--warn)'
+                          : r.k === 'paper' ? 'var(--accent)'
                           : (REASONS_OK.some(x=>x.k===r.k) ? 'var(--ok)' : 'var(--ng)');
       bar.append(sp); row.append(bar);
       const fig = el('div','fig'); fig.innerHTML = `<b>${n}</b>　${Math.round(n/total*100)}%`;

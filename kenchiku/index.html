@@ -65,10 +65,7 @@ body{
   background:var(--bg);color:var(--fg);
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
   font-size:15px;line-height:1.7;
-  /* nav を position:fixed にすると iOS Safari のスクロール中に描画位置がずれてコンテンツに重なるため、
-     body を縦 flex にして nav を通常フローの最後に置き sticky で画面下に固定する（header の sticky と同じ方式） */
-  min-height:100vh;min-height:100dvh;
-  display:flex;flex-direction:column;
+  padding-bottom:calc(64px + env(safe-area-inset-bottom));
 }
 h1,h2,h3{margin:0;font-weight:700;line-height:1.4}
 button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
@@ -84,7 +81,7 @@ header h1{font-size:16px;letter-spacing:.02em}
 header .days{margin-left:auto;font-size:12px;color:var(--sub);text-align:right;line-height:1.3}
 header .days b{display:block;font-size:17px;color:var(--accent)}
 
-main{max-width:760px;margin:0 auto;padding:14px;width:100%;flex:1}
+main{max-width:760px;margin:0 auto;padding:14px}
 .view{display:none}
 .view.on{display:block}
 
@@ -93,7 +90,7 @@ main{max-width:760px;margin:0 auto;padding:14px;width:100%;flex:1}
 .card>h2{font-size:13px;color:var(--sub);letter-spacing:.06em;margin-bottom:10px}
 
 nav{
-  position:sticky;bottom:0;z-index:20;display:flex;flex-shrink:0;
+  position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;
   background:var(--card);border-top:1px solid var(--line);
   padding-bottom:env(safe-area-inset-bottom)
 }
@@ -140,15 +137,15 @@ nav button.on{color:var(--accent);font-weight:700}
        color:var(--s,var(--accent));font-weight:700}
 /* 演習カードは左端に科目色の帯を出して、一目で科目が分かるようにする */
 .card.subj{border-left:4px solid var(--s,var(--accent))}
-.stem{font-size:18px;line-height:1.9;margin-bottom:12px;overflow-wrap:anywhere}
+.stem{font-size:15.5px;line-height:1.85;margin-bottom:12px;overflow-wrap:anywhere}
 .figwrap{margin:10px 0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
 .figwrap img{display:block;width:100%}
 .figwrap+.figwrap{margin-top:-2px}
 
-.choice{display:flex;gap:10px;width:100%;max-width:100%;text-align:left;padding:12px 13px;
+.choice{display:flex;gap:10px;width:100%;max-width:100%;text-align:left;padding:11px 13px;
         overflow-wrap:anywhere;
         border:1.5px solid var(--line);border-radius:10px;background:var(--card);
-        margin-bottom:8px;font-size:16.5px;line-height:1.8;transition:border-color .12s,background .12s}
+        margin-bottom:8px;line-height:1.7;transition:border-color .12s,background .12s}
 .choice:active{background:var(--bg)}
 .choice>span:last-child{min-width:0}
 .choice .n{flex:0 0 24px;height:24px;border-radius:50%;background:var(--bg);
@@ -167,21 +164,21 @@ nav button.on{color:var(--accent);font-weight:700}
 .btn-row{display:flex;gap:8px}
 .btn-row .btn{flex:1}
 
-.verdict{border-radius:10px;padding:12px 13px;margin:10px 0;font-size:17px;font-weight:700}
+.verdict{border-radius:10px;padding:11px 13px;margin:10px 0;font-weight:700}
 .verdict.ok{background:var(--ok-w);color:var(--ok)}
 .verdict.ng{background:var(--ng-w);color:var(--ng)}
-.verdict small{display:block;font-weight:400;color:var(--sub);margin-top:4px;font-size:13px}
+.verdict small{display:block;font-weight:400;color:var(--sub);margin-top:3px;font-size:11.5px}
 
 /* ---- 解説表示 ---- */
-.choice-note{display:block;margin-top:7px;padding-top:7px;border-top:1px dashed var(--line);
-             font-size:14.5px;line-height:1.8;color:var(--sub);font-weight:400}
+.choice-note{display:block;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);
+             font-size:12px;line-height:1.7;color:var(--sub);font-weight:400}
 .choice.ok .choice-note{color:var(--fg)}
 .explain-box{border:1px solid var(--line);border-left:3px solid var(--accent);
-             border-radius:10px;padding:13px 14px;margin:10px 0;
-             font-size:17px;line-height:1.95;background:var(--bg)}
-.explain-title{font-size:13px;font-weight:700;color:var(--accent);
-               letter-spacing:.08em;margin-bottom:6px}
-.explain-src{margin-top:8px;font-size:12.5px}
+             border-radius:10px;padding:11px 13px;margin:10px 0;
+             font-size:13.5px;line-height:1.8;background:var(--bg)}
+.explain-title{font-size:11px;font-weight:700;color:var(--accent);
+               letter-spacing:.08em;margin-bottom:4px}
+.explain-src{margin-top:6px;font-size:10.5px}
 
 .reasons{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
 .reasons button{border:1.5px solid var(--line);border-radius:99px;padding:6px 13px;font-size:13px}
@@ -197,6 +194,24 @@ nav button.on{color:var(--accent);font-weight:700}
              background:var(--bg);color:var(--fg);font:inherit;min-width:0;
              font-size:16px}   /* 16px未満にすると iOS がフォーカス時にズームする */
 .field label{font-size:12px;color:var(--sub);white-space:nowrap}
+
+/* ---- マークシート一括入力 ---- */
+.mk-row{display:flex;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid var(--line)}
+.mk-row:last-child{border-bottom:none}
+.mk-row .no{flex:0 0 46px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--sub);font-size:13.5px}
+.mk-row.done .no{color:var(--fg)}
+.mk-btns{display:flex;gap:9px}
+.mk-c{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);
+      display:grid;place-items:center;font-size:14.5px;font-weight:700;color:var(--sub);
+      background:var(--card);flex:0 0 auto}
+.mk-c:disabled{cursor:default}
+.mk-c.sel{border-color:var(--s,var(--accent));background:var(--s,var(--accent));color:#fff}
+.mk-c.ok{border-color:var(--ok);background:var(--ok);color:#fff}
+.mk-c.miss{border-color:var(--ok);color:var(--ok);background:var(--ok-w)}
+.mk-c.ng{border-color:var(--ng);background:var(--ng);color:#fff}
+.mk-row .res{margin-left:auto;font-weight:700;font-size:13px;white-space:nowrap}
+.mk-row .res.ok{color:var(--ok)}
+.mk-row .res.ng{color:var(--ng)}
 
 /* ---- 一覧・単元 ---- */
 table{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -375,6 +390,50 @@ main,.card,.view{max-width:100%}
   </div>
 </section>
 
+<!-- ============ マークシート一括入力 ============ -->
+<section id="v-mark" class="view">
+  <div class="card" id="mkSetup">
+    <h2>紙で解いた結果をまとめて記録</h2>
+    <p class="note" style="margin:0 0 10px">
+      机で年度別・科目別にまとめて解いたあと、マークシートの要領で解答を入力すると、
+      アプリの演習と同じように正答率・間違えた問題・復習予定に記録されます。
+    </p>
+    <div class="row" style="margin-bottom:11px">
+      <select id="mkYear"></select>
+      <select id="mkSubject"></select>
+    </div>
+    <button class="btn" id="mkStart">入力を始める</button>
+    <p class="note" id="mkInfo" style="margin:9px 0 0"></p>
+  </div>
+
+  <div class="card subj" id="mkSheet" hidden>
+    <div class="qmeta">
+      <span class="tag a" id="mkSubjTag">–</span>
+      <span class="tag" id="mkYearTag">–</span>
+      <span style="margin-left:auto" id="mkProg">入力 0 / 0</span>
+      <button class="linkbtn" id="mkCancel" title="入力を破棄して設定に戻る">やめる</button>
+    </div>
+    <div id="mkRows"></div>
+    <button class="btn" id="mkGrade" style="margin-top:12px" disabled>採点して記録</button>
+    <p class="note" style="margin:9px 0 0">
+      未入力の問題は記録されず、出題プールに残ります（あとから入力し直せます）。
+    </p>
+  </div>
+
+  <div class="card" id="mkResult" hidden>
+    <h2>採点結果</h2>
+    <div class="stat-grid">
+      <div class="stat"><b id="mkScore">–</b><span>正答</span></div>
+      <div class="stat"><b id="mkAcc">–</b><span>正答率</span></div>
+    </div>
+    <div id="mkWrong" style="margin-top:11px"></div>
+    <p class="note" style="margin:9px 0 0">
+      間違えた問題は演習タブの「間違えた問題」からいつでも解き直せます。
+    </p>
+    <button class="btn" id="mkBack" style="margin-top:11px">設定に戻る</button>
+  </div>
+</section>
+
 <!-- ============ 単元 ============ -->
 <section id="v-unit" class="view">
   <div class="card">
@@ -471,6 +530,7 @@ main,.card,.view{max-width:100%}
 <nav>
   <button data-v="home" class="on"><i>◎</i>ホーム</button>
   <button data-v="quiz"><i>✎</i>演習</button>
+  <button data-v="mark"><i>◉</i>マーク</button>
   <button data-v="unit"><i>▤</i>単元</button>
   <button data-v="log"><i>◔</i>記録</button>
 </nav>
