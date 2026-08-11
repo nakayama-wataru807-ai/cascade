@@ -108,7 +108,7 @@ async function boot(){
   const rows = await idbAll('prog');
   rows.forEach(p => PROG.set(p.id, p));
   if(rec && rec.v){ setBundle(rec.v); }
-  else { $('#importCard').hidden = false; $('#todayCard').hidden = true; }
+  else { $('#importCard').hidden = false; $('#todayCard').hidden = true; markAvailability(); }
   updateImportState();
   await ghLoad();
   loadPlan();
@@ -235,7 +235,15 @@ function fillFilters(){
   const ms = $('#mkSubject');
   ms.innerHTML = '';
   SUBJECTS.forEach(x => ms.append(new Option(x, x)));
+  markAvailability();
   updateMarkInfo();
+}
+/* 問題データ未取込のあいだは、マーク画面にも取込を促す案内を出す
+ * （選択肢が空のプルダウンだけを見せるとホーム以外では原因が分からない）。 */
+function markAvailability(){
+  const has = !!BUNDLE;
+  $('#mkNoData').hidden = has;
+  $('#mkSetup').hidden = !has;
 }
 function fillUnitFilter(){
   const sub = $('#selSubject').value;
