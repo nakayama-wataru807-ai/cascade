@@ -505,6 +505,7 @@ html, body {
   color: var(--take);
   flex-shrink: 0;
 }
+.habit-streak.missed { color: var(--c-arrival); }
 .habit-check {
   width: 22px; height: 22px;
   border-radius: 50%;
@@ -906,17 +907,32 @@ function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// 習慣の連続達成日数。今日が未達成なら昨日から遡る（今日はまだ猶予扱い）
+// 習慣の連続日数。今日が未達成なら、昨日からの未達成日数を負数で返す
+// （今日はまだ猶予扱い。記録開始以前まで遡らないよう、最古の記録日を下限にする）
 function habitStreak(id) {
   const logs = store.habits.logs;
-  let count = 0;
   const d = new Date();
-  if (!(logs[dateToStr(d)] && logs[dateToStr(d)][id])) d.setDate(d.getDate() - 1);
-  while (logs[dateToStr(d)] && logs[dateToStr(d)][id]) {
-    count++;
+  const todayDone = !!(logs[dateToStr(d)] && logs[dateToStr(d)][id]);
+
+  if (todayDone) {
+    let count = 0;
+    while (logs[dateToStr(d)] && logs[dateToStr(d)][id]) {
+      count++;
+      d.setDate(d.getDate() - 1);
+    }
+    return count;
+  }
+
+  const firstLogDate = Object.keys(logs).sort()[0];
+  if (!firstLogDate) return 0;
+
+  d.setDate(d.getDate() - 1);
+  let missed = 0;
+  while (dateToStr(d) >= firstLogDate && !(logs[dateToStr(d)] && logs[dateToStr(d)][id])) {
+    missed++;
     d.setDate(d.getDate() - 1);
   }
-  return count;
+  return missed > 0 ? -missed : 0;
 }
 
 function ensureToday() {
@@ -1743,7 +1759,7 @@ function renderHabits() {
     item.innerHTML = `
       <span class="habit-icon">${h.icon}</span>
       <span class="habit-label">${h.label}</span>
-      <span class="habit-streak">${s > 0 ? s + '日' : ''}</span>
+      <span class="habit-streak${s < 0 ? ' missed' : ''}">${s !== 0 ? s + '日' : ''}</span>
       <div class="habit-check">
         <svg class="habit-check-svg" width="12" height="9" viewBox="0 0 12 9" fill="none">
           <path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1768,7 +1784,10 @@ function toggleHabit(id, el) {
   if ('vibrate' in navigator) navigator.vibrate(30);
   const s = habitStreak(id);
   const streakEl = el.querySelector('.habit-streak');
-  if (streakEl) streakEl.textContent = s > 0 ? `${s}日` : '';
+  if (streakEl) {
+    streakEl.textContent = s !== 0 ? `${s}日` : '';
+    streakEl.classList.toggle('missed', s < 0);
+  }
   renderHeatmap();
 }
 
