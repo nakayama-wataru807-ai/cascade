@@ -5,9 +5,24 @@
   "field": "建築史家・批評家",
   "lifespan": "1930–",
   "one_liner": "「テクトニクス＝接合の詩学」を軸に近代建築を読み直した歴史家・批評家",
-  "portrait": { "src": "https://upload.wikimedia.org/wikipedia/commons/6/62/Kenneth_Frampton_at_GSAPP_%28cropped%29.jpeg", "mode": "hotlink", "credit": "Wikimedia Commons / GSAPP" },
+  "portrait": {
+    "src": "img/2026-09/portrait.jpg",
+    "mode": "embed",
+    "credit": "Wikimedia Commons / GSAPP"
+  },
   "intro": "ケネス・フランプトンは、建築の意味は「いかに建てられるか」＝構造と構築のあり方に宿ると説いた歴史家・批評家です。彼のキーワード『テクトニクス（接合の詩学）』と『批判的地域主義』は、木組み継手の強度を研究する中山さんの仕事に理論の言葉を与えます。今月は略歴・主著・思想の核・系譜・批判・現代への接続の順に、1日1トピックずつ辿ります。",
-  "arc": ["導入", "略歴", "主著", "思想の核", "系譜(上流)", "系譜(下流)", "時代背景", "エピソード", "批判", "現代への接続"],
+  "arc": [
+    "導入",
+    "略歴",
+    "主著",
+    "思想の核",
+    "系譜(上流)",
+    "系譜(下流)",
+    "時代背景",
+    "エピソード",
+    "批判",
+    "現代への接続"
+  ],
   "topics": [
     {
       "day": 1,
@@ -15,9 +30,22 @@
       "title": "なぜ今月フランプトンか",
       "body": "建築の本質は様式やイメージではなく「どう組み立てられているか」にある——フランプトンはそう主張し続けた批評家です。彼の中心概念『テクトニクス』は、ギリシャ語 tekton（大工・つくる人）に由来し、構造・構築・接合が持つ表現力を指します。継手の強度と幾何を扱う修士研究に、そのまま接続する言葉です。まずは人物像から。",
       "detail": "フランプトンは建築家として出発し、のちに歴史家・批評家に転じました。設計と理論の両方を経験した稀有な立場から、20世紀建築を「構造と構築の詩学の展開」として書き直しました。日本では『近代建築 その批判的歴史』の著者として知られています。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/6/62/Kenneth_Frampton_at_GSAPP_%28cropped%29.jpeg", "mode": "hotlink", "caption": "コロンビア大学GSAPP のフランプトン（2014）", "credit": "Wikimedia Commons" },
-      "links": [{ "label": "Columbia GSAPP 教員ページ", "url": "https://www.arch.columbia.edu/faculty/17-kenneth-frampton" }],
-      "related_people": ["ゴットフリート・ゼンパー", "カルロ・スカルパ"]
+      "image": {
+        "src": "img/2026-09/day01.jpg",
+        "mode": "embed",
+        "caption": "コロンビア大学GSAPP のフランプトン（2014）",
+        "credit": "Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "Columbia GSAPP 教員ページ",
+          "url": "https://www.arch.columbia.edu/faculty/17-kenneth-frampton"
+        }
+      ],
+      "related_people": [
+        "ゴットフリート・ゼンパー",
+        "カルロ・スカルパ"
+      ]
     },
     {
       "day": 2,
@@ -31,7 +59,12 @@
       "category": "略歴",
       "title": "建築家として——コリンガム・ビル",
       "body": "イスラエルやミドルセックス州庁での勤務を経て、1961〜66年にロンドンの設計事務所 Douglas Stephen and Partners に在籍。ベイズウォーターの集合住宅『コリンガム・ビル』（1962完成、8階建て）を担当しました。この建物は1998年に歴史的建造物に指定されています。設計者としての実務経験が、後年の「建てること」への一貫したこだわりの土台になります。",
-      "links": [{ "label": "Corringham Building（Historic England 指定）", "url": "https://historicengland.org.uk/listing/the-list/list-entry/1078180" }],
+      "links": [
+        {
+          "label": "Corringham Building（Historic England 指定）",
+          "url": "https://historicengland.org.uk/listing/the-list/list-entry/1078180"
+        }
+      ],
       "related_people": []
     },
     {
@@ -47,7 +80,12 @@
       "title": "『近代建築 その批判的歴史』(1980)",
       "body": "世界で最も広く読まれた近代建築史の教科書。1980年の初版以降、1985・1992・2007・2020年と版を重ねています。「批判的（critical）」の語が示す通り、様式の年代記ではなく、社会・技術・思想との関係で建築を評価する視点で貫かれています。",
       "detail": "各版で記述が更新され、非西欧圏や環境・持続可能性の章が加えられてきました。フランプトン自身の関心の変化がそのまま反映された、生きている教科書です。",
-      "links": [{ "label": "Thames & Hudson 版", "url": "https://thamesandhudson.com/modern-architecture-a-critical-history-9780500204443" }],
+      "links": [
+        {
+          "label": "Thames & Hudson 版",
+          "url": "https://thamesandhudson.com/modern-architecture-a-critical-history-9780500204443"
+        }
+      ],
       "related_people": []
     },
     {
@@ -56,16 +94,33 @@
       "title": "『構築文化研究（Studies in Tectonic Culture）』(1995)",
       "body": "フランプトンの代表作。John Cava 編、MIT Press。副題は「19〜20世紀建築における構築の詩学」。19世紀の理論（ゼンパー、ベティヒャー）から説き起こし、ペレ、ライト、ミース、カーン、ウツソン、スカルパの各章で「構造と構築がいかに詩になるか」を分析します。",
       "detail": "序論「テクトニックの射程に関する考察」、「グレコ・ゴシックとネオ・ゴシック」「テクトニックの興隆——ドイツ啓蒙における核形態と芸術形態 1750–1870」、そして6人の建築家の章、追記「テクトニックの軌跡 1903–1994」で構成されます。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Sydney_Australia._%2821339175489%29.jpg", "mode": "hotlink", "caption": "シドニー・オペラハウス（ウツソン）。本書の一章の主題", "credit": "Wikimedia Commons" },
-      "links": [{ "label": "MIT Press", "url": "https://mitpress.mit.edu/9780262561495/studies-in-tectonic-culture/" }],
-      "related_people": ["オーギュスト・ペレ", "ヨーン・ウツソン", "カルロ・スカルパ", "ルイス・カーン"]
+      "image": {
+        "src": "img/2026-09/day06.jpg",
+        "mode": "embed",
+        "caption": "シドニー・オペラハウス（ウツソン）。本書の一章の主題",
+        "credit": "Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "MIT Press",
+          "url": "https://mitpress.mit.edu/9780262561495/studies-in-tectonic-culture/"
+        }
+      ],
+      "related_people": [
+        "オーギュスト・ペレ",
+        "ヨーン・ウツソン",
+        "カルロ・スカルパ",
+        "ルイス・カーン"
+      ]
     },
     {
       "day": 7,
       "category": "主著",
       "title": "『労働・仕事・建築』(2002)",
       "body": "評論集。タイトルはハンナ・アーレント『人間の条件』の三区分——労働（labour）・仕事（work）・活動（action）——から取られています。使い捨てられる「労働」の産物ではなく、世界に残り人が住まう「仕事」の産物として建築を捉える、という倫理的な立場が示されます。",
-      "related_people": ["ハンナ・アーレント"]
+      "related_people": [
+        "ハンナ・アーレント"
+      ]
     },
     {
       "day": 8,
@@ -73,7 +128,9 @@
       "title": "「批判的地域主義に向けて」(1983)",
       "body": "ハル・フォスター編『反美学』に収められた短い論文で、6つの視点から「抵抗の建築」を論じます。普遍化する消費文明に抗い、土地の地形・気候・光・触覚・構築形式を手がかりにする——ただし郷土様式の復活ではない、という難しい立場です。フランプトンの名を最も広めた文章です。",
       "detail": "アレクサンダー・ツォニスとリアーヌ・ルフェーヴルが用いた語をフランプトンが発展させたもの。ポール・リクールの「普遍的文明と国民的文化」（1961）が下敷きにあります。",
-      "related_people": ["ポール・リクール"]
+      "related_people": [
+        "ポール・リクール"
+      ]
     },
     {
       "day": 9,
@@ -87,8 +144,16 @@
       "category": "思想の核",
       "title": "核形態と芸術形態——ゼンパーとベティヒャー",
       "body": "19世紀ドイツの理論家カール・ベティヒャーは、部材の力学的な姿（核形態＝Kernform）と、それを説明し様式化する表現（芸術形態＝Kunstform）を区別しました。ゴットフリート・ゼンパーはこれを文化の理論へ広げます。フランプトンの『構築文化研究』はこの2人から始まります。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/6/6e/ETH-BIB-Semper%2C_Gottfried_%281803-1879%29-Portrait-Portr_10869.tif_%28cropped%29.jpg", "mode": "hotlink", "caption": "ゴットフリート・ゼンパー（1803–1879）", "credit": "ETH-Bibliothek / Wikimedia Commons" },
-      "related_people": ["ゴットフリート・ゼンパー", "カール・ベティヒャー"]
+      "image": {
+        "src": "img/2026-09/day10.jpg",
+        "mode": "embed",
+        "caption": "ゴットフリート・ゼンパー（1803–1879）",
+        "credit": "ETH-Bibliothek / Wikimedia Commons"
+      },
+      "related_people": [
+        "ゴットフリート・ゼンパー",
+        "カール・ベティヒャー"
+      ]
     },
     {
       "day": 11,
@@ -96,15 +161,25 @@
       "title": "ゼンパーの「建築の四要素」",
       "body": "ゼンパーは建築を4つの要素に分けました。炉（社会の中心）、基壇（土を盛り・掘る＝土工）、軸組と屋根（線材を組む）、そして空間を仕切る被覆膜です。土工は「ステレオトミック（量塊的）」、軸組は「テクトニック（組立的）」という二つの構築の系譜に対応します。",
       "detail": "この分類は、木造の継手（軸組＝テクトニック）と石・土の基礎（ステレオトミック）が別の論理で働くことを言語化します。中山さんの木組み研究は、まさにテクトニックの系譜の内部にあります。",
-      "image": { "src": "img/2026-09/day11-four-elements.svg", "mode": "embed", "caption": "四要素の模式図" },
-      "related_people": ["ゴットフリート・ゼンパー"]
+      "image": {
+        "src": "img/2026-09/day11-four-elements.svg",
+        "mode": "embed",
+        "caption": "四要素の模式図"
+      },
+      "related_people": [
+        "ゴットフリート・ゼンパー"
+      ]
     },
     {
       "day": 12,
       "category": "思想の核",
       "title": "ステレオトミック vs テクトニック",
       "body": "フランプトンは建築の物質性を二極で捉えます。ステレオトミックは圧縮に働く量塊——石を積み、大地を掘り、重さで立つ。テクトニックは引張と曲げに働く軸組——線材を継ぎ、架け、軽さで立つ。多くの名建築は、この二つの対比を意識的に扱っています。",
-      "image": { "src": "img/2026-09/day12-stereotomic-tectonic.svg", "mode": "embed", "caption": "二つの構築の論理" },
+      "image": {
+        "src": "img/2026-09/day12-stereotomic-tectonic.svg",
+        "mode": "embed",
+        "caption": "二つの構築の論理"
+      },
       "related_people": []
     },
     {
@@ -113,8 +188,15 @@
       "title": "接合への礼賛——「the joint」",
       "body": "『構築文化研究』のスカルパの章は「接合への礼賛（the adoration of the joint）」と題されています。フランプトンにとって継手（Knoten＝結び目）は、力が集まり、素材が出会い、作り手の判断が最も濃く現れる場所。装飾ではなく、そこに建築の詩がある、という主張です。",
       "detail": "中山さんの研究における「継手の最大荷重」「破壊モード」「加工精度」は、フランプトンの言う『接合の詩学』の力学的な裏側です。数値と詩は同じ場所を別の言葉で見ています。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Verona%2C_castelvecchio%2C_museo_01.jpg", "mode": "hotlink", "caption": "カステルヴェッキオ美術館（スカルパ改修）", "credit": "Wikimedia Commons" },
-      "related_people": ["カルロ・スカルパ"]
+      "image": {
+        "src": "img/2026-09/day13.jpg",
+        "mode": "embed",
+        "caption": "カステルヴェッキオ美術館（スカルパ改修）",
+        "credit": "Wikimedia Commons"
+      },
+      "related_people": [
+        "カルロ・スカルパ"
+      ]
     },
     {
       "day": 14,
@@ -128,14 +210,20 @@
       "category": "系譜(上流)",
       "title": "ゴットフリート・ゼンパー（1803–1879）",
       "body": "ドイツの建築家・理論家。『建築の四要素』『様式論』で、建築を素材・技法・儀礼から説明しました。とくに「被覆理論（Bekleidung）」——壁の起源は編まれた織物・仕切りにあるという説——は、構造と表層の関係を考える出発点です。フランプトン経由で、中山さんの修論の理論的支柱になりえます。",
-      "related_people": ["ゴットフリート・ゼンパー"]
+      "related_people": [
+        "ゴットフリート・ゼンパー"
+      ]
     },
     {
       "day": 16,
       "category": "系譜(上流)",
       "title": "アーレント・ハイデガー・リクール",
       "body": "フランプトンの思想には現象学と政治哲学が流れ込んでいます。ハンナ・アーレント（公共性、労働と仕事の区別）、マルティン・ハイデガー（「建てる・住まう・考える」）、ポール・リクール（普遍文明と地域文化）。建築を「人が世界に住まうための構築」として捉える枠組みです。",
-      "related_people": ["ハンナ・アーレント", "マルティン・ハイデガー", "ポール・リクール"]
+      "related_people": [
+        "ハンナ・アーレント",
+        "マルティン・ハイデガー",
+        "ポール・リクール"
+      ]
     },
     {
       "day": 17,
@@ -149,46 +237,84 @@
       "category": "系譜(下流)",
       "title": "フランプトンが読んだ建築家たち",
       "body": "『構築文化研究』が章を割くのは、オーギュスト・ペレ、フランク・ロイド・ライト、ミース・ファン・デル・ローエ、ルイス・カーン、ヨーン・ウツソン、カルロ・スカルパ。共通するのは、構造・構築・接合を「隠す」でも「見せびらかす」でもなく、意味の源泉として扱ったことです。",
-      "related_people": ["オーギュスト・ペレ", "フランク・ロイド・ライト", "ミース・ファン・デル・ローエ", "ルイス・カーン", "ヨーン・ウツソン", "カルロ・スカルパ"]
+      "related_people": [
+        "オーギュスト・ペレ",
+        "フランク・ロイド・ライト",
+        "ミース・ファン・デル・ローエ",
+        "ルイス・カーン",
+        "ヨーン・ウツソン",
+        "カルロ・スカルパ"
+      ]
     },
     {
       "day": 19,
       "category": "系譜(下流)",
       "title": "オーギュスト・ペレ——鉄筋コンクリートの古典的合理主義",
       "body": "ペレは鉄筋コンクリートの架構をそのまま建築の秩序にした人です。ル・ランシーのノートルダム教会（1923）では、細い柱と薄い殻、プレキャストの格子壁が、ゴシックの光をコンクリートで再現します。「構造の格（order）」という考え方の原点です。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Le_Raincy.Eglise_Notre-Dame.jpg", "mode": "hotlink", "caption": "ノートルダム・デュ・ランシー（ペレ、1923）", "credit": "Wikimedia Commons" },
-      "related_people": ["オーギュスト・ペレ"]
+      "image": {
+        "src": "img/2026-09/day19.jpg",
+        "mode": "embed",
+        "caption": "ノートルダム・デュ・ランシー（ペレ、1923）",
+        "credit": "Wikimedia Commons"
+      },
+      "related_people": [
+        "オーギュスト・ペレ"
+      ]
     },
     {
       "day": 20,
       "category": "系譜(下流)",
       "title": "ライトの「テキスタイル・テクトニック」／ミースの連続性",
       "body": "フランプトンはライトを「織物のようなテクトニック」と呼びます——コンクリートブロックを編むように積むミラード邸など。ミースについては「アヴァンギャルドと連続性」、鉄骨のディテールに古典の格を宿す姿勢を論じます。バルセロナ・パビリオンの十字柱はその象徴です。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/4/42/The_Barcelona_Pavilion%2C_Barcelona%2C_2010.jpg", "mode": "hotlink", "caption": "バルセロナ・パビリオン（ミース、1929／1986再建）", "credit": "Wikimedia Commons" },
-      "related_people": ["フランク・ロイド・ライト", "ミース・ファン・デル・ローエ"]
+      "image": {
+        "src": "img/2026-09/day20.jpg",
+        "mode": "embed",
+        "caption": "バルセロナ・パビリオン（ミース、1929／1986再建）",
+        "credit": "Wikimedia Commons"
+      },
+      "related_people": [
+        "フランク・ロイド・ライト",
+        "ミース・ファン・デル・ローエ"
+      ]
     },
     {
       "day": 21,
       "category": "系譜(下流)",
       "title": "ルイス・カーン——新しいモニュメンタリティ",
       "body": "カーンの章は「近代化と新しいモニュメンタリティ 1944–1972」。ソーク研究所やキンベル美術館で、カーンは「仕える／仕えられる空間」と、構造そのものが空間と光をつくる建築を示しました。フランプトンにとって、テクトニクスが精神的な重さを獲得した到達点です。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/8/81/Kimbell_Art_Museum_Highsmith.jpg", "mode": "hotlink", "caption": "キンベル美術館（カーン、1972）のサイクロイド・ヴォールト", "credit": "Wikimedia Commons / Carol M. Highsmith" },
-      "related_people": ["ルイス・カーン"]
+      "image": {
+        "src": "img/2026-09/day21.jpg",
+        "mode": "embed",
+        "caption": "キンベル美術館（カーン、1972）のサイクロイド・ヴォールト",
+        "credit": "Wikimedia Commons / Carol M. Highsmith"
+      },
+      "related_people": [
+        "ルイス・カーン"
+      ]
     },
     {
       "day": 22,
       "category": "系譜(下流)",
       "title": "ヨーン・ウツソン——テクトニックな隠喩",
       "body": "ウツソンの章は「トランスカルチュラルな形式とテクトニックな隠喩」。バウスヴェア教会（1976）では、外はプレキャストの工業的な箱、内は雲のように打ち上がった現場打ちの折板天井。工業と手仕事、普遍と地域が一つの断面に共存します。批判的地域主義の実例としてよく引かれます。",
-      "image": { "src": "https://upload.wikimedia.org/wikipedia/commons/8/80/Bagsv%C3%A6rd_Kirke_2009.jpg", "mode": "hotlink", "caption": "バウスヴェア教会（ウツソン、1976）", "credit": "Wikimedia Commons" },
-      "related_people": ["ヨーン・ウツソン"]
+      "image": {
+        "src": "img/2026-09/day22.jpg",
+        "mode": "embed",
+        "caption": "バウスヴェア教会（ウツソン、1976）",
+        "credit": "Wikimedia Commons"
+      },
+      "related_people": [
+        "ヨーン・ウツソン"
+      ]
     },
     {
       "day": 23,
       "category": "時代背景",
       "title": "『Oppositions』誌の時代（1973–1984）",
       "body": "フランプトンはニューヨークの IAUS（建築都市研究所）が出した理論誌『Oppositions』の共同編集者でした。ピーター・アイゼンマン、アンソニー・ヴィドラーらと、建築を「書いて考える」ことが前衛だった時代。フランプトンの立場はこの論争空間の中で鍛えられました。",
-      "related_people": ["ピーター・アイゼンマン"]
+      "related_people": [
+        "ピーター・アイゼンマン"
+      ]
     },
     {
       "day": 24,
@@ -231,35 +357,97 @@
       "title": "デジタルファブリケーション時代のテクトニクス",
       "body": "ロボット木造やパラメトリックな継手生成が現実になった今、「接合の詩学」はどう読み直せるでしょうか。フランプトンは手仕事の判断を重視しましたが、テクトニクスの核——力の流れと組立の論理が形を決める——はむしろデジタル設計と相性が良い。ICD シュツットガルトの木質パビリオンはその一例です。",
       "detail": "アルゴリズムが継手を生成しても、「なぜこの接合か」を力学と意味の両面で説明できるかどうかが問われます。そこがフランプトンの言う『詩学』の現代版です。",
-      "related_people": ["アヒム・メンゲス", "フライ・オットー"]
+      "related_people": [
+        "アヒム・メンゲス",
+        "フライ・オットー"
+      ]
     },
     {
       "day": 30,
       "category": "現代への接続",
       "title": "中山さんの研究とフランプトン",
       "body": "木組み継手の強度特性を測ることは、フランプトンの言う Knoten（結び目）を力学の言葉で記述する作業です。最大荷重・破壊モード・加工精度のばらつきは、『接合の詩学』の裏面。修論の考察に「テクトニクス」「核形態／芸術形態」の語彙を一段入れると、数値の意味が立ち上がります。次は『構築文化研究』のスカルパ章、そしてゼンパー『建築の四要素』へ。",
-      "related_people": ["ゴットフリート・ゼンパー", "佐々木睦朗"]
+      "related_people": [
+        "ゴットフリート・ゼンパー",
+        "佐々木睦朗"
+      ]
     }
   ],
   "resources": {
     "books": [
-      { "title": "Studies in Tectonic Culture: The Poetics of Construction in Nineteenth and Twentieth Century Architecture", "author": "Kenneth Frampton (ed. John Cava)", "year": 1995, "note": "代表作。まずスカルパ章と序論から", "url": "https://mitpress.mit.edu/9780262561495/studies-in-tectonic-culture/" },
-      { "title": "近代建築 その批判的歴史（Modern Architecture: A Critical History）", "author": "Kenneth Frampton", "year": 1980, "note": "邦訳あり（青土社）。第5版 2020", "url": "https://thamesandhudson.com/modern-architecture-a-critical-history-9780500204443" },
-      { "title": "Labour, Work and Architecture: Collected Essays on Architecture and Design", "author": "Kenneth Frampton", "year": 2002, "note": "「批判的地域主義に向けて」を含む評論集", "url": "https://www.phaidon.com/store/architecture/labour-work-and-architecture-9780714841809/" },
-      { "title": "A Genealogy of Modern Architecture: Comparative Critical Analysis of Built Form", "author": "Kenneth Frampton", "year": 2014, "note": "同種の建物を対で比較分析", "url": "https://www.lars-mueller-publishers.com/genealogy-modern-architecture" },
-      { "title": "建築の四要素・様式論（Die vier Elemente der Baukunst / Der Stil）", "author": "Gottfried Semper", "year": 1851, "note": "フランプトンの上流。被覆理論", "url": "https://www.getty.edu/publications/virtuallibrary/9780892365975.html" }
+      {
+        "title": "Studies in Tectonic Culture: The Poetics of Construction in Nineteenth and Twentieth Century Architecture",
+        "author": "Kenneth Frampton (ed. John Cava)",
+        "year": 1995,
+        "note": "代表作。まずスカルパ章と序論から",
+        "url": "https://mitpress.mit.edu/9780262561495/studies-in-tectonic-culture/"
+      },
+      {
+        "title": "近代建築 その批判的歴史（Modern Architecture: A Critical History）",
+        "author": "Kenneth Frampton",
+        "year": 1980,
+        "note": "邦訳あり（青土社）。第5版 2020",
+        "url": "https://thamesandhudson.com/modern-architecture-a-critical-history-9780500204443"
+      },
+      {
+        "title": "Labour, Work and Architecture: Collected Essays on Architecture and Design",
+        "author": "Kenneth Frampton",
+        "year": 2002,
+        "note": "「批判的地域主義に向けて」を含む評論集",
+        "url": "https://www.phaidon.com/store/architecture/labour-work-and-architecture-9780714841809/"
+      },
+      {
+        "title": "A Genealogy of Modern Architecture: Comparative Critical Analysis of Built Form",
+        "author": "Kenneth Frampton",
+        "year": 2014,
+        "note": "同種の建物を対で比較分析",
+        "url": "https://www.lars-mueller-publishers.com/genealogy-modern-architecture"
+      },
+      {
+        "title": "建築の四要素・様式論（Die vier Elemente der Baukunst / Der Stil）",
+        "author": "Gottfried Semper",
+        "year": 1851,
+        "note": "フランプトンの上流。被覆理論",
+        "url": "https://www.getty.edu/publications/virtuallibrary/9780892365975.html"
+      }
     ],
     "articles": [
-      { "title": "Towards a Critical Regionalism: Six Points for an Architecture of Resistance", "publisher": "in『The Anti-Aesthetic』(ed. Hal Foster)", "year": 1983, "url": "https://monoskop.org/images/8/8f/Foster_Hal_ed_The_Anti-Aesthetic_Essays_on_Postmodern_Culture.pdf" },
-      { "title": "Rappel à l'Ordre: The Case for the Tectonic", "publisher": "Architectural Design", "year": 1990, "url": "https://www.tandfonline.com/" }
+      {
+        "title": "Towards a Critical Regionalism: Six Points for an Architecture of Resistance",
+        "publisher": "in『The Anti-Aesthetic』(ed. Hal Foster)",
+        "year": 1983,
+        "url": "https://monoskop.org/images/8/8f/Foster_Hal_ed_The_Anti-Aesthetic_Essays_on_Postmodern_Culture.pdf"
+      },
+      {
+        "title": "Rappel à l'Ordre: The Case for the Tectonic",
+        "publisher": "Architectural Design",
+        "year": 1990,
+        "url": "https://www.tandfonline.com/"
+      }
     ],
     "videos": [
-      { "title": "Kenneth Frampton — Golden Lion for Lifetime Achievement (La Biennale di Venezia)", "platform": "YouTube / labiennale", "length": "—", "url": "https://www.labiennale.org/en/architecture/2018/golden-lion-lifetime-achievement-kenneth-frampton" },
-      { "title": "Kenneth Frampton lectures at Columbia GSAPP", "platform": "YouTube / Columbia GSAPP", "length": "複数", "url": "https://www.youtube.com/@ColumbiaGSAPP/search?query=frampton" }
+      {
+        "title": "Kenneth Frampton — Golden Lion for Lifetime Achievement (La Biennale di Venezia)",
+        "platform": "YouTube / labiennale",
+        "length": "—",
+        "url": "https://www.labiennale.org/en/architecture/2018/golden-lion-lifetime-achievement-kenneth-frampton"
+      },
+      {
+        "title": "Kenneth Frampton lectures at Columbia GSAPP",
+        "platform": "YouTube / Columbia GSAPP",
+        "length": "複数",
+        "url": "https://www.youtube.com/@ColumbiaGSAPP/search?query=frampton"
+      }
     ],
     "archives": [
-      { "label": "Columbia GSAPP — Kenneth Frampton", "url": "https://www.arch.columbia.edu/faculty/17-kenneth-frampton" },
-      { "label": "The Pritzker/Soane Medal 2019 lecture 記録", "url": "https://www.soane.org/whats-on/lectures-courses/soane-medal-lecture-2019-kenneth-frampton" }
+      {
+        "label": "Columbia GSAPP — Kenneth Frampton",
+        "url": "https://www.arch.columbia.edu/faculty/17-kenneth-frampton"
+      },
+      {
+        "label": "The Pritzker/Soane Medal 2019 lecture 記録",
+        "url": "https://www.soane.org/whats-on/lectures-courses/soane-medal-lecture-2019-kenneth-frampton"
+      }
     ]
   },
   "wrap_prompts": [
