@@ -548,7 +548,7 @@ function finishSession(){
     br.append(el('span', 'chip '+cls, `${REASON_LABEL[k]||k} ${n}`));
   });
   render();
-  if(GH.auto && GH.token && GH.repo && ids.length) syncNow(true);
+  if(GH.auto && GH.token && GH.repo && ids.length && Date.now() >= syncCooldownUntil) syncNow(true);
 }
 
 /* ---------------- 描画 ---------------- */
@@ -871,12 +871,17 @@ function daysFromProgress(progress){
   return Object.values(m).sort((a,b) => a.d.localeCompare(b.d));
 }
 
+let syncInFlight = false;
+let syncCooldownUntil = 0;   // 失敗が続くとき自動同期を止める時刻
+
 async function syncNow(silent){
   const msg = $('#syMsg');
   if(!GH.token || !GH.repo){
     if(!silent) msg.textContent = '設定が未入力です。リポジトリとトークンを保存してください。';
     return false;
   }
+  if(syncInFlight) return false;   // 多重実行を防ぐ（低速回線での 409 スパム対策）
+  syncInFlight = true;
   const url = `https://api.github.com/repos/${GH.repo}/contents/${GH.path}`;
   try{
     if(!silent) msg.textContent = '同期中…';
@@ -907,12 +912,18 @@ async function syncNow(silent){
     GH.last = new Date().toISOString();
     GH.lastCount = merged.length;
     await ghSave();
+    syncCooldownUntil = 0;
     if(!silent) msg.textContent = `同期しました（${merged.length}問）。`;
     render();
     return true;
   }catch(err){
+    // 失敗が続くとき（PAT 失効・オフライン等）は 10 分間 自動同期を止める。
+    // 手動の「今すぐ同期」は syncNow(false) なのでクールダウンに関係なく走る。
+    syncCooldownUntil = Date.now() + 10 * 60 * 1000;
     msg.textContent = '同期に失敗: ' + err.message;
     return false;
+  }finally{
+    syncInFlight = false;
   }
 }
 
