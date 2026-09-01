@@ -605,44 +605,44 @@ html, body {
 }
 
 /* ── 人物研究 ── */
-.ps-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
-.ps-portrait { width: 60px; height: 60px; border-radius: var(--r3); object-fit: cover; flex-shrink: 0; background: var(--kinari-3); }
-.ps-name { font-family: var(--font-mincho); font-size: 17px; font-weight: 600; color: var(--sumi); line-height: 1.3; }
-.ps-sub { font-size: 11px; color: var(--sumi-muted); margin-top: 2px; font-family: var(--font-latin); letter-spacing: .04em; }
-.ps-oneliner { font-size: 12px; color: var(--sumi-soft); margin-top: 5px; line-height: 1.5; }
-.ps-progress { font-family: var(--font-latin); font-size: 11px; color: var(--sumi-muted); letter-spacing: .1em; margin-bottom: 12px; }
+.ps-head { display: flex; gap: 13px; align-items: flex-start; margin-bottom: 16px; }
+.ps-portrait { width: 64px; height: 64px; border-radius: var(--r3); object-fit: cover; flex-shrink: 0; background: var(--kinari-3); }
+.ps-name { font-family: var(--font-mincho); font-size: 19px; font-weight: 600; color: var(--sumi); line-height: 1.35; }
+.ps-sub { font-size: 12px; color: var(--sumi-muted); margin-top: 3px; font-family: var(--font-latin); letter-spacing: .03em; line-height: 1.4; }
+.ps-oneliner { font-size: 13.5px; color: var(--sumi-soft); margin-top: 7px; line-height: 1.6; }
+.ps-progress { font-family: var(--font-latin); font-size: 12px; color: var(--sumi-muted); letter-spacing: .08em; margin-bottom: 14px; }
 .ps-progress b { color: var(--ki-deep); }
-.ps-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
-.ps-tab { flex: 1; padding: 8px 4px; font-size: 12px; font-family: var(--font-gothic); background: var(--kinari-2); border: 1px solid var(--line); border-radius: var(--r2); color: var(--sumi-muted); cursor: pointer; }
+.ps-tabs { display: flex; gap: 7px; margin-bottom: 16px; }
+.ps-tab { flex: 1; padding: 10px 4px; font-size: 13.5px; font-family: var(--font-gothic); background: var(--kinari-2); border: 1px solid var(--line); border-radius: var(--r2); color: var(--sumi-muted); cursor: pointer; }
 .ps-tab.active { background: color-mix(in srgb, var(--ki) 12%, var(--kinari-2)); border-color: var(--ki); color: var(--ki-deep); font-weight: 700; }
-.ps-topic { background: var(--kinari-2); border-radius: var(--r3); border-left: 3px solid var(--ki); padding: 15px; margin-bottom: 12px; box-shadow: var(--shadow); }
-.ps-topic .cat { display: inline-block; font-family: var(--font-latin); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ki-deep); background: var(--ki-pale); border-radius: var(--r1); padding: 2px 7px; margin-bottom: 8px; }
-.ps-topic h3 { font-family: var(--font-mincho); font-size: 16px; font-weight: 600; color: var(--sumi); line-height: 1.4; margin-bottom: 8px; }
-.ps-topic .body { font-size: 13.5px; line-height: 1.75; color: var(--sumi-soft); }
-.ps-topic img { border-radius: var(--r2); margin: 10px 0 4px; display: block; }
-.ps-topic .cap { font-size: 10.5px; color: var(--sumi-muted); line-height: 1.4; }
-.ps-topic .quote { border-left: 2px solid var(--ki-pale); padding-left: 10px; margin: 10px 0; font-family: var(--font-mincho); font-size: 12.5px; color: var(--sumi-soft); font-style: italic; }
-.ps-more { background: none; border: none; color: var(--ki-deep); font-size: 12px; padding: 6px 0; cursor: pointer; font-family: var(--font-gothic); }
-.ps-detail { font-size: 12.5px; line-height: 1.7; color: var(--sumi-soft); background: color-mix(in srgb, var(--ki) 5%, var(--kinari-2)); border-radius: var(--r2); padding: 10px 12px; margin-top: 6px; }
-.ps-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.ps-chip { font-size: 11px; background: var(--kinari-3); border-radius: var(--r1); padding: 3px 8px; color: var(--sumi-muted); }
-.ps-links a { display: block; font-size: 12px; color: var(--c-work-deep); margin-top: 5px; word-break: break-all; }
-.ps-memo { margin-top: 10px; }
-.ps-memo textarea { width: 100%; min-height: 64px; border: 1px solid var(--line-strong); border-radius: var(--r2); padding: 9px 10px; font-size: 13px; font-family: var(--font-gothic); background: var(--kinari); color: var(--sumi); resize: vertical; }
+.ps-topic { background: var(--kinari-2); border-radius: var(--r3); border-left: 3px solid var(--ki); padding: 18px 16px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.ps-topic .cat { display: inline-block; font-family: var(--font-latin); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ki-deep); background: var(--ki-pale); border-radius: var(--r1); padding: 3px 9px; margin-bottom: 11px; }
+.ps-topic h3 { font-family: var(--font-mincho); font-size: 20px; font-weight: 600; color: var(--sumi); line-height: 1.5; margin-bottom: 13px; }
+.ps-topic .body { font-size: 16px; line-height: 2; color: var(--sumi-soft); }
+.ps-topic img { width: 100%; height: auto; border-radius: var(--r2); margin: 15px 0 5px; display: block; }
+.ps-topic .cap { font-size: 12px; color: var(--sumi-muted); line-height: 1.5; }
+.ps-topic .quote { border-left: 2px solid var(--ki-pale); padding-left: 12px; margin: 15px 0; font-family: var(--font-mincho); font-size: 15px; color: var(--sumi-soft); font-style: italic; line-height: 1.85; }
+.ps-detail { font-size: 15.5px; line-height: 1.95; color: var(--sumi-soft); margin-top: 13px; }
+.ps-back { background: none; border: none; color: var(--ki-deep); font-size: 14px; padding: 4px 0 12px; cursor: pointer; font-family: var(--font-gothic); }
+.ps-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 15px; }
+.ps-chip { font-size: 12.5px; background: var(--kinari-3); border-radius: var(--r1); padding: 4px 10px; color: var(--sumi-muted); }
+.ps-links a { display: block; font-size: 14px; color: var(--c-work-deep); margin-top: 9px; word-break: break-all; line-height: 1.5; }
+.ps-memo { margin-top: 16px; }
+.ps-memo textarea { width: 100%; min-height: 76px; border: 1px solid var(--line-strong); border-radius: var(--r2); padding: 12px; font-size: 16px; font-family: var(--font-gothic); background: var(--kinari); color: var(--sumi); resize: vertical; line-height: 1.7; }
 .ps-memo textarea:focus { border-color: var(--ki); outline: none; }
-.ps-memo-hint { font-size: 10.5px; color: var(--sumi-muted); margin: 4px 0 6px; }
-.ps-note { font-size: 12px; line-height: 1.6; color: var(--sumi-soft); background: var(--kinari-3); border-radius: var(--r2); padding: 8px 10px; margin-top: 6px; }
-.ps-note .ts { display: block; font-family: var(--font-latin); font-size: 9.5px; color: var(--sumi-muted); margin-bottom: 2px; }
-.ps-daylist { display: flex; flex-direction: column; gap: 4px; }
-.ps-dayrow { display: flex; gap: 10px; align-items: baseline; padding: 9px 11px; background: var(--kinari-2); border-radius: var(--r2); border-left: 2px solid transparent; cursor: pointer; }
+.ps-memo-hint { font-size: 12.5px; color: var(--sumi-muted); margin: 5px 0 8px; }
+.ps-note { font-size: 14.5px; line-height: 1.75; color: var(--sumi-soft); background: var(--kinari-3); border-radius: var(--r2); padding: 11px 13px; margin-top: 9px; }
+.ps-note .ts { display: block; font-family: var(--font-latin); font-size: 11px; color: var(--sumi-muted); margin-bottom: 3px; }
+.ps-daylist { display: flex; flex-direction: column; gap: 6px; }
+.ps-dayrow { display: flex; gap: 12px; align-items: baseline; padding: 13px; background: var(--kinari-2); border-radius: var(--r2); border-left: 2px solid transparent; cursor: pointer; }
 .ps-dayrow.locked { opacity: .38; cursor: default; }
 .ps-dayrow.has-note { border-left-color: var(--c-weight); }
-.ps-dayrow .d { font-family: var(--font-latin); font-size: 11px; color: var(--sumi-muted); flex-shrink: 0; width: 34px; }
-.ps-dayrow .t { font-size: 12.5px; color: var(--sumi-soft); line-height: 1.4; }
-.ps-res h4 { font-family: var(--font-mincho); font-size: 13px; color: var(--sumi); margin: 14px 0 6px; }
-.ps-res a { display: block; font-size: 12.5px; color: var(--c-work-deep); margin: 4px 0; line-height: 1.5; }
-.ps-res .meta { color: var(--sumi-muted); font-size: 11px; }
-.ps-empty { font-size: 13px; color: var(--sumi-muted); line-height: 1.8; text-align: center; padding: 40px 12px; }
+.ps-dayrow .d { font-family: var(--font-latin); font-size: 12.5px; color: var(--sumi-muted); flex-shrink: 0; width: 40px; }
+.ps-dayrow .t { font-size: 15px; color: var(--sumi-soft); line-height: 1.55; }
+.ps-res h4 { font-family: var(--font-mincho); font-size: 15.5px; color: var(--sumi); margin: 20px 0 9px; }
+.ps-res a { display: block; font-size: 15px; color: var(--c-work-deep); margin: 7px 0 2px; line-height: 1.6; }
+.ps-res .meta { display: block; color: var(--sumi-muted); font-size: 13px; line-height: 1.55; margin-bottom: 7px; }
+.ps-empty { font-size: 15px; color: var(--sumi-muted); line-height: 1.95; text-align: center; padding: 44px 14px; }
 </style>
 </head>
 <body>
@@ -879,6 +879,7 @@ const DEFAULT_HABITS = [
   {id:'h24',label:'フロスピック',icon:'🦷'},
   {id:'h25',label:'日焼け止め',icon:'🧴'},
   {id:'h26',label:'ヘアセット',icon:'💇'},
+  {id:'h31',label:'人物研究',icon:'☖'},
   {id:'h18',label:'3Dプリント',icon:'🖨️'},
   {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h20',label:'FP',icon:'💰'},
@@ -1989,17 +1990,14 @@ function renderPerson() {
   psRenderBody();
 }
 
-function psTopicHTML(tp, expanded) {
+function psTopicHTML(tp) {
   let h = '<div class="ps-topic">';
   if (tp.category) h += '<span class="cat">' + psEsc(tp.category) + '</span>';
   h += '<h3>' + psEsc(tp.title) + '</h3>';
   h += '<div class="body">' + psEsc(tp.body).replace(/\n/g, '<br>') + '</div>';
   if (tp.image) h += psImg(tp.image);
   if (tp.quote && tp.quote.text) h += '<div class="quote">「' + psEsc(tp.quote.text) + '」' + (tp.quote.source ? '<br>— ' + psEsc(tp.quote.source) : '') + '</div>';
-  if (tp.detail) {
-    h += '<button class="ps-more" data-more="' + tp.day + '">' + (expanded ? '閉じる' : 'もっと読む') + '</button>';
-    if (expanded) h += '<div class="ps-detail">' + psEsc(tp.detail).replace(/\n/g, '<br>') + '</div>';
-  }
+  if (tp.detail) h += '<div class="ps-detail">' + psEsc(tp.detail).replace(/\n/g, '<br>') + '</div>';
   if (Array.isArray(tp.links) && tp.links.length) {
     h += '<div class="ps-links">' + tp.links.map(l => '<a href="' + psEsc(l.url) + '" target="_blank" rel="noopener">' + psEsc(l.label || l.url) + '</a>').join('') + '</div>';
   }
@@ -2053,13 +2051,9 @@ function psRenderBody() {
     const day = Math.min(today, total);
     const tp = d.topics.find(t => t.day === day) || d.topics[day - 1];
     if (!tp) { body.innerHTML = '<div class="ps-empty">今日のトピックはありません。</div>'; return; }
-    const expanded = PS.openDay === tp.day;
-    body.innerHTML = psTopicHTML(tp, expanded) + psMemoHTML(tp.day)
+    body.innerHTML = psTopicHTML(tp) + psMemoHTML(tp.day)
       + (today > total ? '' : '<div class="ps-progress" style="margin-top:14px">明日また新しいトピックが届きます</div>')
       + '<div class="data-btn-row" style="margin-top:16px"><button class="data-btn" id="ps-export">メモをレポート用に書き出す</button></div>';
-    body.querySelectorAll('.ps-more').forEach(b => b.addEventListener('click', () => {
-      PS.openDay = expanded ? null : tp.day; psRenderBody();
-    }));
     psWireMemo(tp.day);
     document.getElementById('ps-export').addEventListener('click', psExport);
     return;
@@ -2068,8 +2062,8 @@ function psRenderBody() {
   if (PS.tab === 'history') {
     if (PS.openDay) {
       const tp = d.topics.find(t => t.day === PS.openDay);
-      body.innerHTML = '<button class="ps-more" id="ps-back">← 一覧へ</button>'
-        + psTopicHTML(tp, true) + psMemoHTML(tp.day);
+      body.innerHTML = '<button class="ps-back" id="ps-back">← 一覧へ</button>'
+        + psTopicHTML(tp) + psMemoHTML(tp.day);
       document.getElementById('ps-back').addEventListener('click', () => { PS.openDay = null; psRenderBody(); });
       psWireMemo(tp.day);
       return;
