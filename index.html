@@ -603,6 +603,46 @@ html, body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ── 人物研究 ── */
+.ps-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+.ps-portrait { width: 60px; height: 60px; border-radius: var(--r3); object-fit: cover; flex-shrink: 0; background: var(--kinari-3); }
+.ps-name { font-family: var(--font-mincho); font-size: 17px; font-weight: 600; color: var(--sumi); line-height: 1.3; }
+.ps-sub { font-size: 11px; color: var(--sumi-muted); margin-top: 2px; font-family: var(--font-latin); letter-spacing: .04em; }
+.ps-oneliner { font-size: 12px; color: var(--sumi-soft); margin-top: 5px; line-height: 1.5; }
+.ps-progress { font-family: var(--font-latin); font-size: 11px; color: var(--sumi-muted); letter-spacing: .1em; margin-bottom: 12px; }
+.ps-progress b { color: var(--ki-deep); }
+.ps-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.ps-tab { flex: 1; padding: 8px 4px; font-size: 12px; font-family: var(--font-gothic); background: var(--kinari-2); border: 1px solid var(--line); border-radius: var(--r2); color: var(--sumi-muted); cursor: pointer; }
+.ps-tab.active { background: color-mix(in srgb, var(--ki) 12%, var(--kinari-2)); border-color: var(--ki); color: var(--ki-deep); font-weight: 700; }
+.ps-topic { background: var(--kinari-2); border-radius: var(--r3); border-left: 3px solid var(--ki); padding: 15px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.ps-topic .cat { display: inline-block; font-family: var(--font-latin); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ki-deep); background: var(--ki-pale); border-radius: var(--r1); padding: 2px 7px; margin-bottom: 8px; }
+.ps-topic h3 { font-family: var(--font-mincho); font-size: 16px; font-weight: 600; color: var(--sumi); line-height: 1.4; margin-bottom: 8px; }
+.ps-topic .body { font-size: 13.5px; line-height: 1.75; color: var(--sumi-soft); }
+.ps-topic img { border-radius: var(--r2); margin: 10px 0 4px; display: block; }
+.ps-topic .cap { font-size: 10.5px; color: var(--sumi-muted); line-height: 1.4; }
+.ps-topic .quote { border-left: 2px solid var(--ki-pale); padding-left: 10px; margin: 10px 0; font-family: var(--font-mincho); font-size: 12.5px; color: var(--sumi-soft); font-style: italic; }
+.ps-more { background: none; border: none; color: var(--ki-deep); font-size: 12px; padding: 6px 0; cursor: pointer; font-family: var(--font-gothic); }
+.ps-detail { font-size: 12.5px; line-height: 1.7; color: var(--sumi-soft); background: color-mix(in srgb, var(--ki) 5%, var(--kinari-2)); border-radius: var(--r2); padding: 10px 12px; margin-top: 6px; }
+.ps-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ps-chip { font-size: 11px; background: var(--kinari-3); border-radius: var(--r1); padding: 3px 8px; color: var(--sumi-muted); }
+.ps-links a { display: block; font-size: 12px; color: var(--c-work-deep); margin-top: 5px; word-break: break-all; }
+.ps-memo { margin-top: 10px; }
+.ps-memo textarea { width: 100%; min-height: 64px; border: 1px solid var(--line-strong); border-radius: var(--r2); padding: 9px 10px; font-size: 13px; font-family: var(--font-gothic); background: var(--kinari); color: var(--sumi); resize: vertical; }
+.ps-memo textarea:focus { border-color: var(--ki); outline: none; }
+.ps-memo-hint { font-size: 10.5px; color: var(--sumi-muted); margin: 4px 0 6px; }
+.ps-note { font-size: 12px; line-height: 1.6; color: var(--sumi-soft); background: var(--kinari-3); border-radius: var(--r2); padding: 8px 10px; margin-top: 6px; }
+.ps-note .ts { display: block; font-family: var(--font-latin); font-size: 9.5px; color: var(--sumi-muted); margin-bottom: 2px; }
+.ps-daylist { display: flex; flex-direction: column; gap: 4px; }
+.ps-dayrow { display: flex; gap: 10px; align-items: baseline; padding: 9px 11px; background: var(--kinari-2); border-radius: var(--r2); border-left: 2px solid transparent; cursor: pointer; }
+.ps-dayrow.locked { opacity: .38; cursor: default; }
+.ps-dayrow.has-note { border-left-color: var(--c-weight); }
+.ps-dayrow .d { font-family: var(--font-latin); font-size: 11px; color: var(--sumi-muted); flex-shrink: 0; width: 34px; }
+.ps-dayrow .t { font-size: 12.5px; color: var(--sumi-soft); line-height: 1.4; }
+.ps-res h4 { font-family: var(--font-mincho); font-size: 13px; color: var(--sumi); margin: 14px 0 6px; }
+.ps-res a { display: block; font-size: 12.5px; color: var(--c-work-deep); margin: 4px 0; line-height: 1.5; }
+.ps-res .meta { color: var(--sumi-muted); font-size: 11px; }
+.ps-empty { font-size: 13px; color: var(--sumi-muted); line-height: 1.8; text-align: center; padding: 40px 12px; }
 </style>
 </head>
 <body>
@@ -792,6 +832,12 @@ html, body {
         <div class="heatmap-grid" id="heatmap-grid"></div>
       </div>
     </section>
+
+    <!-- 人物研究（月次） -->
+    <section class="view" id="view-person">
+      <h2 class="screen-title">人物研究</h2>
+      <div id="ps-root"></div>
+    </section>
   </main>
 
   <!-- Bottom Nav -->
@@ -803,6 +849,10 @@ html, body {
     <button class="nav-item" data-view="habits">
       <span class="nav-icon">◎</span>
       <span>習慣</span>
+    </button>
+    <button class="nav-item" data-view="person">
+      <span class="nav-icon">☖</span>
+      <span>人物</span>
     </button>
   </nav>
 </div>
@@ -854,6 +904,7 @@ function freshStore() {
     departureLog: [],
     workLog: [],
     screenLog: [],
+    personStudy: {},   // { "YYYY-MM": { opened:[日], notes:{ "日":[{ts,text}] }, monthMemo:"" } }
   };
 }
 
@@ -876,6 +927,7 @@ function migrate(s) {
   if (!Array.isArray(s.departureLog)) s.departureLog = [];
   if (!Array.isArray(s.workLog)) s.workLog = [];
   if (!Array.isArray(s.screenLog)) s.screenLog = [];
+  if (!s.personStudy || typeof s.personStudy !== 'object') s.personStudy = {};
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -1029,6 +1081,7 @@ function navigate(viewId) {
   document.querySelector(`.nav-item[data-view="${viewId}"]`)?.classList.add('active');
   if (viewId === 'home') renderHome();
   if (viewId === 'habits') renderHabits();
+  if (viewId === 'person') renderPerson();
   activateReveal();
 }
 
@@ -1676,6 +1729,8 @@ function mergeStore(remote, local) {
   out.habits = out.habits || { definitions: DEFAULT_HABITS, logs: {} };
   const rl = (remote.habits && remote.habits.logs) || {};
   out.habits.logs = Object.assign({}, rl, (local.habits && local.habits.logs) || {});
+  // 人物研究のメモは月単位でローカルを優先してマージ
+  out.personStudy = Object.assign({}, remote.personStudy || {}, local.personStudy || {});
   return out;
 }
 
@@ -1856,6 +1911,240 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
+// ── 人物研究 ──
+// 毎月 cascade/person-study/<YYYY-MM>.json を Claude（/person gen）が生成する。
+// 1日1トピックのニュース形式で表示し、メモは store.personStudy に端末保存（同期あり）。
+const PS = { data: null, month: null, tab: 'today', tried: false, openDay: null };
+
+function psMonth() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+function psSlot() {
+  const m = psMonth();
+  if (!store.personStudy[m]) store.personStudy[m] = { opened: [], notes: {}, monthMemo: '' };
+  return store.personStudy[m];
+}
+function psEsc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+function psImg(img) {
+  if (!img || !img.src) return '';
+  const src = /^https?:/.test(img.src) ? img.src : './person-study/' + img.src.replace(/^\.?\//, '');
+  return '<img loading="lazy" src="' + psEsc(src) + '" alt="">'
+    + (img.caption ? '<div class="cap">' + psEsc(img.caption) + (img.credit ? ' — ' + psEsc(img.credit) : '') + '</div>' : '');
+}
+
+function loadPerson() {
+  const m = psMonth();
+  PS.month = m;
+  fetch('./person-study/' + m + '.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : null)
+    .then(j => { PS.data = j; PS.tried = true; if (curView() === 'person') renderPerson(); })
+    .catch(() => { PS.data = null; PS.tried = true; if (curView() === 'person') renderPerson(); });
+}
+function curView() {
+  const v = document.querySelector('.view.active');
+  return v ? v.id.replace('view-', '') : '';
+}
+
+function renderPerson() {
+  const root = document.getElementById('ps-root');
+  if (!root) return;
+  if (!PS.tried) { root.innerHTML = '<div class="ps-empty">読み込み中…</div>'; return; }
+  const d = PS.data;
+  if (!d || !Array.isArray(d.topics) || !d.topics.length) {
+    root.innerHTML = '<div class="ps-empty">今月の人物研究はまだ準備中です。<br>準備ができるとここに毎日1トピックずつ届きます。</div>';
+    return;
+  }
+  const today = new Date().getDate();
+  const total = d.topics.length;
+  const doneCount = psSlot().opened.length;
+
+  // 今日のぶんを開封記録
+  if (today <= total && !psSlot().opened.includes(today)) {
+    psSlot().opened.push(today);
+    saveStore();
+  }
+
+  let html = '';
+  html += '<div class="ps-head">';
+  if (d.portrait) html += '<img class="ps-portrait" src="' + psEsc(/^https?:/.test(d.portrait.src) ? d.portrait.src : './person-study/' + d.portrait.src.replace(/^\.?\//, '')) + '" alt="">';
+  html += '<div><div class="ps-name">' + psEsc(d.person) + '</div>'
+    + '<div class="ps-sub">' + psEsc(d.person_en || '') + (d.lifespan ? ' · ' + psEsc(d.lifespan) : '') + (d.field ? ' · ' + psEsc(d.field) : '') + '</div>'
+    + (d.one_liner ? '<div class="ps-oneliner">' + psEsc(d.one_liner) + '</div>' : '')
+    + '</div></div>';
+  html += '<div class="ps-progress">' + psEsc(d.month) + ' · <b>' + Math.min(doneCount, total) + '</b> / ' + total + ' 読了</div>';
+  html += '<div class="ps-tabs">'
+    + '<div class="ps-tab' + (PS.tab === 'today' ? ' active' : '') + '" data-pstab="today">今日</div>'
+    + '<div class="ps-tab' + (PS.tab === 'history' ? ' active' : '') + '" data-pstab="history">これまで</div>'
+    + '<div class="ps-tab' + (PS.tab === 'res' ? ' active' : '') + '" data-pstab="res">資料</div>'
+    + '</div>';
+  html += '<div id="ps-body"></div>';
+  root.innerHTML = html;
+
+  root.querySelectorAll('.ps-tab').forEach(t => t.addEventListener('click', () => {
+    PS.tab = t.dataset.pstab; PS.openDay = null; renderPerson();
+  }));
+  psRenderBody();
+}
+
+function psTopicHTML(tp, expanded) {
+  let h = '<div class="ps-topic">';
+  if (tp.category) h += '<span class="cat">' + psEsc(tp.category) + '</span>';
+  h += '<h3>' + psEsc(tp.title) + '</h3>';
+  h += '<div class="body">' + psEsc(tp.body).replace(/\n/g, '<br>') + '</div>';
+  if (tp.image) h += psImg(tp.image);
+  if (tp.quote && tp.quote.text) h += '<div class="quote">「' + psEsc(tp.quote.text) + '」' + (tp.quote.source ? '<br>— ' + psEsc(tp.quote.source) : '') + '</div>';
+  if (tp.detail) {
+    h += '<button class="ps-more" data-more="' + tp.day + '">' + (expanded ? '閉じる' : 'もっと読む') + '</button>';
+    if (expanded) h += '<div class="ps-detail">' + psEsc(tp.detail).replace(/\n/g, '<br>') + '</div>';
+  }
+  if (Array.isArray(tp.links) && tp.links.length) {
+    h += '<div class="ps-links">' + tp.links.map(l => '<a href="' + psEsc(l.url) + '" target="_blank" rel="noopener">' + psEsc(l.label || l.url) + '</a>').join('') + '</div>';
+  }
+  if (Array.isArray(tp.related_people) && tp.related_people.length) {
+    h += '<div class="ps-chips">' + tp.related_people.map(p => '<span class="ps-chip">' + psEsc(p) + '</span>').join('') + '</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function psNotesHTML(day) {
+  const notes = (psSlot().notes[day] || []);
+  return notes.map(n => '<div class="ps-note"><span class="ts">' + psEsc(n.ts) + '</span>' + psEsc(n.text).replace(/\n/g, '<br>') + '</div>').join('');
+}
+function psMemoHTML(day) {
+  return '<div class="ps-memo">'
+    + '<div class="ps-memo-hint">思ったことをメモ（キーボードの🎤で音声入力できます）</div>'
+    + '<textarea id="ps-memo-input" placeholder="このトピックについて考えたこと"></textarea>'
+    + '<div class="data-btn-row" style="margin-top:6px"><button class="data-btn" id="ps-memo-save">メモを保存</button></div>'
+    + '<div id="ps-notes">' + psNotesHTML(day) + '</div>'
+    + '</div>';
+}
+function psWireMemo(day) {
+  const save = document.getElementById('ps-memo-save');
+  if (!save) return;
+  save.addEventListener('click', () => {
+    const inp = document.getElementById('ps-memo-input');
+    const txt = (inp.value || '').trim();
+    if (!txt) return;
+    const s = psSlot();
+    if (!s.notes[day]) s.notes[day] = [];
+    const now = new Date();
+    const ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0')
+      + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    s.notes[day].push({ ts, text: txt });
+    saveStore();
+    inp.value = '';
+    document.getElementById('ps-notes').innerHTML = psNotesHTML(day);
+    if ('vibrate' in navigator) navigator.vibrate(30);
+    showToast('メモを保存しました');
+  });
+}
+
+function psRenderBody() {
+  const body = document.getElementById('ps-body');
+  const d = PS.data;
+  const today = new Date().getDate();
+  const total = d.topics.length;
+
+  if (PS.tab === 'today') {
+    const day = Math.min(today, total);
+    const tp = d.topics.find(t => t.day === day) || d.topics[day - 1];
+    if (!tp) { body.innerHTML = '<div class="ps-empty">今日のトピックはありません。</div>'; return; }
+    const expanded = PS.openDay === tp.day;
+    body.innerHTML = psTopicHTML(tp, expanded) + psMemoHTML(tp.day)
+      + (today > total ? '' : '<div class="ps-progress" style="margin-top:14px">明日また新しいトピックが届きます</div>')
+      + '<div class="data-btn-row" style="margin-top:16px"><button class="data-btn" id="ps-export">メモをレポート用に書き出す</button></div>';
+    body.querySelectorAll('.ps-more').forEach(b => b.addEventListener('click', () => {
+      PS.openDay = expanded ? null : tp.day; psRenderBody();
+    }));
+    psWireMemo(tp.day);
+    document.getElementById('ps-export').addEventListener('click', psExport);
+    return;
+  }
+
+  if (PS.tab === 'history') {
+    if (PS.openDay) {
+      const tp = d.topics.find(t => t.day === PS.openDay);
+      body.innerHTML = '<button class="ps-more" id="ps-back">← 一覧へ</button>'
+        + psTopicHTML(tp, true) + psMemoHTML(tp.day);
+      document.getElementById('ps-back').addEventListener('click', () => { PS.openDay = null; psRenderBody(); });
+      psWireMemo(tp.day);
+      return;
+    }
+    let h = '<div class="ps-daylist">';
+    d.topics.forEach(tp => {
+      const locked = tp.day > today;
+      const hasNote = (psSlot().notes[tp.day] || []).length > 0;
+      h += '<div class="ps-dayrow' + (locked ? ' locked' : '') + (hasNote ? ' has-note' : '') + '"'
+        + (locked ? '' : ' data-openday="' + tp.day + '"') + '>'
+        + '<span class="d">' + tp.day + '日</span>'
+        + '<span class="t">' + psEsc(locked ? '——' : tp.title) + '</span></div>';
+    });
+    h += '</div>';
+    body.innerHTML = h;
+    body.querySelectorAll('[data-openday]').forEach(r => r.addEventListener('click', () => {
+      PS.openDay = +r.dataset.openday; psRenderBody();
+    }));
+    return;
+  }
+
+  // resources
+  const r = d.resources || {};
+  const sec = (title, arr, fmt) => (Array.isArray(arr) && arr.length)
+    ? '<h4>' + title + '</h4>' + arr.map(fmt).join('') : '';
+  let h = '<div class="ps-res">';
+  h += sec('書籍', r.books, b => '<a href="' + psEsc(b.url || '#') + '" target="_blank" rel="noopener">' + psEsc(b.title) + '</a><span class="meta">' + psEsc([b.author, b.year].filter(Boolean).join(' / ')) + (b.note ? ' — ' + psEsc(b.note) : '') + '</span>');
+  h += sec('特集・記事', r.articles, a => '<a href="' + psEsc(a.url) + '" target="_blank" rel="noopener">' + psEsc(a.title) + '</a><span class="meta">' + psEsc([a.publisher, a.year].filter(Boolean).join(' / ')) + '</span>');
+  h += sec('動画・インタビュー', r.videos, v => '<a href="' + psEsc(v.url) + '" target="_blank" rel="noopener">' + psEsc(v.title) + '</a><span class="meta">' + psEsc([v.platform, v.length].filter(Boolean).join(' / ')) + '</span>');
+  h += sec('アーカイブ・リンク', r.archives, a => '<a href="' + psEsc(a.url) + '" target="_blank" rel="noopener">' + psEsc(a.label) + '</a>');
+  h += '<h4>今月の全体メモ</h4>'
+    + '<textarea id="ps-monthmemo" style="width:100%;min-height:80px;border:1px solid var(--line-strong);border-radius:4px;padding:9px 10px;font-size:13px;font-family:var(--font-gothic);background:var(--kinari);color:var(--sumi)">' + psEsc(psSlot().monthMemo) + '</textarea>'
+    + '<div class="data-btn-row" style="margin-top:6px"><button class="data-btn" id="ps-mm-save">保存</button></div>';
+  h += '</div>';
+  if (!h.includes('<a ') && !r.books) h = '<div class="ps-empty">資料はまだ登録されていません。</div>' + h;
+  body.innerHTML = h;
+  const mm = document.getElementById('ps-mm-save');
+  if (mm) mm.addEventListener('click', () => {
+    psSlot().monthMemo = document.getElementById('ps-monthmemo').value;
+    saveStore(); showToast('保存しました');
+  });
+}
+
+function psExport() {
+  const d = PS.data, s = psSlot();
+  let out = '# 人物研究メモ ' + d.month + ' — ' + d.person + '\n\n';
+  d.topics.forEach(tp => {
+    const notes = s.notes[tp.day] || [];
+    if (!notes.length) return;
+    out += '## Day ' + tp.day + ' — ' + tp.title + '\n';
+    notes.forEach(n => { out += '- (' + n.ts + ') ' + n.text + '\n'; });
+    out += '\n';
+  });
+  if (s.monthMemo) out += '## 今月の全体メモ\n' + s.monthMemo + '\n';
+  if (out.indexOf('## ') < 0) { showToast('まだメモがありません'); return; }
+  const share = navigator.share && navigator.canShare;
+  if (share) {
+    navigator.share({ title: '人物研究メモ ' + d.month, text: out }).catch(() => psCopy(out));
+  } else {
+    psCopy(out);
+  }
+}
+function psCopy(txt) {
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => showToast('メモをコピーしました（Claude に貼れます）')).catch(() => psDl(txt));
+  else psDl(txt);
+}
+function psDl(txt) {
+  const blob = new Blob([txt], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'person-study-notes-' + (PS.data ? PS.data.month : '') + '.md';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 // ── Init ──
 function init() {
   ensureToday();
@@ -1863,6 +2152,7 @@ function init() {
   activateReveal();
   loadStudyMenu();
   loadWorkoutMenu();
+  loadPerson();
 
   const t = todayStr();
   if (store.settings.lastWakeDate !== t) {

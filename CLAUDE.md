@@ -24,3 +24,16 @@ Notion連携・体重グラフ・Focus Card/建築用語帳。設計は plan フ
 ## 一級建築士学習連携
 
 `schedule.json` は 1st-ClassArchitect リポジトリの学習計画スキル（`/kenchikushi`）と連携している。
+
+## 人物研究連携
+
+`person-study/<YYYY-MM>.json`（＋ `person-study/img/<YYYY-MM>/`・`person-study/index.json`）は
+`/person` スキル（`~/projects/.claude/commands/person.md`）が毎月生成する。アプリ内「人物」タブが
+1日1トピックのニュース形式で表示。ユーザーのメモは `store.personStudy` に端末保存（GitHub 同期対象・
+公開リポジトリには載らない）。月末レポートは `/person report` が HTML で出力。
+
+## Service Worker の注意（2026-09-01 修正済み）
+
+データ JSON を `?v=Date.now()` で取得すると SW 汎用ハンドラがキャッシュを無制限に肥大化させる。
+`sw.js` はデータ JSON をクエリ除去キーで network-first 保存する実装（1ファイル1エントリ固定）。
+新規のデータ取得は `fetch(path, {cache:'no-store'})` で行い、URL にクエリを付けない。

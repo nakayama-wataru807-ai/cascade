@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" font-family="'BIZ UDGothic', sans-serif">
+  <rect width="400" height="260" fill="#F5F0E8"/>
+  <text x="200" y="24" text-anchor="middle" font-size="13" fill="#1C1C1A">ゼンパー「建築の四要素」</text>
+
+  <!-- earthwork / stereotomic -->
+  <rect x="70" y="180" width="260" height="46" fill="#5C4033"/>
+  <text x="200" y="209" text-anchor="middle" font-size="11" fill="#F5F0E8">基壇・土工（stereotomic＝量塊）</text>
+
+  <!-- framework / roof (tectonic) -->
+  <line x1="90" y1="180" x2="90" y2="90" stroke="#4A5C42" stroke-width="6"/>
+  <line x1="310" y1="180" x2="310" y2="90" stroke="#4A5C42" stroke-width="6"/>
+  <polygon points="78,92 322,92 200,52" fill="none" stroke="#4A5C42" stroke-width="6" stroke-linejoin="round"/>
+  <text x="200" y="84" text-anchor="middle" font-size="11" fill="#4A5C42">軸組・屋根（tectonic＝線材の組立）</text>
+
+  <!-- enclosing membrane -->
+  <path d="M110 178 q90 -20 180 0" fill="none" stroke="#C4833A" stroke-width="3" stroke-dasharray="5 4"/>
+  <text x="200" y="150" text-anchor="middle" font-size="11" fill="#9E6228">被覆する膜（間仕切り・壁）</text>
+
+  <!-- hearth -->
+  <circle cx="200" cy="200" r="12" fill="#C4833A"/>
+  <text x="200" y="245" text-anchor="middle" font-size="11" fill="#1C1C1A">炉（社会の中心）</text>
+</svg>
