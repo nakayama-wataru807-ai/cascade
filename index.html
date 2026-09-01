@@ -880,6 +880,18 @@ function migrate(s) {
   delete s.daily;
   delete s.tasks;
   delete s.streak;
+  // 2 年より古い日次ログを剪定（store の無制限肥大を防ぐ）。
+  // 体重・貯金は長期推移を見たいので剪定しない。
+  try {
+    const c = new Date(); c.setDate(c.getDate() - 730);
+    const cut = `${c.getFullYear()}-${String(c.getMonth()+1).padStart(2,'0')}-${String(c.getDate()).padStart(2,'0')}`;
+    for (const k of ['wakeLog','studyLog','workoutLog','arrivalLog','departureLog','workLog','screenLog']) {
+      if (Array.isArray(s[k])) s[k] = s[k].filter(e => !e || !e.date || e.date >= cut);
+    }
+    if (s.habits && s.habits.logs) {
+      for (const d of Object.keys(s.habits.logs)) if (d < cut) delete s.habits.logs[d];
+    }
+  } catch (e) {}
   return s;
 }
 
@@ -1668,8 +1680,11 @@ function mergeStore(remote, local) {
 }
 
 let syncTimer = null;
+let syncInFlight = false;
+let syncCooldownUntil = 0;   // 失敗が続くとき自動同期を止める時刻
 function scheduleSync() {
   if (!gh.auto || !gh.token || !gh.repo) return;
+  if (Date.now() < syncCooldownUntil) return;   // 失敗直後はしばらく自動同期しない
   clearTimeout(syncTimer);
   syncTimer = setTimeout(() => syncNow(true), 4000);   // 連続入力でAPIを叩きすぎない
 }
@@ -1679,6 +1694,8 @@ async function syncNow(silent) {
     if (!silent) showToast('同期の設定が未入力です');
     return false;
   }
+  if (syncInFlight) return false;   // 多重実行を防ぐ（低速回線での 409 スパム対策）
+  syncInFlight = true;
   const url = 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path;
   try {
     const cur = await ghApi('GET', url);
@@ -1697,11 +1714,17 @@ async function syncNow(silent) {
     localStorage.setItem(STORE_KEY, JSON.stringify(store));   // saveStore だと再帰する
     gh.last = new Date().toISOString();
     saveGh();
+    syncCooldownUntil = 0;
     if (!silent) { showToast('同期しました'); location.reload(); }
     return true;
   } catch (err) {
+    // 失敗が続くとき（PAT 失効・オフライン等）は 10 分間 自動同期を止めてスパムを防ぐ。
+    // 手動の「今すぐ同期」は syncNow(false) なのでこのクールダウンに関係なく走る。
+    syncCooldownUntil = Date.now() + 10 * 60 * 1000;
     showToast('同期に失敗: ' + err.message);
     return false;
+  } finally {
+    syncInFlight = false;
   }
 }
 
@@ -1851,7 +1874,7 @@ function init() {
 function loadStudyMenu() {
   const el = document.getElementById('study-menu');
   if (!el) return;
-  fetch('./schedule.json?v=' + Date.now()).then(r => r.json()).then(sched => {
+  fetch('./schedule.json', { cache: 'no-store' }).then(r => r.json()).then(sched => {
     const m = sched[todayStr()];
     if (!m) { el.innerHTML = ''; return; }
     const rest = m.problems === 0;
@@ -1871,7 +1894,7 @@ function loadStudyMenu() {
 function loadWorkoutMenu() {
   const el = document.getElementById('workout-menu');
   if (!el) return;
-  fetch('./workout_schedule.json?v=' + Date.now()).then(r => r.json()).then(sched => {
+  fetch('./workout_schedule.json', { cache: 'no-store' }).then(r => r.json()).then(sched => {
     const m = sched[todayStr()];
     if (!m) { el.innerHTML = ''; return; }
     el.innerHTML =
@@ -1887,13 +1910,16 @@ init();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
-  // 新しい Service Worker が制御を取ったら一度だけ自動リロード（更新を即反映）
-  let swReloaded = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (swReloaded) return;
-    swReloaded = true;
-    location.reload();
-  });
+  // 既に SW の制御下にあるページで、新しい SW が制御を取ったときだけ一度リロード。
+  // 初回インストール（controller が無い状態）では reload しない（無駄な再読み込み防止）。
+  if (navigator.serviceWorker.controller) {
+    let swReloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (swReloaded) return;
+      swReloaded = true;
+      location.reload();
+    });
+  }
 }
 </script>
 </body>

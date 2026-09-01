@@ -909,7 +909,7 @@ async function loadPlan(){
   if(cached && cached.v){ PLAN = cached.v; renderPlan(); }
   for(const url of ['../schedule.json', './schedule.json']){
     try{
-      const r = await fetch(url + '?v=' + Date.now(), {cache:'no-store'});
+      const r = await fetch(url, {cache:'no-store'});
       if(!r.ok) continue;
       const j = await r.json();
       if(j && typeof j === 'object' && Object.keys(j).length){
