@@ -1091,18 +1091,17 @@ function renderHome() {
   renderScreenChart();
 }
 
-// ── グラフ配色：全指標モノクロに統一（識別は英字ラベルと和文名で行う）──
-const INK = '#1A1A1A';
+// ── グラフ配色：モノクロの濃淡グラデーション。指標ごとに少しずつ明度を変えて区別する ──
 const CHART_COLORS = {
-  wake:      { c: INK, deep: INK },
-  bank:      { c: INK, deep: INK },
-  study:     { c: INK, deep: INK },
-  departure: { c: INK, deep: INK },
-  work:      { c: INK, deep: INK },
-  arrival:   { c: INK, deep: INK },
-  weight:    { c: INK, deep: INK },
-  workout:   { c: INK, deep: INK },
-  screen:    { c: INK, deep: INK },
+  wake:      { c: '#1C1C1C', deep: '#1C1C1C' },
+  bank:      { c: '#282828', deep: '#282828' },
+  study:     { c: '#333333', deep: '#333333' },
+  departure: { c: '#3E3E3E', deep: '#3E3E3E' },
+  work:      { c: '#4A4A4A', deep: '#4A4A4A' },
+  arrival:   { c: '#555555', deep: '#555555' },
+  weight:    { c: '#616161', deep: '#616161' },
+  workout:   { c: '#6C6C6C', deep: '#6C6C6C' },
+  screen:    { c: '#787878', deep: '#787878' },
 };
 
 // ── Line Chart（8指標共通の SVG 折れ線描画）──
@@ -1140,9 +1139,9 @@ function buildLineChartSVG(data, { fmt, invert, ariaLabel, color = CHART_COLORS.
   data.forEach((d, i) => {
     const cx = xAt(i).toFixed(1), cy = yAt(d.value).toFixed(1);
     const isToday = d.date === t;
-    // 今日の点だけアクセント（蛍光黄緑の塗り＋黒の輪郭）で強調。他はインクの小さな点
+    // 今日の点だけアクセント（蛍光黄緑・フチなし）で強調。他は指標色の小さな点
     if (isToday) {
-      dots += `<circle cx="${cx}" cy="${cy}" r="6" fill="#EAF33E" stroke="#1A1A1A" stroke-width="1.5"/>`;
+      dots += `<circle cx="${cx}" cy="${cy}" r="5.5" fill="#EAF33E"/>`;
     } else {
       dots += `<circle cx="${cx}" cy="${cy}" r="3" fill="${colorDeep}"/>`;
     }
