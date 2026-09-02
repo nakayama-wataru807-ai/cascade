@@ -4,8 +4,8 @@
   "description": "小さな習慣を積み上げる、一日の自己管理アプリ",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F5F0E8",
-  "theme_color": "#F5F0E8",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "orientation": "portrait",
   "icons": [
     {
