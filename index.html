@@ -20,7 +20,7 @@
   --ink: #1A1A1A;
   --ink-soft: #33332F;
   --ink-mute: #6B6B6B;
-  --accent: #EAF33E;          /* 蛍光黄緑。マーカー・塗り・下線のみ。文字色には使わない */
+  --accent: #F0531C;          /* シグナルオレンジ。マーカー・塗り・下線のみ。文字色には使わない */
   --line: rgba(0,0,0,0.10);
   --line-strong: rgba(0,0,0,0.20);
   --shadow: none;
@@ -1141,7 +1141,7 @@ function buildLineChartSVG(data, { fmt, invert, ariaLabel, color = CHART_COLORS.
     const isToday = d.date === t;
     // 今日の点だけアクセント（蛍光黄緑・フチなし）で強調。他は指標色の小さな点
     if (isToday) {
-      dots += `<circle cx="${cx}" cy="${cy}" r="5.5" fill="#EAF33E"/>`;
+      dots += `<circle cx="${cx}" cy="${cy}" r="5.5" fill="#F0531C"/>`;
     } else {
       dots += `<circle cx="${cx}" cy="${cy}" r="3" fill="${colorDeep}"/>`;
     }
@@ -1816,7 +1816,7 @@ function renderHabits() {
       <span class="habit-streak${s < 0 ? ' missed' : ''}">${s !== 0 ? s + '日' : ''}</span>
       <div class="habit-check">
         <svg class="habit-check-svg" width="12" height="9" viewBox="0 0 12 9" fill="none">
-          <path d="M1 4L4.5 7.5L11 1" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M1 4L4.5 7.5L11 1" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
     `;
