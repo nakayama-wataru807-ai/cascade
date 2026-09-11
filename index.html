@@ -675,7 +675,7 @@ html, body {
         <div class="chart-today-line" id="workout-today-line"></div>
       </div>
 
-      <div class="card reveal" id="study-card">
+      <div class="card reveal" id="study-card" style="display:none"><!-- 一時非表示（2026-09-09）: 建築士勉強時間グラフ -->
         <div class="label" style="margin-bottom:14px">建築士勉強 — 全記録</div>
         <div id="study-menu"></div>
         <div class="weight-input-row">
@@ -731,7 +731,7 @@ html, body {
         <div class="chart-today-line" id="weight-today-line"></div>
       </div>
 
-      <div class="card reveal" id="screen-card">
+      <div class="card reveal" id="screen-card" style="display:none"><!-- 一時非表示（2026-09-09）: スクリーンタイムグラフ -->
         <div class="label" style="margin-bottom:14px">スクリーンタイム — 全記録</div>
         <div class="weight-input-row">
           <input type="number" id="screen-input-h" class="weight-input hm-input" placeholder="0" min="0" max="23" inputmode="numeric" enterkeyhint="next" autocomplete="off">
@@ -838,8 +838,8 @@ const DEFAULT_HABITS = [
   {id:'h7',label:'読書',icon:'📚'},
   {id:'h8',label:'日記振り返り',icon:'📓'},
   {id:'h15',label:'NOドーパミン',icon:'🚫'},
+  {id:'h32',label:'アイトレ',icon:'👁️'},
   {id:'h11',label:'表情筋トレ',icon:'😀'},
-  {id:'h16',label:'顎トレ',icon:'😬'},
   {id:'h13',label:'Podcasts',icon:'🎧'},
   {id:'h12',label:'朝トレ',icon:'🌅'},
   {id:'h29',label:'背筋を伸ばす',icon:'🧘'},
@@ -847,9 +847,14 @@ const DEFAULT_HABITS = [
   {id:'h21',label:'薬服用',icon:'💊'},
   {id:'h22',label:'プロテイン',icon:'🥤'},
   {id:'h23',label:'朝シャワー',icon:'🚿'},
+  {id:'h33',label:'外国語独り言',icon:'🗣️'},
+  {id:'h34',label:'外国語シャドーイング',icon:'🎤'},
   {id:'h24',label:'フロスピック',icon:'🦷'},
   {id:'h25',label:'日焼け止め',icon:'🧴'},
   {id:'h26',label:'ヘアセット',icon:'💇'},
+  {id:'h27',label:'洗濯',icon:'🧺'},
+  {id:'h28',label:'掃除',icon:'🧹'},
+  {id:'h17',label:'Vlog',icon:'🎥'},
   {id:'h31',label:'人物研究',icon:'☖'},
   {id:'h18',label:'3Dプリント',icon:'🖨️'},
   {id:'h14',label:'Pingo',icon:'🎲'},
@@ -857,10 +862,7 @@ const DEFAULT_HABITS = [
   {id:'h19',label:'建築士勉強',icon:'📐'},
   {id:'h9',label:'建築士アプリ',icon:'📱'},
   {id:'h4',label:'間食増量',icon:'🍱'},
-  {id:'h17',label:'Vlog',icon:'🎥'},
   {id:'h10',label:'散歩',icon:'🚶'},
-  {id:'h27',label:'洗濯',icon:'🧺'},
-  {id:'h28',label:'掃除',icon:'🧹'},
 ];
 
 function freshStore() {
