@@ -614,6 +614,47 @@ html, body {
 .ps-res a { display: block; font-size: 15px; color: var(--ink); margin: 8px 0 2px; line-height: 1.6; text-decoration: underline; text-underline-offset: 2px; }
 .ps-res .meta { display: block; color: var(--ink-mute); font-size: 13px; line-height: 1.6; margin-bottom: 8px; }
 .ps-empty { font-size: 15px; color: var(--ink-mute); line-height: 2; text-align: center; padding: 44px 14px; }
+
+/* ── 語学（1日1動詞・つぶやき・復習）── */
+.lg-tabs { display: flex; gap: 22px; border-bottom: 1px solid var(--line); }
+.lg-tab { padding: 8px 0; font-size: 13px; font-family: var(--font-gothic); background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; color: var(--ink-mute); cursor: pointer; }
+.lg-tab.active { border-bottom-color: var(--accent); color: var(--ink); font-weight: 700; }
+.lg-tab .n { font-family: var(--font-latin); font-size: 11px; font-weight: 400; color: var(--ink-mute); margin-left: 6px; }
+.lg-sub { font-family: var(--font-latin); font-size: 12px; color: var(--ink-mute); letter-spacing: .06em; margin: 12px 0 6px; }
+.lg-sub b { color: var(--ink); }
+.lg-sec { border-top: 1px solid var(--line); padding: 20px 0 8px; margin-top: 14px; }
+.lg-step { display: flex; align-items: center; gap: 10px; font-family: var(--font-gothic); font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--ink-mute); margin-bottom: 14px; }
+.lg-step .ok { font-weight: 500; letter-spacing: .04em; color: var(--ink); }
+.lg-lemma-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.lg-lemma { font-size: 30px; font-weight: 700; line-height: 1.3; color: var(--ink); word-break: break-word; }
+.lg-gloss { font-size: 14px; color: var(--ink-mute); margin-top: 2px; line-height: 1.6; }
+.lg-forms { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 16px 0 4px; }
+.lg-form .k { display: block; font-size: 10px; color: var(--ink-mute); letter-spacing: .04em; }
+.lg-form .v { display: block; font-size: 15px; font-weight: 500; color: var(--ink); }
+.lg-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 8px; }
+.lg-chip { font-size: 12px; background: var(--bg-sink); padding: 4px 9px; color: var(--ink-mute); line-height: 1.6; }
+.lg-ex { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line); }
+.lg-ex-body { min-width: 0; flex: 1; }
+.lg-t, .lg-cue, .lg-say { font-size: 16px; line-height: 1.8; color: var(--ink); }
+.lg-t b, .lg-cue b { font-weight: 700; }
+.lg-say { font-size: 17px; font-weight: 500; }
+.lg-ja { font-size: 13px; color: var(--ink-mute); line-height: 1.6; margin-top: 1px; }
+.lg-blank { display: inline-block; width: 3.4em; height: 1em; border-bottom: 1.5px solid var(--ink); vertical-align: -0.12em; margin: 0 .2em; }
+.lg-note { font-size: 13px; line-height: 1.8; color: var(--ink-soft); background: var(--bg-sink); border-radius: var(--r2); padding: 10px 12px; margin-top: 10px; }
+.lg-hint { font-size: 13px; color: var(--ink-mute); line-height: 1.7; margin-top: 8px; }
+.lg-hint b { color: var(--ink); }
+.lg-count { font-family: var(--font-latin); font-size: 12px; color: var(--ink-mute); letter-spacing: .06em; margin-bottom: 8px; }
+.lg-actions { display: flex; gap: 8px; margin: 16px 0 6px; }
+.lg-btn { flex: 1; padding: 13px 10px; background: var(--ink); color: var(--bg); font-family: var(--font-gothic); font-size: 14px; font-weight: 700; letter-spacing: .04em; border: 1px solid var(--ink); border-radius: var(--r2); cursor: pointer; -webkit-appearance: none; }
+.lg-btn:active { background: #333330; }
+.lg-btn.ghost { background: var(--bg); color: var(--ink); border-color: var(--line-strong); font-weight: 500; }
+.lg-btn.ghost:active { background: var(--bg-sink); border-color: var(--ink); }
+.lg-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.lg-spk { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--ink); background: var(--bg); border: 1px solid var(--line-strong); border-radius: var(--r2); padding: 0; cursor: pointer; -webkit-appearance: none; }
+.lg-spk:active { background: var(--bg-sink); border-color: var(--ink); }
+.lg-link { display: block; margin: 14px 0 4px; background: none; border: none; color: var(--ink-mute); font-size: 12px; font-family: var(--font-gothic); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; padding: 0; }
+.lg-empty { font-size: 14px; color: var(--ink-mute); line-height: 1.9; padding: 2px 0 12px; }
+#lg-root [lang="ko"] { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', var(--font-gothic); }
 </style>
 </head>
 <body>
@@ -809,6 +850,12 @@ html, body {
       <h2 class="screen-title">人物研究</h2>
       <div id="ps-root"></div>
     </section>
+
+    <!-- 語学（1日1動詞・つぶやき・復習） -->
+    <section class="view" id="view-lang">
+      <h2 class="screen-title">語学</h2>
+      <div id="lg-root"></div>
+    </section>
   </main>
 
   <!-- Bottom Nav -->
@@ -824,6 +871,10 @@ html, body {
     <button class="nav-item" data-view="person">
       <span class="nav-icon">☖</span>
       <span>人物</span>
+    </button>
+    <button class="nav-item" data-view="lang">
+      <span class="nav-icon">言</span>
+      <span>語学</span>
     </button>
   </nav>
 </div>
@@ -880,6 +931,7 @@ function freshStore() {
     workLog: [],
     screenLog: [],
     personStudy: {},   // { "YYYY-MM": { opened:[日], notes:{ "日":[{ts,text}] }, monthMemo:"" } }
+    lang: {},          // { de|ko: { next, prog:{動詞id:{ease,interval,reps,lapses,due,last}}, days:{日付:{n,s,r}} } }
   };
 }
 
@@ -903,6 +955,20 @@ function migrate(s) {
   if (!Array.isArray(s.workLog)) s.workLog = [];
   if (!Array.isArray(s.screenLog)) s.screenLog = [];
   if (!s.personStudy || typeof s.personStudy !== 'object') s.personStudy = {};
+  // 語学の進捗：形を整え、400 日より古い日次記録を剪定（store の肥大を防ぐ）
+  if (!s.lang || typeof s.lang !== 'object') s.lang = {};
+  try {
+    const lc = new Date(); lc.setDate(lc.getDate() - 400);
+    const lcut = dateToStr(lc);
+    for (const k of Object.keys(s.lang)) {
+      const L = s.lang[k];
+      if (!L || typeof L !== 'object') { delete s.lang[k]; continue; }
+      if (!Number.isFinite(L.next)) L.next = 0;
+      if (!L.prog || typeof L.prog !== 'object') L.prog = {};
+      if (!L.days || typeof L.days !== 'object') L.days = {};
+      for (const d of Object.keys(L.days)) if (d < lcut) delete L.days[d];
+    }
+  } catch (e) {}
   // 旧バージョンの未使用フィールドを破棄
   delete s.daily;
   delete s.tasks;
@@ -1057,6 +1123,7 @@ function navigate(viewId) {
   if (viewId === 'home') renderHome();
   if (viewId === 'habits') renderHabits();
   if (viewId === 'person') renderPerson();
+  if (viewId === 'lang') renderLang();
   activateReveal();
 }
 
@@ -1709,6 +1776,8 @@ function mergeStore(remote, local) {
   out.habits.logs = Object.assign({}, rl, (local.habits && local.habits.logs) || {});
   // 人物研究のメモは月単位でローカルを優先してマージ
   out.personStudy = Object.assign({}, remote.personStudy || {}, local.personStudy || {});
+  // 語学の進捗は動詞ごと・日付ごとにマージ（別端末の進捗を上書きで失わない）
+  out.lang = mergeLang(remote.lang, local.lang);
   return out;
 }
 
@@ -2116,6 +2185,322 @@ function psDl(txt) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+// ── 語学（1日1動詞・つぶやき・復習）──
+// 動詞データは cascade/lang/<de|ko>.json（Claude が生成。動詞は末尾に足すだけで、並べ替え・削除はしない）。
+// 進捗は store.lang[言語] = { next, prog, days } に端末保存（同期あり）。
+//   next … 次に出す語の位置 / prog[動詞id] … SM-2 の状態 / days[日付] … n:新規登録済み s:つぶやき済み r:復習件数
+// 動詞は日付でなく「次の未学習語」の順に出すので、数日空けても穴は開かない。
+const LG_LANGS = ['de', 'ko'];
+const LG_DAILY_CAP = 10;   // 復習の 1 日の上限（言語ごと）。超えた分は翌日以降に回る
+const LG_HABIT = 'h33';    // つぶやき完了で自動チェックする習慣（外国語独り言）
+// 発音ボタンのアイコン（絵文字はモノクロ基調から浮き、端末の絵文字フォントにも依存するので線画にする）
+const LG_SPK_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+const LG = { decks: { de: null, ko: null }, maps: {}, tried: { de: false, ko: false }, tab: 'de', tabSet: false, session: null };
+
+function lgSlot(lang) {
+  if (!store.lang[lang]) store.lang[lang] = { next: 0, prog: {}, days: {} };
+  return store.lang[lang];
+}
+function lgDay(slot, t) {
+  if (!slot.days[t]) slot.days[t] = { n: 0, s: 0, r: 0 };
+  return slot.days[t];
+}
+function lgAddDays(s, n) {
+  const [y, m, d] = s.split('-').map(Number);
+  return dateToStr(new Date(y, m - 1, d + n));
+}
+
+// SM-2（fp3/app.js と同じ式）。試験日による間隔の頭打ちは付けない。
+// 毎日新規が増える語学でそれを付けると、試験直前に復習が急増するため。
+function lgNewProg() { return { ease: 2.5, interval: 0, reps: 0, lapses: 0, due: todayStr(), last: '' }; }
+function lgApplySM2(p, quality) {
+  if (quality >= 3) {
+    if (p.reps === 0) p.interval = 1;
+    else if (p.reps === 1) p.interval = 6;
+    else p.interval = Math.round(p.interval * p.ease);
+    p.reps += 1;
+  } else {
+    p.reps = 0; p.interval = 1; p.lapses += 1;
+  }
+  p.ease = Math.max(1.3, p.ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
+  p.last = todayStr();
+  p.due = lgAddDays(p.last, p.interval);
+  return p;
+}
+
+// 同期用：動詞ごとに last が新しい方（同日なら reps が多い方）、next は進んだ方、days は日付ごとに大きい方を採る。
+function mergeLang(remote, local) {
+  const out = JSON.parse(JSON.stringify(local || {}));
+  for (const k of Object.keys(remote || {})) {
+    const r = remote[k];
+    if (!r || typeof r !== 'object') continue;
+    const l = out[k];
+    if (!l) { out[k] = r; continue; }
+    l.next = Math.max(l.next || 0, r.next || 0);
+    l.prog = l.prog || {};
+    for (const id of Object.keys(r.prog || {})) {
+      const a = l.prog[id], b = r.prog[id];
+      if (!a || (b.last || '') > (a.last || '') || ((b.last || '') === (a.last || '') && (b.reps || 0) > (a.reps || 0))) l.prog[id] = b;
+    }
+    l.days = l.days || {};
+    for (const d of Object.keys(r.days || {})) {
+      const a = l.days[d], b = r.days[d];
+      l.days[d] = a ? { n: Math.max(a.n || 0, b.n || 0), s: Math.max(a.s || 0, b.s || 0), r: Math.max(a.r || 0, b.r || 0) } : b;
+    }
+  }
+  return out;
+}
+
+function loadLang() {
+  LG_LANGS.forEach(l => {
+    const done = () => { LG.tried[l] = true; if (curView() === 'lang') renderLang(); };
+    fetch('./lang/' + l + '.json', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(j => {
+        if (j && Array.isArray(j.verbs)) {
+          LG.decks[l] = j;
+          LG.maps[l] = new Map(j.verbs.map(v => [v.id, v]));
+        }
+        done();
+      })
+      .catch(done);
+  });
+}
+
+// 今日ぶんの復習（期日が来た順・1日の上限つき）
+function lgDueIds(lang) {
+  const map = LG.maps[lang];
+  if (!map) return [];
+  const slot = lgSlot(lang), t = todayStr();
+  const left = LG_DAILY_CAP - ((slot.days[t] && slot.days[t].r) || 0);
+  if (left <= 0) return [];
+  return Object.keys(slot.prog)
+    .filter(id => map.has(id) && slot.prog[id].due <= t)
+    .sort((a, b) => slot.prog[a].due.localeCompare(slot.prog[b].due) || a.localeCompare(b))
+    .slice(0, left);
+}
+// 今日の動詞：登録前は「次の未学習語」、登録後は今日登録した語。全部登録済みなら exhausted。
+function lgCurrent(lang) {
+  const deck = LG.decks[lang], slot = lgSlot(lang), t = todayStr();
+  const introduced = !!(slot.days[t] && slot.days[t].n);
+  const exhausted = !introduced && slot.next >= deck.verbs.length;
+  const verb = introduced ? deck.verbs[slot.next - 1]
+    : (deck.verbs[slot.next] || deck.verbs[slot.next - 1] || null);
+  return { verb: verb || null, introduced, exhausted };
+}
+
+function lgEsc(s) { return psEsc(s); }
+// 例文中の {{…}} を、太字（答え表示）または空欄（復習の出題）にする
+function lgMark(t, blank) {
+  return String(t).split(/(\{\{.+?\}\})/).map(part => {
+    const m = part.match(/^\{\{(.+?)\}\}$/);
+    if (!m) return lgEsc(part);
+    return blank ? '<span class="lg-blank"></span>' : '<b>' + lgEsc(m[1]) + '</b>';
+  }).join('');
+}
+function lgPlain(t) { return String(t).replace(/\{\{|\}\}/g, ''); }
+function lgSayHtml(s) { return lgEsc(s).replace(/___/g, '<span class="lg-blank"></span>'); }
+
+// 端末内蔵の音声合成（無料・ファイル不要）。声が無い言語ではボタンを出さない。
+function lgCanSpeak(code) {
+  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return false;
+  const vs = speechSynthesis.getVoices();
+  if (!vs.length) return true;   // 声の一覧が読み込まれる前は仮に表示
+  const p = String(code).toLowerCase().slice(0, 2);
+  return vs.some(v => String(v.lang || '').toLowerCase().startsWith(p));
+}
+function lgSpeak(text, code) {
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = code; u.rate = 0.9;
+    const want = String(code).toLowerCase().replace('_', '-');
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(x => String(x.lang || '').toLowerCase().replace('_', '-') === want)
+      || vs.find(x => String(x.lang || '').toLowerCase().startsWith(want.slice(0, 2)));
+    if (v) u.voice = v;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+function lgSpk(text, deck) {
+  if (!lgCanSpeak(deck.tts)) return '';
+  return '<button class="lg-spk" data-lg="spk" data-text="' + lgEsc(lgPlain(text)) + '" data-code="' + lgEsc(deck.tts) + '" aria-label="発音を聞く">' + LG_SPK_SVG + '</button>';
+}
+
+function lgFormsHtml(deck, v) {
+  const labels = deck.forms_labels || [];
+  const parts = String(v.forms).split('–').map(s => s.trim());
+  return '<div class="lg-forms">' + parts.map((p, i) =>
+    '<div class="lg-form"><span class="k">' + lgEsc(labels[i] || '') + '</span><span class="v" lang="' + deck.lang + '">' + lgEsc(p) + '</span></div>'
+  ).join('') + '</div>';
+}
+function lgVerbCard(deck, v) {
+  let h = '<div class="lg-lemma-row"><div><div class="lg-lemma" lang="' + deck.lang + '">' + lgEsc(v.lemma) + '</div>'
+    + '<div class="lg-gloss">' + lgEsc(v.ja) + '</div></div>' + lgSpk(v.lemma, deck) + '</div>';
+  h += lgFormsHtml(deck, v);
+  h += '<div class="lg-chips"><span class="lg-chip">型　' + lgEsc(v.frame) + '</span><span class="lg-chip">' + lgEsc(v.scene) + '</span></div>';
+  h += v.ex.map(e =>
+    '<div class="lg-ex"><div class="lg-ex-body"><div class="lg-t" lang="' + deck.lang + '">' + lgMark(e.t, false) + '</div>'
+    + '<div class="lg-ja">' + lgEsc(e.ja) + '</div></div>' + lgSpk(e.t, deck) + '</div>'
+  ).join('');
+  if (v.note) h += '<div class="lg-note">' + lgEsc(v.note) + '</div>';
+  return h;
+}
+
+// ③ 復習：例文の動詞を伏せて出し、活用させて声に出してから答えを見る
+function lgReviewHtml(lang, deck, slot, day) {
+  const s = LG.session;
+  if (s && s.lang === lang) {
+    const id = s.queue[s.idx], v = LG.maps[lang].get(id), p = slot.prog[id];
+    if (v && p) {
+      const ex = v.ex[(p.reps || 0) % v.ex.length];
+      let h = '<div class="lg-count">' + (s.idx + 1) + ' / ' + s.queue.length + '</div>';
+      h += '<div class="lg-ex" style="border-top:none;padding-top:0"><div class="lg-ex-body"><div class="lg-cue" lang="' + lang + '">' + lgMark(ex.t, !s.revealed) + '</div>'
+        + '<div class="lg-ja">' + lgEsc(ex.ja) + '</div></div>' + (s.revealed ? lgSpk(ex.t, deck) : '') + '</div>';
+      h += '<div class="lg-chips"><span class="lg-chip">' + lgEsc(v.ja) + '</span><span class="lg-chip">型　' + lgEsc(v.frame) + '</span></div>';
+      if (!s.revealed) {
+        h += '<div class="lg-hint">空欄の動詞を、活用させて声に出してから答えを見ます。</div>';
+        h += '<div class="lg-actions"><button class="lg-btn" data-lg="reveal">答えを見る</button></div>';
+      } else {
+        h += lgFormsHtml(deck, v);
+        h += '<div class="lg-grade">'
+          + '<button class="lg-btn ghost" data-lg="grade" data-q="5">言えた</button>'
+          + '<button class="lg-btn ghost" data-lg="grade" data-q="3">あやふや</button>'
+          + '<button class="lg-btn ghost" data-lg="grade" data-q="1">言えなかった</button></div>';
+      }
+      h += '<button class="lg-link" data-lg="stop">復習をやめる</button>';
+      return h;
+    }
+    LG.session = null;   // 動詞データと食い違う状態は破棄して通常表示へ
+  }
+  const ids = lgDueIds(lang);
+  const doneToday = (day && day.r) || 0;
+  if (ids.length) {
+    return '<div class="lg-hint">期日が来た動詞が <b>' + ids.length + '</b> 件あります。</div>'
+      + '<div class="lg-actions"><button class="lg-btn" data-lg="start">復習を始める（' + ids.length + '件）</button></div>';
+  }
+  if (doneToday >= LG_DAILY_CAP) return '<div class="lg-empty">今日の上限（' + LG_DAILY_CAP + '件）まで終わりました。残りは明日以降に回ります。</div>';
+  return '<div class="lg-empty">' + (doneToday ? '今日の復習はすべて終わりました。' : '今日の復習はありません。') + '</div>';
+}
+
+function renderLang() {
+  const root = document.getElementById('lg-root');
+  if (!root) return;
+  if (!LG_LANGS.every(l => LG.tried[l])) { root.innerHTML = '<div class="ps-empty">読み込み中…</div>'; return; }
+  const avail = LG_LANGS.filter(l => LG.decks[l]);
+  if (!avail.length) {
+    root.innerHTML = '<div class="ps-empty">動詞データを読み込めませんでした。<br>通信状況を確認して、もう一度開いてください。</div>';
+    return;
+  }
+  const t = todayStr();
+  const todo = l => {
+    const c = lgCurrent(l), d = lgSlot(l).days[t] || {};
+    return (c.exhausted || c.introduced || !c.verb ? 0 : 1) + (d.s ? 0 : 1) + lgDueIds(l).length;
+  };
+  if (!LG.tabSet) { LG.tab = avail.find(l => todo(l) > 0) || avail[0]; LG.tabSet = true; }
+  if (!LG.decks[LG.tab]) LG.tab = avail[0];
+  const lang = LG.tab, deck = LG.decks[lang], slot = lgSlot(lang), day = slot.days[t] || {};
+  const cur = lgCurrent(lang);
+
+  let h = '<div class="lg-tabs">' + avail.map(l => {
+    const n = todo(l);
+    return '<button class="lg-tab' + (l === lang ? ' active' : '') + '" data-lg="tab" data-lang="' + l + '">'
+      + lgEsc(LG.decks[l].label) + '<span class="n">' + (n > 0 ? '残り' + n : '✓') + '</span></button>';
+  }).join('') + '</div>';
+  h += '<div class="lg-sub"><b>' + Math.min(slot.next, deck.verbs.length) + '</b> / ' + deck.verbs.length + ' 語を登録済み</div>';
+
+  // ① 今日の動詞
+  h += '<section class="lg-sec"><div class="lg-step">① 今日の動詞' + (cur.introduced ? '<span class="ok">✓ 登録済み</span>' : '') + '</div>';
+  if (cur.exhausted) {
+    h += '<div class="lg-empty">用意した動詞をすべて登録しました。新しい動詞の追加をお待ちください。</div>';
+  } else if (!cur.verb) {
+    h += '<div class="lg-empty">動詞がまだありません。</div>';
+  } else {
+    h += lgVerbCard(deck, cur.verb);
+    if (!cur.introduced) h += '<div class="lg-actions"><button class="lg-btn" data-lg="intro">声に出して読んだ（復習に登録）</button></div>';
+  }
+  h += '</section>';
+
+  // ② つぶやく
+  h += '<section class="lg-sec"><div class="lg-step">② つぶやく' + (day.s ? '<span class="ok">✓ 済み</span>' : '') + '</div>';
+  if (!cur.verb) {
+    h += '<div class="lg-empty">動詞があると、つぶやきの型が出ます。</div>';
+  } else {
+    h += '<div class="lg-say" lang="' + lang + '">' + lgSayHtml(cur.verb.say) + '</div>'
+      + '<div class="lg-gloss">' + lgEsc(cur.verb.say_ja) + '</div>'
+      + '<div class="lg-hint">空欄に今日のことを入れて、声に出して 1 文言います（30 秒以内）。</div>';
+    if (!day.s) h += '<div class="lg-actions"><button class="lg-btn" data-lg="say">つぶやいた</button></div>';
+  }
+  h += '</section>';
+
+  // ③ 復習
+  h += '<section class="lg-sec"><div class="lg-step">③ 復習</div>' + lgReviewHtml(lang, deck, slot, day) + '</section>';
+  root.innerHTML = h;
+}
+
+// 今日の動詞を登録：初回は quality 4 相当で、翌日に最初の復習が来る
+function lgIntro(lang) {
+  const deck = LG.decks[lang], slot = lgSlot(lang), day = lgDay(slot, todayStr());
+  const v = deck.verbs[slot.next];
+  if (!v || day.n) return;
+  const p = lgNewProg();
+  lgApplySM2(p, 4);
+  slot.prog[v.id] = p;
+  slot.next += 1;
+  day.n = 1;
+  saveStore();
+  showToast('「' + v.lemma + '」を復習に登録しました');
+  renderLang();
+}
+// つぶやき完了：習慣「外国語独り言」を自動でチェックする
+function lgSay(lang) {
+  const day = lgDay(lgSlot(lang), todayStr());
+  if (day.s) return;
+  day.s = 1;
+  ensureToday();
+  store.habits.logs[todayStr()][LG_HABIT] = true;
+  saveStore();
+  showToast('つぶやきを記録しました（外国語独り言 ✓）');
+  renderLang();
+}
+function lgStart(lang) {
+  const ids = lgDueIds(lang);
+  if (!ids.length) return;
+  LG.session = { lang, queue: ids, idx: 0, revealed: false };
+  renderLang();
+}
+function lgGrade(q) {
+  const s = LG.session;
+  if (!s) return;
+  const slot = lgSlot(s.lang), p = slot.prog[s.queue[s.idx]];
+  if (p) {
+    lgApplySM2(p, q);
+    lgDay(slot, todayStr()).r += 1;
+  }
+  s.idx += 1;
+  s.revealed = false;
+  if (s.idx >= s.queue.length) { LG.session = null; showToast('復習が終わりました'); }
+  saveStore();
+  renderLang();
+}
+function lgClick(e) {
+  const b = e.target.closest('[data-lg]');
+  if (!b) return;
+  const a = b.dataset.lg;
+  if (a === 'tab') { LG.tab = b.dataset.lang; LG.tabSet = true; renderLang(); }
+  else if (a === 'intro') lgIntro(LG.tab);
+  else if (a === 'say') lgSay(LG.tab);
+  else if (a === 'start') lgStart(LG.tab);
+  else if (a === 'reveal') { if (LG.session) { LG.session.revealed = true; renderLang(); } }
+  else if (a === 'grade') lgGrade(Number(b.dataset.q));
+  else if (a === 'stop') { LG.session = null; renderLang(); }
+  else if (a === 'spk') lgSpeak(b.dataset.text, b.dataset.code);
+}
+document.getElementById('lg-root').addEventListener('click', lgClick);
+if ('speechSynthesis' in window && speechSynthesis.addEventListener) {
+  speechSynthesis.addEventListener('voiceschanged', () => { if (curView() === 'lang') renderLang(); });
+}
+
 // ── Init ──
 function init() {
   ensureToday();
@@ -2124,6 +2509,7 @@ function init() {
   loadStudyMenu();
   loadWorkoutMenu();
   loadPerson();
+  loadLang();
 
   const t = todayStr();
   if (store.settings.lastWakeDate !== t) {

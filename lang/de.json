@@ -1,0 +1,459 @@
+{
+  "lang": "de",
+  "label": "ドイツ語",
+  "tts": "de-DE",
+  "version": 1,
+  "forms_labels": ["不定詞", "3人称単数・現在", "過去基本形", "完了形（助動詞＋過去分詞）"],
+  "verbs": [
+    {
+      "id": "de001",
+      "lemma": "machen",
+      "ja": "する・作る",
+      "forms": "machen – macht – machte – hat gemacht",
+      "frame": "etwas machen（4格）",
+      "scene": "日常",
+      "ex": [
+        {"t": "Was {{machst}} du heute?", "ja": "今日は何をするの？"},
+        {"t": "Gestern {{habe}} ich die Hausaufgaben {{gemacht}}.", "ja": "昨日は宿題をした。"}
+      ],
+      "say": "Heute habe ich ___ gemacht.",
+      "say_ja": "今日は〜をした。",
+      "note": "Sport machen（運動する）、eine Pause machen（休憩する）のように名詞と組んで使う。"
+    },
+    {
+      "id": "de002",
+      "lemma": "gehen",
+      "ja": "行く・歩く",
+      "forms": "gehen – geht – ging – ist gegangen",
+      "frame": "zu ＋ 3格／in ＋ 4格／nach ＋ 地名 gehen",
+      "scene": "移動",
+      "ex": [
+        {"t": "Ich {{gehe}} jeden Tag zu Fuß zur Uni.", "ja": "毎日歩いて大学に行く。"},
+        {"t": "Heute {{bin}} ich früh nach Hause {{gegangen}}.", "ja": "今日は早く家に帰った。"}
+      ],
+      "say": "Heute bin ich ___ gegangen.",
+      "say_ja": "今日は〜へ行った（zu ＋ 3格／in ＋ 4格／nach ＋ 地名）。",
+      "note": "完了形は sein を使う（ist gegangen）。乗り物で行くなら fahren。"
+    },
+    {
+      "id": "de003",
+      "lemma": "essen",
+      "ja": "食べる",
+      "forms": "essen – isst – aß – hat gegessen",
+      "frame": "etwas essen（4格）",
+      "scene": "食事",
+      "ex": [
+        {"t": "Ich {{esse}} morgens immer Brot.", "ja": "朝はいつもパンを食べる。"},
+        {"t": "Was {{hast}} du heute Mittag {{gegessen}}?", "ja": "今日のお昼は何を食べたの？"}
+      ],
+      "say": "Heute habe ich ___ gegessen.",
+      "say_ja": "今日は〜を食べた。",
+      "note": "du isst / er isst（語幹の e が i に変わる）。"
+    },
+    {
+      "id": "de004",
+      "lemma": "trinken",
+      "ja": "飲む",
+      "forms": "trinken – trinkt – trank – hat getrunken",
+      "frame": "etwas trinken（4格）",
+      "scene": "食事",
+      "ex": [
+        {"t": "Ich {{trinke}} jeden Morgen Kaffee.", "ja": "毎朝コーヒーを飲む。"},
+        {"t": "Gestern {{habe}} ich zu viel Tee {{getrunken}}.", "ja": "昨日はお茶を飲みすぎた。"}
+      ],
+      "say": "Heute habe ich ___ getrunken.",
+      "say_ja": "今日は〜を飲んだ。",
+      "note": "強変化動詞：i – a – u（trinken – trank – getrunken）。"
+    },
+    {
+      "id": "de005",
+      "lemma": "kommen",
+      "ja": "来る",
+      "forms": "kommen – kommt – kam – ist gekommen",
+      "frame": "aus ＋ 3格 kommen／nach Hause kommen",
+      "scene": "移動",
+      "ex": [
+        {"t": "Ich {{komme}} aus Japan.", "ja": "私は日本の出身です。"},
+        {"t": "Wann {{bist}} du nach Hause {{gekommen}}?", "ja": "いつ帰ってきたの？"}
+      ],
+      "say": "Heute bin ich um ___ Uhr nach Hause gekommen.",
+      "say_ja": "今日は〜時に帰宅した。",
+      "note": "完了形は sein を使う（ist gekommen）。"
+    },
+    {
+      "id": "de006",
+      "lemma": "können",
+      "ja": "〜できる",
+      "forms": "können – kann – konnte – hat gekonnt",
+      "frame": "〜（不定詞）können",
+      "scene": "話法",
+      "ex": [
+        {"t": "Ich {{kann}} gut schwimmen.", "ja": "私は上手に泳げる。"},
+        {"t": "{{Kannst}} du morgen kommen?", "ja": "明日来られる？"}
+      ],
+      "say": "Heute kann ich ___.",
+      "say_ja": "今日は〜できる。",
+      "note": "話法の助動詞：不定詞は文末へ。ich kann / du kannst / er kann（単数は語幹の母音が変わる）。過去のことは日常ふつう過去形で言う（Ich konnte nicht kommen）。"
+    },
+    {
+      "id": "de007",
+      "lemma": "müssen",
+      "ja": "〜しなければならない",
+      "forms": "müssen – muss – musste – hat gemusst",
+      "frame": "〜（不定詞）müssen",
+      "scene": "話法",
+      "ex": [
+        {"t": "Ich {{muss}} heute lange arbeiten.", "ja": "今日は長く働かなければならない。"},
+        {"t": "Wir {{müssen}} jetzt gehen.", "ja": "もう行かなくちゃ。"}
+      ],
+      "say": "Heute muss ich ___.",
+      "say_ja": "今日は〜しなければならない。",
+      "note": "nicht müssen ＝〜する必要がない（禁止ではない）。禁止は nicht dürfen。過去のことは日常ふつう過去形で言う（Ich musste arbeiten）。"
+    },
+    {
+      "id": "de008",
+      "lemma": "wollen",
+      "ja": "〜したい",
+      "forms": "wollen – will – wollte – hat gewollt",
+      "frame": "〜（不定詞）wollen",
+      "scene": "話法",
+      "ex": [
+        {"t": "Ich {{will}} heute nichts machen.", "ja": "今日は何もしたくない。"},
+        {"t": "Was {{willst}} du essen?", "ja": "何を食べたい？"}
+      ],
+      "say": "Heute will ich ___.",
+      "say_ja": "今日は〜したい。",
+      "note": "ich will / du willst / er will。強い意志の表現。ていねいに言うなら ich möchte。過去のことは日常ふつう過去形で言う（Ich wollte schlafen）。"
+    },
+    {
+      "id": "de009",
+      "lemma": "sehen",
+      "ja": "見る・見える",
+      "forms": "sehen – sieht – sah – hat gesehen",
+      "frame": "etwas sehen（4格）",
+      "scene": "余暇",
+      "ex": [
+        {"t": "Ich {{sehe}} gern Filme.", "ja": "映画を見るのが好きだ。"},
+        {"t": "Gestern {{habe}} ich einen tollen Film {{gesehen}}.", "ja": "昨日はすばらしい映画を見た。"}
+      ],
+      "say": "Heute habe ich ___ gesehen.",
+      "say_ja": "今日は〜を見た。",
+      "note": "du siehst / er sieht（e → ie）。"
+    },
+    {
+      "id": "de010",
+      "lemma": "hören",
+      "ja": "聞く・聴く",
+      "forms": "hören – hört – hörte – hat gehört",
+      "frame": "etwas hören（4格）",
+      "scene": "余暇",
+      "ex": [
+        {"t": "Ich {{höre}} jeden Tag Musik.", "ja": "毎日音楽を聴く。"},
+        {"t": "{{Hast}} du das {{gehört}}?", "ja": "それ聞いた？"}
+      ],
+      "say": "Heute habe ich ___ gehört.",
+      "say_ja": "今日は〜を聞いた。",
+      "note": "規則変化。「聞こえる」も「聴く」も hören。"
+    },
+    {
+      "id": "de011",
+      "lemma": "lesen",
+      "ja": "読む",
+      "forms": "lesen – liest – las – hat gelesen",
+      "frame": "etwas lesen（4格）",
+      "scene": "余暇",
+      "ex": [
+        {"t": "Ich {{lese}} abends gern ein Buch.", "ja": "夜は本を読むのが好きだ。"},
+        {"t": "{{Hast}} du das Buch schon {{gelesen}}?", "ja": "その本はもう読んだ？"}
+      ],
+      "say": "Heute habe ich ___ gelesen.",
+      "say_ja": "今日は〜を読んだ。",
+      "note": "du liest / er liest（e → ie）。lesen – las – gelesen。"
+    },
+    {
+      "id": "de012",
+      "lemma": "schreiben",
+      "ja": "書く",
+      "forms": "schreiben – schreibt – schrieb – hat geschrieben",
+      "frame": "jemandem etwas schreiben（3格＋4格）",
+      "scene": "連絡",
+      "ex": [
+        {"t": "Ich {{schreibe}} jeden Tag eine E-Mail.", "ja": "毎日メールを書く。"},
+        {"t": "Er {{hat}} mir eine Postkarte {{geschrieben}}.", "ja": "彼は私にはがきを書いてくれた。"}
+      ],
+      "say": "Heute habe ich ___ geschrieben.",
+      "say_ja": "今日は〜を書いた。",
+      "note": "強変化動詞：ei – ie – ie（schreiben – schrieb – geschrieben）。"
+    },
+    {
+      "id": "de013",
+      "lemma": "sprechen",
+      "ja": "話す",
+      "forms": "sprechen – spricht – sprach – hat gesprochen",
+      "frame": "mit ＋ 3格 sprechen／über ＋ 4格 sprechen",
+      "scene": "会話",
+      "ex": [
+        {"t": "Ich {{spreche}} ein bisschen Deutsch.", "ja": "ドイツ語を少し話す。"},
+        {"t": "Mit wem {{hast}} du {{gesprochen}}?", "ja": "誰と話したの？"}
+      ],
+      "say": "Heute habe ich mit ___ gesprochen.",
+      "say_ja": "今日は〜（人・3格）と話した。",
+      "note": "du sprichst / er spricht（e → i）。"
+    },
+    {
+      "id": "de014",
+      "lemma": "lernen",
+      "ja": "学ぶ・勉強する",
+      "forms": "lernen – lernt – lernte – hat gelernt",
+      "frame": "etwas lernen（4格）",
+      "scene": "学習",
+      "ex": [
+        {"t": "Ich {{lerne}} jeden Abend Deutsch.", "ja": "毎晩ドイツ語を勉強している。"},
+        {"t": "Wie lange {{lernst}} du schon Koreanisch?", "ja": "どのくらい前から韓国語を勉強しているの？"}
+      ],
+      "say": "Heute habe ich ___ gelernt.",
+      "say_ja": "今日は〜を勉強した。",
+      "note": "規則変化。schon ＋ 現在形で「〜前からずっと〜している」を表す。"
+    },
+    {
+      "id": "de015",
+      "lemma": "arbeiten",
+      "ja": "働く",
+      "forms": "arbeiten – arbeitet – arbeitete – hat gearbeitet",
+      "frame": "als ＋ 職業／bei ＋ 3格 arbeiten",
+      "scene": "仕事",
+      "ex": [
+        {"t": "Ich {{arbeite}} heute zu Hause.", "ja": "今日は家で仕事をする。"},
+        {"t": "Er {{hat}} gestern bis acht Uhr {{gearbeitet}}.", "ja": "彼は昨日8時まで働いた。"}
+      ],
+      "say": "Heute habe ich ___ gearbeitet.",
+      "say_ja": "今日は〜働いた。",
+      "note": "語幹が t で終わるので、du arbeitest / er arbeitet と e を入れる。"
+    },
+    {
+      "id": "de016",
+      "lemma": "kaufen",
+      "ja": "買う",
+      "forms": "kaufen – kauft – kaufte – hat gekauft",
+      "frame": "etwas kaufen（4格）",
+      "scene": "買い物",
+      "ex": [
+        {"t": "Ich {{kaufe}} heute Brot und Milch.", "ja": "今日はパンと牛乳を買う。"},
+        {"t": "Was {{hast}} du im Supermarkt {{gekauft}}?", "ja": "スーパーで何を買ったの？"}
+      ],
+      "say": "Heute habe ich ___ gekauft.",
+      "say_ja": "今日は〜を買った。",
+      "note": "規則変化。einkaufen（買い物をする）は分離動詞。"
+    },
+    {
+      "id": "de017",
+      "lemma": "fahren",
+      "ja": "（乗り物で）行く",
+      "forms": "fahren – fährt – fuhr – ist gefahren",
+      "frame": "mit ＋ 3格 fahren／nach ＋ 場所 fahren",
+      "scene": "移動",
+      "ex": [
+        {"t": "Ich {{fahre}} jeden Tag mit dem Zug zur Arbeit.", "ja": "毎日電車で通勤している。"},
+        {"t": "Am Sonntag {{sind}} wir nach Kyoto {{gefahren}}.", "ja": "日曜日に私たちは京都へ行った。"}
+      ],
+      "say": "Heute bin ich mit ___ gefahren.",
+      "say_ja": "今日は〜（mit の後ろ・3格）で行った。",
+      "note": "du fährst / er fährt（a → ä）。完了形は sein を使う（ist gefahren）。"
+    },
+    {
+      "id": "de018",
+      "lemma": "schlafen",
+      "ja": "眠る・寝る",
+      "forms": "schlafen – schläft – schlief – hat geschlafen",
+      "frame": "gut／schlecht schlafen、〜 Stunden schlafen",
+      "scene": "朝夜",
+      "ex": [
+        {"t": "Ich {{schlafe}} meistens sieben Stunden.", "ja": "たいてい7時間寝る。"},
+        {"t": "Gestern {{habe}} ich schlecht {{geschlafen}}.", "ja": "昨日はよく眠れなかった。"}
+      ],
+      "say": "Heute habe ich ___ geschlafen.",
+      "say_ja": "今日は〜寝た。",
+      "note": "du schläfst / er schläft（a → ä）。"
+    },
+    {
+      "id": "de019",
+      "lemma": "aufstehen",
+      "ja": "起きる",
+      "forms": "aufstehen – steht auf – stand auf – ist aufgestanden",
+      "frame": "um ＋ 時刻 aufstehen",
+      "scene": "朝夜",
+      "ex": [
+        {"t": "Ich {{stehe}} jeden Morgen um sieben Uhr {{auf}}.", "ja": "毎朝7時に起きる。"},
+        {"t": "Heute {{bin}} ich früh {{aufgestanden}}.", "ja": "今日は早く起きた。"}
+      ],
+      "say": "Heute bin ich um ___ Uhr aufgestanden.",
+      "say_ja": "今日は〜時に起きた。",
+      "note": "分離動詞：現在形では前つづり auf が文末へ。過去分詞は auf｜ge｜standen と ge が間に入る。"
+    },
+    {
+      "id": "de020",
+      "lemma": "nehmen",
+      "ja": "取る・乗る",
+      "forms": "nehmen – nimmt – nahm – hat genommen",
+      "frame": "etwas nehmen（4格）",
+      "scene": "移動",
+      "ex": [
+        {"t": "Ich {{nehme}} einen Kaffee, bitte.", "ja": "コーヒーをお願いします。"},
+        {"t": "Wir {{haben}} den Bus {{genommen}}.", "ja": "私たちはバスに乗った。"}
+      ],
+      "say": "Heute habe ich ___ genommen.",
+      "say_ja": "今日は〜に乗った（〜を取った）。",
+      "note": "du nimmst / er nimmt（e → i、子音も変わる）。乗り物には nehmen も使える。"
+    },
+    {
+      "id": "de021",
+      "lemma": "denken",
+      "ja": "考える・思う",
+      "forms": "denken – denkt – dachte – hat gedacht",
+      "frame": "an ＋ 4格 denken",
+      "scene": "気持ち",
+      "ex": [
+        {"t": "Ich {{denke}} oft an meine Familie.", "ja": "よく家族のことを思う。"},
+        {"t": "Was {{denkst}} du darüber?", "ja": "それについてどう思う？"}
+      ],
+      "say": "Heute habe ich an ___ gedacht.",
+      "say_ja": "今日は〜のことを考えた。",
+      "note": "不規則動詞（混合変化）：denken – dachte – gedacht。"
+    },
+    {
+      "id": "de022",
+      "lemma": "wissen",
+      "ja": "知っている",
+      "forms": "wissen – weiß – wusste – hat gewusst",
+      "frame": "（dass／wo など）＋ wissen",
+      "scene": "気持ち",
+      "ex": [
+        {"t": "Ich {{weiß}} das nicht.", "ja": "それは知らない。"},
+        {"t": "{{Weißt}} du, wo der Bahnhof ist?", "ja": "駅がどこにあるか知ってる？"}
+      ],
+      "say": "Ich weiß nicht, wo ___ ist.",
+      "say_ja": "〜（単数）がどこにあるかわからない。",
+      "note": "ich weiß / du weißt / er weiß（不規則な人称変化）。人や場所を「知っている」は kennen。"
+    },
+    {
+      "id": "de023",
+      "lemma": "kochen",
+      "ja": "料理する",
+      "forms": "kochen – kocht – kochte – hat gekocht",
+      "frame": "etwas kochen（4格）",
+      "scene": "食事",
+      "ex": [
+        {"t": "Ich {{koche}} heute Abend Pasta.", "ja": "今夜はパスタを作る。"},
+        {"t": "Er {{kocht}} sehr gut.", "ja": "彼は料理がとても上手だ。"}
+      ],
+      "say": "Heute habe ich ___ gekocht.",
+      "say_ja": "今日は〜を作った。",
+      "note": "規則変化。「料理する」も「ゆでる・沸かす」も kochen。"
+    },
+    {
+      "id": "de024",
+      "lemma": "warten",
+      "ja": "待つ",
+      "forms": "warten – wartet – wartete – hat gewartet",
+      "frame": "auf ＋ 4格 warten",
+      "scene": "移動",
+      "ex": [
+        {"t": "Ich {{warte}} auf den Bus.", "ja": "バスを待っている。"},
+        {"t": "Wie lange {{hast}} du auf mich {{gewartet}}?", "ja": "どのくらい私を待ってた？"}
+      ],
+      "say": "Heute habe ich auf ___ gewartet.",
+      "say_ja": "今日は〜を待った。",
+      "note": "auf ＋ 4格：auf den Bus / auf mich。語幹が t で終わるので du wartest / er wartet。"
+    },
+    {
+      "id": "de025",
+      "lemma": "helfen",
+      "ja": "手伝う・助ける",
+      "forms": "helfen – hilft – half – hat geholfen",
+      "frame": "jemandem helfen（3格）",
+      "scene": "人づきあい",
+      "ex": [
+        {"t": "Ich {{helfe}} meiner Mutter in der Küche.", "ja": "台所で母を手伝う。"},
+        {"t": "Gestern {{hat}} er mir beim Umzug {{geholfen}}.", "ja": "昨日、彼は引っ越しを手伝ってくれた。"}
+      ],
+      "say": "Heute habe ich ___ geholfen.",
+      "say_ja": "今日は〜（人・3格）を手伝った。",
+      "note": "helfen は 3格支配：ich helfe dir（× dich）。du hilfst / er hilft（e → i）。"
+    },
+    {
+      "id": "de026",
+      "lemma": "anrufen",
+      "ja": "電話をかける",
+      "forms": "anrufen – ruft an – rief an – hat angerufen",
+      "frame": "jemanden anrufen（4格）",
+      "scene": "連絡",
+      "ex": [
+        {"t": "Ich {{rufe}} meine Eltern jeden Sonntag {{an}}.", "ja": "毎週日曜日に両親に電話する。"},
+        {"t": "Er {{hat}} mich gestern {{angerufen}}.", "ja": "彼は昨日私に電話をくれた。"}
+      ],
+      "say": "Heute habe ich ___ angerufen.",
+      "say_ja": "今日は〜に電話した。",
+      "note": "分離動詞：ich rufe ... an。過去分詞は an｜ge｜rufen。"
+    },
+    {
+      "id": "de027",
+      "lemma": "treffen",
+      "ja": "会う",
+      "forms": "treffen – trifft – traf – hat getroffen",
+      "frame": "jemanden treffen（4格）／sich treffen",
+      "scene": "人づきあい",
+      "ex": [
+        {"t": "Ich {{treffe}} heute eine Freundin.", "ja": "今日は友だち（女性）に会う。"},
+        {"t": "Wir {{haben}} uns gestern im Café {{getroffen}}.", "ja": "私たちは昨日カフェで会った。"}
+      ],
+      "say": "Heute habe ich ___ getroffen.",
+      "say_ja": "今日は〜に会った。",
+      "note": "du triffst / er trifft（e → i）。約束して会う場合が中心。zufällig treffen なら偶然会う意味にもなる。"
+    },
+    {
+      "id": "de028",
+      "lemma": "bleiben",
+      "ja": "とどまる・いる",
+      "forms": "bleiben – bleibt – blieb – ist geblieben",
+      "frame": "in ＋ 3格／zu Hause bleiben（場所）、gesund bleiben（状態）",
+      "scene": "日常",
+      "ex": [
+        {"t": "Ich {{bleibe}} heute zu Hause.", "ja": "今日は家にいる。"},
+        {"t": "Wie lange {{bist}} du in Deutschland {{geblieben}}?", "ja": "ドイツにどのくらい滞在したの？"}
+      ],
+      "say": "Heute bin ich ___ geblieben.",
+      "say_ja": "今日は〜（場所・3格）にいた。",
+      "note": "完了形は sein を使う（ist geblieben）。"
+    },
+    {
+      "id": "de029",
+      "lemma": "geben",
+      "ja": "与える・あげる",
+      "forms": "geben – gibt – gab – hat gegeben",
+      "frame": "jemandem etwas geben（3格＋4格）／es gibt ＋ 4格",
+      "scene": "人づきあい",
+      "ex": [
+        {"t": "Ich {{gebe}} dir morgen das Buch.", "ja": "明日その本をあなたに渡す。"},
+        {"t": "Hier {{gibt}} es viele Restaurants.", "ja": "ここにはレストランがたくさんある。"}
+      ],
+      "say": "Heute habe ich ___ ein Geschenk gegeben.",
+      "say_ja": "今日は〜（人・3格）にプレゼントをあげた。",
+      "note": "du gibst / er gibt（e → i）。es gibt ＋ 4格 ＝〜がある。"
+    },
+    {
+      "id": "de030",
+      "lemma": "finden",
+      "ja": "見つける・思う",
+      "forms": "finden – findet – fand – hat gefunden",
+      "frame": "etwas finden（見つける）／〜 gut finden（〜を良いと思う）",
+      "scene": "気持ち",
+      "ex": [
+        {"t": "Ich {{finde}} das Essen hier sehr gut.", "ja": "ここの料理はとてもおいしいと思う。"},
+        {"t": "Ich {{habe}} meinen Schlüssel nicht {{gefunden}}.", "ja": "鍵が見つからなかった。"}
+      ],
+      "say": "Ich finde ___ gut.",
+      "say_ja": "私は〜がいいと思う。",
+      "note": "語幹が d で終わるので du findest / er findet。強変化：i – a – u。"
+    }
+  ]
+}
