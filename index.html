@@ -2190,12 +2190,12 @@ function psDl(txt) {
 // 進捗は store.lang[言語] = { next, prog, days } に端末保存（同期あり）。
 //   next … 次に出す語の位置 / prog[動詞id] … SM-2 の状態 / days[日付] … n:新規登録済み s:つぶやき済み r:復習件数
 // 動詞は日付でなく「次の未学習語」の順に出すので、数日空けても穴は開かない。
-const LG_LANGS = ['de', 'ko'];
+const LG_LANGS = ['ko', 'de'];   // タブの並び順（先に韓国語・次にドイツ語）
 const LG_DAILY_CAP = 10;   // 復習の 1 日の上限（言語ごと）。超えた分は翌日以降に回る
 const LG_HABIT = 'h33';    // つぶやき完了で自動チェックする習慣（外国語独り言）
 // 発音ボタンのアイコン（絵文字はモノクロ基調から浮き、端末の絵文字フォントにも依存するので線画にする）
 const LG_SPK_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
-const LG = { decks: { de: null, ko: null }, maps: {}, tried: { de: false, ko: false }, tab: 'de', tabSet: false, session: null };
+const LG = { decks: { de: null, ko: null }, maps: {}, tried: { de: false, ko: false }, tab: 'ko', tabSet: false, session: null };
 
 function lgSlot(lang) {
   if (!store.lang[lang]) store.lang[lang] = { next: 0, prog: {}, days: {} };
