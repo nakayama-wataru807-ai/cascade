@@ -1,0 +1,717 @@
+{
+  "month": "2026-10",
+  "person": "アヒム・メンゲス",
+  "person_en": "Achim Menges",
+  "field": "建築家・研究者",
+  "lifespan": "1975–",
+  "one_liner": "木材と繊維のロボット施工を、計算設計で結びつける建築家・研究者",
+  "intro": "アヒム・メンゲスは、シュトゥットガルト大学の ICD を率い、計算設計とロボット施工を結びつけて、木材や繊維の建築をつくっています。理論や評価がまだ固まっていない現役の研究者なので、今月は、具体的な技術、作品事例、ICD の仕事を中心に、1日1トピックずつ見ていきます。",
+  "arc": [
+    "導入",
+    "略歴",
+    "主要な仕事",
+    "技術の核",
+    "系譜(上流)",
+    "同時代の動き",
+    "ICDという場",
+    "実建築への展開",
+    "限界と問い",
+    "現代への接続"
+  ],
+  "topics": [
+    {
+      "day": 1,
+      "category": "導入",
+      "title": "なぜ今月メンゲスか",
+      "body": "アヒム・メンゲスは、シュトゥットガルト大学の ICD（計算設計・施工研究所）を率いる建築家です。コンピュータで形を決めるだけでなく、ロボットで木材や繊維を組み立てるところまでを、ひとつの設計として扱います。今月は理論よりも先に、実際につくられた建物と、それを支える技術から見ていきます。",
+      "detail": "写真は2019年のBUGAウッド・パビリオンです。376個の中空の木材セグメントで、柱のない30mの空間を架けています。重さは1平方メートルあたり36kgです。この1つの建物に、今月扱う技術の大半が入っています。",
+      "image": {
+        "src": "img/2026-10/day01.jpg",
+        "mode": "embed",
+        "caption": "BUGAウッド・パビリオン（ハイルブロン、2019）",
+        "credit": "Joachim Köhler / CC BY-SA 4.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：BUGA Wood Pavilion 2019",
+          "url": "https://www.icd.uni-stuttgart.de/projects/buga-wood-pavilion-2019/"
+        },
+        {
+          "label": "Dezeen：BUGA のパビリオン",
+          "url": "https://www.dezeen.com/2019/05/08/university-stuttgart-biomimetic-pavilion-bundesgartenschau-horticultural-show/"
+        }
+      ],
+      "related_people": [
+        "ヤン・クニッパース"
+      ]
+    },
+    {
+      "day": 2,
+      "category": "略歴",
+      "title": "1975年、マンハイム生まれ",
+      "body": "1975年にドイツのマンハイムで生まれ、ダルムシュタット工科大学と、ロンドンの AA スクール（Architectural Association）で建築を学びました。AA は、のちに本人が教える側にもなる学校です（次の回）。",
+      "links": [
+        {
+          "label": "Wikipedia：Achim Menges",
+          "url": "https://en.wikipedia.org/wiki/Achim_Menges"
+        },
+        {
+          "label": "シュトゥットガルト大学：ライプニッツ賞の記事",
+          "url": "https://www.uni-stuttgart.de/en/university/news/all/Leibniz-Prize-awarded-to-Prof.-Achim-Menges/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 3,
+      "category": "略歴",
+      "title": "AA で教え、ハーバードにも通う",
+      "body": "AA では、ディプロマ・スクールのユニット・マスターと、修士課程 EmTech（Emergent Technologies and Design）のスタジオ・マスターを務めました。オッフェンバッハ造形大学（HfG Offenbach）でも教授を務め、2009年から2015年までは、ハーバード大学デザイン大学院の客員教授でした。",
+      "links": [
+        {
+          "label": "Wikipedia：Achim Menges",
+          "url": "https://en.wikipedia.org/wiki/Achim_Menges"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 4,
+      "category": "略歴",
+      "title": "2008年、シュトゥットガルトへ",
+      "body": "2008年にシュトゥットガルト大学の教授に着任し、ICD（Institute for Computational Design and Construction）を率いています。2017年からは建築・都市計画学部の研究担当副学部長、2019年からは、後で触れる研究クラスター IntCDC（EXC 2120）のスポークスパーソンも務めています。",
+      "links": [
+        {
+          "label": "ICD 公式サイト",
+          "url": "https://www.icd.uni-stuttgart.de/"
+        },
+        {
+          "label": "Wikipedia：Achim Menges",
+          "url": "https://en.wikipedia.org/wiki/Achim_Menges"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 5,
+      "category": "主要な仕事",
+      "title": "リサーチ・パビリオン 2010–2017",
+      "body": "ICD と構造研究所 ITKE は、毎年1棟、実物大の「リサーチ・パビリオン」をつくってきました。2010年は厚さ6.5mmの合板だけで直径12m超、2011年はウニの仲間の骨格、2012年は炭素繊維とガラス繊維、2013–14年は甲虫の翅、2014–15年はミズグモの巣、2015–16年は木の板の縫合、2016–17年はドローンとロボットによる繊維の巻き付けでした。",
+      "detail": "年ごとに、生き物の仕組みを調べ、コンピュータ上で設計に移し、ロボットで施工する、という流れを繰り返しています。材料と施工の方法は毎年変わるので、パビリオンは完成品というより、技術の試験体として読むものです。",
+      "image": {
+        "src": "img/2026-10/day05.jpg",
+        "mode": "embed",
+        "caption": "ICD/ITKE リサーチ・パビリオン 2011（シュトゥットガルト）",
+        "credit": "MSeses / CC BY-SA 4.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：Research Pavilion 2010",
+          "url": "https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2010/"
+        },
+        {
+          "label": "ICD：Research Pavilion 2012",
+          "url": "https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2012/"
+        },
+        {
+          "label": "ICD：Research Pavilion 2014–15",
+          "url": "https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2014-15/"
+        },
+        {
+          "label": "ICD：Research Pavilion 2015–16",
+          "url": "https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2015-16/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 6,
+      "category": "主要な仕事",
+      "title": "ランデスガルテンシャウ展示ホール（2014）",
+      "body": "ドイツ南西部のシュヴェービッシュ・グミュントで開かれた園芸博覧会のために、2014年に建てた展示ホールです。厚さ50mmのブナ合板の板だけで主構造をつくり、板のふちを指接合でつないでいます。ウニの骨格の板の組み方を手がかりにした設計で、面積は125平方メートルです。",
+      "detail": "合板の板は、ロボットで加工しています。「木造建築のためのロボット施工」という研究プロジェクトの一つで、KUKA や、木造会社（Müllerblaustein Holzbau）などと進めました。この建物は、木材研究のヴィルヘルム・クラウディッツ賞と、2016年のドイツ・デザイン賞（建築部門の特別賞）を受けています。",
+      "links": [
+        {
+          "label": "ArchDaily：Landesgartenschau Exhibition Hall",
+          "url": "https://www.archdaily.com/520897/landesgartenschau-exhibition-hall-icd-itke-iigs-university-of-stuttgart"
+        },
+        {
+          "label": "designboom：展示ホール",
+          "url": "https://www.designboom.com/architecture/robotically-fabricated-landesgartenschau-exhibition-hall-06-25-2014/"
+        }
+      ],
+      "related_people": [
+        "ヤン・クニッパース"
+      ]
+    },
+    {
+      "day": 7,
+      "category": "主要な仕事",
+      "title": "Elytra フィラメント・パビリオン（2016）",
+      "body": "ロンドンのヴィクトリア&アルバート博物館（V&A）で、2016年に公開されました。型枠を使わず、ロボットが樹脂をしみこませたガラス繊維と炭素繊維を、専用の六角形の枠に巻き付けて、部材を1つずつつくります。甲虫の前翅（elytra）の繊維構造が手がかりで、部材は1平方メートルあたり9kgの軽さです。",
+      "detail": "面積は約200平方メートルです。光ファイバーのセンサーで部材にかかる力を測り、来場者の動きを熱画像で追って、展示の期間中に天蓋が変わっていくように設計されています。その後、ヴィトラ・キャンパス（ヴァイル・アム・ライン）や上海にも設置されました。",
+      "image": {
+        "src": "img/2026-10/day07.jpg",
+        "mode": "embed",
+        "caption": "ヴィトラ・キャンパス（ヴァイル・アム・ライン）に設置された Elytra Filament Pavilion",
+        "credit": "Andreas Schwarzkopf / CC BY-SA 3.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：Elytra Filament Pavilion",
+          "url": "https://www.icd.uni-stuttgart.de/projects/elytra-filament-pavilion/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 8,
+      "category": "主要な仕事",
+      "title": "BUGA ウッド・パビリオン（2019）",
+      "body": "2019年のBUGA（連邦園芸博覧会、ハイルブロン）のために建てた木造のシェルです。376個の中空の木材セグメントを、17,000か所の指接合でつなぎ、柱のない30mの空間を架けています。重さは1平方メートルあたり36kgです。",
+      "detail": "セグメントは、2枚の薄い板と、その間の縁の梁でできています。専用の14軸のロボット施工装置（産業用ロボット2台をコンテナに載せたもの）が、組み立て、仮留め、接着、ミリング（切削）までを行い、現場の組み立ては、職人2人で10日間でした。",
+      "image": {
+        "src": "img/2026-10/day08.jpg",
+        "mode": "embed",
+        "caption": "2023年にマンハイムのBUGAで再び展示されたウッド・パビリオン（2019年にハイルブロンで建設）",
+        "credit": "Joachim Köhler / CC BY-SA 4.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：BUGA Wood Pavilion 2019",
+          "url": "https://www.icd.uni-stuttgart.de/projects/buga-wood-pavilion-2019/"
+        },
+        {
+          "label": "Dezeen：BUGA のパビリオン",
+          "url": "https://www.dezeen.com/2019/05/08/university-stuttgart-biomimetic-pavilion-bundesgartenschau-horticultural-show/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 9,
+      "category": "主要な仕事",
+      "title": "Urbach Tower（2019）",
+      "body": "ドイツ南西部のレムスタール園芸博覧会（2019）のために建てた、高さ14mの塔です。部材は平らなまま工場で加工し、通常の人工乾燥にかけると、木材の収縮によって、自分で曲面になります。この方法で建築規模の部材をつくったのは、世界で初めてとされます。",
+      "detail": "壁の厚さは9cm、重さは1平方メートルあたり38kgです。曲げるための機械や型を使わず、乾燥のときに起きる木材の収縮だけで形を決めます。重機とエネルギーを使う加工から、材料が自分で形になる工程へ、という変化です。",
+      "image": {
+        "src": "img/2026-10/day09.jpg",
+        "mode": "embed",
+        "caption": "Urbach Tower（レムスタール園芸博覧会 2019）",
+        "credit": "Geak / CC BY-SA 4.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ITKE：Urbach Tower",
+          "url": "https://itke.uni-stuttgart.de/research/built-projects/urbach-tower"
+        },
+        {
+          "label": "Dezeen：Urbach Tower",
+          "url": "https://www.dezeen.com/2019/06/03/university-of-stuttgart-urbach-tower-self-shaping-wood/"
+        },
+        {
+          "label": "Wikipedia：Urbach Tower",
+          "url": "https://en.wikipedia.org/wiki/Urbach_Tower"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 10,
+      "category": "技術の核",
+      "title": "計算設計——形と作り方を、同じ計算で決める",
+      "body": "ICD の設計では、形をコンピュータで描いてから、別に施工計画を立てる、という順序をとりません。2010年のパビリオンでは、6,400行のコードが、構造解析用のモデルと、ロボットが加工するためのデータを、同時に出力しました。形・力・施工が、同じ計算のなかでつながっています。",
+      "detail": "2010年のパビリオンは、厚さ6.5mmの合板の帯を曲げて組みます。80種類の帯のパターン、500個を超える固有の部品を、FEM 解析で曲げと張力を確かめながら設計しました。実測と計算結果を比べて、「設計の計算と材料化を一体にできる」ことを示した、と報告されています。",
+      "links": [
+        {
+          "label": "ICD：Research Pavilion 2010",
+          "url": "https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2010/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 11,
+      "category": "技術の核",
+      "title": "ロボット施工——工場の機械を、建築の道具にする",
+      "body": "ICD は、工場で使われる産業用ロボットを、建築の施工に使います。BUGA ウッド・パビリオンでは、2台のロボットを載せた14軸の施工装置が、1個のセグメントを平均8分で組み立て、続けてミリングに20〜40分をかけました。精度は300マイクロメートルです。",
+      "detail": "2016–17年のパビリオンでは、固定したロボットアームに加えて、自作のドローンが繊維を運びました。ロボットとドローンが、リアルタイムで通信しながら、184kmの繊維を巻いています。ロボットの届く範囲を超える大きさの構造を、1つのしくみで施工する試みです。",
+      "image": {
+        "src": "img/2026-10/day11.jpg",
+        "mode": "embed",
+        "caption": "ICD/ITKE リサーチ・パビリオン 2016–17（シュトゥットガルト）",
+        "credit": "MSeses / CC BY-SA 4.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：BUGA Wood Pavilion 2019",
+          "url": "https://www.icd.uni-stuttgart.de/projects/buga-wood-pavilion-2019/"
+        },
+        {
+          "label": "ArchDaily：Research Pavilion 2016–17",
+          "url": "https://www.archdaily.com/869450/icd-itke-research-pavilion-2016-17-icd-itke-university-of-stuttgart"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 12,
+      "category": "技術の核",
+      "title": "プレートと指接合——ウニの骨格から、木の板へ",
+      "body": "ウニの仲間（カシパン、sand dollar など）の殻は、多角形の板が縫い目でかみ合って、薄いのに丈夫な骨格になっています。ICD は、この組み方を、合板の板と指接合に置き換えました。2011年のパビリオンでは、指接合が力をせん断力として伝えるため、板の系全体で、曲げモーメントが生じません。",
+      "detail": "この考え方は、2014年の展示ホール（厚さ50mmのブナ合板）や、2019年のBUGAウッド・パビリオン（17,000か所の指接合）へ、規模を大きくしながら引き継がれました。",
+      "image": {
+        "src": "img/2026-10/day12-finger-joints.jpg",
+        "mode": "embed",
+        "caption": "概念イラスト（AI 生成）。実際のパビリオンの形状や寸法を示すものではありません",
+        "credit": "gpt-image（Codex）で生成"
+      },
+      "links": [
+        {
+          "label": "ICD：Research Pavilion 2011（設計スタジオ）",
+          "url": "https://www.icd.uni-stuttgart.de/teaching/design-studio/icditke-research-pavillon-2011/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 13,
+      "category": "技術の核",
+      "title": "木材の吸湿変形を、動きの仕組みとして使う",
+      "body": "木材は、湿度に応じて伸び縮みします。ICD は、この性質を欠点として抑えず、センサーもモーターも電力も要らない仕組みとして使います。HygroSkin（2011–13年）は、28個の部材に1,100個の開口部をもち、相対湿度30〜90%の範囲で、数分のうちに開閉します。",
+      "detail": "2019年の Urbach Tower と2023年の HygroShell は、同じ性質を、形づくりに使っています。HygroShell は、平らに運んだ合板の板が、現場で約5日間乾いて曲面になる、スパン10m、厚さ28mmの屋根です。",
+      "image": {
+        "src": "img/2026-10/day13-hygroscopic-bilayer.jpg",
+        "mode": "embed",
+        "caption": "概念イラスト（AI 生成）。2層の木材が、乾燥につれて曲がるイメージ。実際の部材の寸法を示すものではありません",
+        "credit": "gpt-image（Codex）で生成"
+      },
+      "links": [
+        {
+          "label": "ICD：HygroSkin",
+          "url": "https://www.icd.uni-stuttgart.de/projects/hygroskin-meteorosensitive-pavilion/"
+        },
+        {
+          "label": "ICD：HygroShell",
+          "url": "https://www.icd.uni-stuttgart.de/projects/hygroshell/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 14,
+      "category": "技術の核",
+      "title": "繊維の巻き付け——型を使わずに、構造をつくる",
+      "body": "ガラス繊維や炭素繊維に樹脂をしみこませ、ロボットが専用の枠に巻き付けていくと、型枠なしで、軽い部材ができます（コアレス・フィラメント・ワインディング）。繊維の向きを、力のかかる方向に合わせられるのが特徴です。2012年のパビリオンはロブスターの外骨格を、Elytra は甲虫の前翅を手がかりにしました。",
+      "detail": "2021年のヴェネチア・ビエンナーレに出した Maison Fibre では、3層分の構造を、この方法でつくりました。上階の繊維の構造体は、1平方メートルあたり9.9kgです。",
+      "image": {
+        "src": "img/2026-10/day14.jpg",
+        "mode": "embed",
+        "caption": "深圳に設置された ICD/ITKE リサーチ・パビリオン。プレートの記載によると、ガラス炭素繊維強化ポリマー製",
+        "credit": "Mx. Granger / CC0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：Elytra Filament Pavilion",
+          "url": "https://www.icd.uni-stuttgart.de/projects/elytra-filament-pavilion/"
+        },
+        {
+          "label": "ICD：Maison Fibre",
+          "url": "https://www.icd.uni-stuttgart.de/projects/maison-fibre/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 15,
+      "category": "技術の核",
+      "title": "バイオミメティクス——生き物の作り方を、建築の作り方に移す",
+      "body": "リサーチ・パビリオンの手がかりは、毎年、生き物でした。ウニの骨格、ロブスターの外骨格、甲虫の前翅、ミズグモの巣、葉に潜るガ（leaf-miner moth）の絹糸。生き物の形そのものではなく、少ない材料で丈夫にする「つくり方の理屈」を取り出している、と読めます。",
+      "detail": "2015–16年のパビリオンは、建築・構造の学生が、生物学者と古生物学者と一緒に進めました。生物学の側から、材料と構造の理屈を教わりながら、設計をつくる体制です。",
+      "image": {
+        "src": "img/2026-10/day15-sea-urchin-plates.jpg",
+        "mode": "embed",
+        "caption": "概念イラスト（AI 生成）。ウニの殻（板がかみ合う骨格）のイメージ",
+        "credit": "gpt-image（Codex）で生成"
+      },
+      "links": [
+        {
+          "label": "Dezeen：2015–16 のパビリオン",
+          "url": "https://www.dezeen.com/2016/05/05/robotically-fabricated-pavilion-university-of-stuttgart-students-plywood-icd-itke/"
+        },
+        {
+          "label": "ICD：Research Pavilion 2014–15",
+          "url": "https://www.icd.uni-stuttgart.de/projects/icditke-research-pavilion-2014-15/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 16,
+      "category": "系譜(上流)",
+      "title": "フライ・オットーと IL",
+      "body": "シュトゥットガルト大学には、1964年にフライ・オットーが率いて発足した軽量構造研究所（IL）の歴史があります。オットーは、石けん膜や吊り模型のような実物のモデルで、最適な形を探しました。ICD と ITKE の研究は、その形態探索を、デジタルの時代に引き継いだものと位置づけられています。",
+      "links": [
+        {
+          "label": "ILEK：研究所の歴史",
+          "url": "https://www.ilek.uni-stuttgart.de/en/institute/history/"
+        },
+        {
+          "label": "IntCDC：Frei Otto 100 シンポジウム",
+          "url": "https://www.intcdc.uni-stuttgart.de/news-events/news/detail/Frei-Otto-100-Symposium--The-Spirit-of-Lightweight-Construction"
+        },
+        {
+          "label": "プリツカー賞：フライ・オットー",
+          "url": "https://www.pritzkerprize.com/laureates/frei-otto"
+        }
+      ],
+      "related_people": [
+        "フライ・オットー"
+      ]
+    },
+    {
+      "day": 17,
+      "category": "系譜(上流)",
+      "title": "AA の EmTech と『Material Computation』",
+      "body": "メンゲスは、AA の修士課程 EmTech で、スタジオ・マスターを務めました。2011年にショーン・アールクィストと『Computational Design Thinking』を、2012年に雑誌『Architectural Design』の特集号『Material Computation: Higher Integration in Morphogenetic Design』を編集しています。材料の振る舞いを、計算で設計に取り込むという考え方の拠りどころです。",
+      "links": [
+        {
+          "label": "『Computational Design Thinking』（2011）",
+          "url": "https://icd.uni-stuttgart.de/publications/books-journals/computational-design-thinking-2"
+        },
+        {
+          "label": "『Material Computation』（2012）",
+          "url": "https://www.goodreads.com/book/show/170688157-material-computation"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 18,
+      "category": "系譜(上流)",
+      "title": "ITKE のヤン・クニッパースと ITECH",
+      "body": "ほとんどのパビリオンは、ICD（メンゲス）と、構造設計の ITKE（ヤン・クニッパース）の共同です。建築の形と構造の計算を、別々の部署で順番に進めずに、同じプロジェクトのなかで一緒に決めます。2人は、英語で学べる修士課程 ITECH（Integrative Technologies and Architectural Design Research）も、共同でつくりました。",
+      "links": [
+        {
+          "label": "ICD：修士課程 ITECH",
+          "url": "https://www.icd.uni-stuttgart.de/teaching/seminars/new-in-2012-master-at-icd/"
+        },
+        {
+          "label": "ITKE：Research Pavilions",
+          "url": "https://www.itke.uni-stuttgart.de/research-pavilions"
+        }
+      ],
+      "related_people": [
+        "ヤン・クニッパース"
+      ]
+    },
+    {
+      "day": 19,
+      "category": "同時代の動き",
+      "title": "グラマツィオ＆コーラー——ロボットでレンガを積む",
+      "body": "スイスの ETH チューリッヒでは、ファビオ・グラマツィオとマティアス・コーラーの研究グループが、2005年から、産業用ロボットを建築の道具として使ってきました。『The Programmed Wall』は、プログラムでレンガの位置と角度を決めて、ロボットが積んだ壁です。2008年のヴェネチア・ビエンナーレのスイス館には、うねるレンガの間仕切りを出しました。",
+      "links": [
+        {
+          "label": "ArchDaily：建築の未来を変えるロボットたち",
+          "url": "https://www.archdaily.com/336849/5-robots-revolutionizing-architectures-future"
+        },
+        {
+          "label": "Icon：Gramazio Kohler のプロフィール",
+          "url": "https://www.iconeye.com/design/profile-gramazio-kohler"
+        }
+      ],
+      "related_people": [
+        "Gramazio & Kohler"
+      ]
+    },
+    {
+      "day": 20,
+      "category": "同時代の動き",
+      "title": "ブロック・リサーチ・グループ——接着剤なしの石のヴォールト",
+      "body": "同じ ETH のブロック・リサーチ・グループ（フィリップ・ブロック）は、石を計算で切り出します。2016年のヴェネチア・ビエンナーレに出した Armadillo Vault は、399個の石灰岩の部材を、モルタルも接着剤も使わずに組んだ、スパン16m、最も薄いところで5cmのヴォールトです。木や繊維のロボット施工と並ぶ、デジタルな施工の別の道です。",
+      "links": [
+        {
+          "label": "Dezeen：Armadillo Vault",
+          "url": "https://www.dezeen.com/2016/05/31/armadillo-vault-block-research-group-eth-zurich-beyond-the-bending-limestone-structure-without-glue-venice-architecture-biennale-2016/"
+        },
+        {
+          "label": "Domus：Armadillo Vault",
+          "url": "https://domusweb.it/en/news/2016/10/06/armadillo_vault.html"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 21,
+      "category": "ICDという場",
+      "title": "授業のなかで、実物大をつくる",
+      "body": "リサーチ・パビリオンは、研究室の展示品ではなく、設計スタジオの授業から生まれます。2011年のパビリオンは、2011年夏学期の設計スタジオ（ディプロマ）として、ICD と ITKE の教員の指導のもと、学生と教員のチームが、1つの学期のなかで、1:1の実物を完成させました。",
+      "detail": "デジタルモデル、構造解析、ロボット施工までを、学生が経験します。2015–16年も、建築・構造の学生が、生物学者と古生物学者と協力して進めました。授業が、研究の実験場になっています。",
+      "links": [
+        {
+          "label": "ICD：Research Pavilion 2011（設計スタジオ）",
+          "url": "https://www.icd.uni-stuttgart.de/teaching/design-studio/icditke-research-pavillon-2011/"
+        },
+        {
+          "label": "Dezeen：2015–16 のパビリオン",
+          "url": "https://www.dezeen.com/2016/05/05/robotically-fabricated-pavilion-university-of-stuttgart-students-plywood-icd-itke/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 22,
+      "category": "ICDという場",
+      "title": "建築・構造・測量の3つの研究所",
+      "body": "2014年の展示ホールは、ICD（メンゲス）、構造の ITKE（クニッパース）、測量工学の IIGS（フォルカー・シュヴィーガー）の、3つの研究所の共同でした。BUGA ウッド・パビリオンも、ICD と ITKE に、施工会社（Müllerblaustein Bauwerke ほか）が加わった体制です。研究と施工が、同じプロジェクトのなかで組まれています。",
+      "links": [
+        {
+          "label": "ArchDaily：展示ホール（チーム）",
+          "url": "https://www.archdaily.com/520897/landesgartenschau-exhibition-hall-icd-itke-iigs-university-of-stuttgart"
+        },
+        {
+          "label": "ICD：BUGA Wood Pavilion 2019",
+          "url": "https://www.icd.uni-stuttgart.de/projects/buga-wood-pavilion-2019/"
+        }
+      ],
+      "related_people": [
+        "ヤン・クニッパース"
+      ]
+    },
+    {
+      "day": 23,
+      "category": "ICDという場",
+      "title": "IntCDC——建築分野で初のエクセレンス・クラスター",
+      "body": "2019年、ドイツ研究振興協会（DFG）は、建築分野で初めての「エクセレンス・クラスター」として、IntCDC（Integrative Computational Design and Construction for Architecture）を採択しました。初期の資金提供は7年間で、メンゲスが代表です。22人の研究代表者が、シュトゥットガルト大学の7学部と、マックス・プランク知能システム研究所から集まっています。",
+      "detail": "目標は、デジタル技術を使って、設計と施工を、統合と学際にもとづいて考え直し、建設分野で大きな変化を起こすことです。気候に前向きな建設への転換の、方法の土台をつくることも掲げられています。",
+      "links": [
+        {
+          "label": "IntCDC：クラスターの概要",
+          "url": "https://www.intcdc.uni-stuttgart.de/cluster/"
+        },
+        {
+          "label": "エクセレンス戦略：IntCDC",
+          "url": "https://www.exzellenzstrategie.de/en/clusters-of-excellence/intcdc/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 24,
+      "category": "ICDという場",
+      "title": "2023年のライプニッツ賞",
+      "body": "2023年3月15日、DFG はメンゲスに、ライプニッツ賞を贈りました。賞金は250万ユーロで、ドイツで最も重要とされる研究賞です。建築の教授としては初めての受賞とされます。理由は、デジタルな計画手法とロボット製造で、建設を、より資源効率が高く持続可能なものにする研究です。",
+      "links": [
+        {
+          "label": "シュトゥットガルト大学：ライプニッツ賞",
+          "url": "https://www.uni-stuttgart.de/en/university/news/all/Leibniz-Prize-awarded-to-Prof.-Achim-Menges/"
+        },
+        {
+          "label": "DFG：2023年ライプニッツ賞の発表",
+          "url": "https://www.dfg.de/en/service/press/press-releases/2022/press-release-no-50"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 25,
+      "category": "実建築への展開",
+      "title": "Wangen Tower（2024）",
+      "body": "ドイツ南部のヴァンゲンの園芸博覧会の会場に、2024年に建った、高さ23mの塔です。曲がった CLT（直交集成板）の12個のセグメントが、らせん状に立ち上がります。断面は130mmと薄く、乾燥窯での収縮で自分で曲がった板を、5軸 CNC で切って組みました。",
+      "detail": "展望台は7mのスパンで、階段は113段、外壁はカラマツの168枚のパネルです。現場の組み立ては3日で終わりました。木材は地元のトウヒで、パートナーに Blumer-Lehmann が入っています。",
+      "image": {
+        "src": "img/2026-10/day25.jpg",
+        "mode": "embed",
+        "caption": "Wangen Tower（ヴァンゲン、2024）",
+        "credit": "Gelli63 / CC BY-SA 4.0 / Wikimedia Commons"
+      },
+      "links": [
+        {
+          "label": "ICD：Wangen Tower",
+          "url": "https://www.icd.uni-stuttgart.de/projects/wangen-tower/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 26,
+      "category": "実建築への展開",
+      "title": "Blumer-Lehmann 本社のアトリウム（2025）",
+      "body": "スイスのゴッサウに2025年に完成した、木造会社 Blumer-Lehmann の本社です。180人分の執務空間と会議場、食堂があり、実際に使われています。中心のアトリウムでは、曲げた CLT でつくった自由曲面の階段が、5つの階をつないでいます。",
+      "detail": "壁の厚さは130mmで、5層分の荷重を伝えます。曲面の部材は、半径を2種類だけに絞り、同じ階段モジュールを繰り返して、効率を上げています。ICD は、建物全体を設計した K&L Architekten、構造の SJB Kempter Fitze と協働しました。",
+      "links": [
+        {
+          "label": "ICD：Atrium Blumer Lehmann Headquarters",
+          "url": "https://www.icd.uni-stuttgart.de/projects/atrium/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 27,
+      "category": "実建築への展開",
+      "title": "UniversalTimberSlab（2026）",
+      "body": "2026年に、ドイツのレムシャイトで完成した実証床です。木材とコンクリートを組み合わせた、柱で点支持する多方向の長スパン平板としては、世界初の施工例とされます。9×5m、厚さ36cmで、同規模の鉄筋コンクリートの床より、コンクリートが約3分の2少なくなります。",
+      "detail": "20トンを載せた載荷試験で、最大のたわみは12mmでした。特許出願中の分割手法で、不整形な床を集成材のセグメントに分け、それぞれの繊維方向を最適化しています。工期は3か月、現場の組み立ては2日でした。",
+      "links": [
+        {
+          "label": "ICD：UniversalTimberSlab Demonstrator 2026",
+          "url": "https://www.icd.uni-stuttgart.de/projects/universal-timber-slab-demonstrator/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 28,
+      "category": "限界と問い",
+      "title": "数字から見える、まだ残る課題",
+      "body": "ICD が公表している数字から、課題が見えてきます。BUGA の1個のセグメントは、組み立てが平均8分、ミリングが20〜40分かかりました。HygroShell は、形になるまで約5日かかります。展示ホールは125平方メートル、UniversalTimberSlab は9×5mで、建築の規模へ進みつつありますが、コストや工期を、従来の工法と比べた数字は、今回の調査では見つかりませんでした。",
+      "detail": "第三者による批評も、今回の調査の範囲では見つかりませんでした。そのため、この回は批判の紹介ではなく、公開された数字から出てくる問いを並べています。素材が自分で形を決めるとき、設計者が決めるのは何か。ロボットが組む接合は、手で組む接合と何が違うのか。",
+      "links": [
+        {
+          "label": "ICD：BUGA Wood Pavilion 2019",
+          "url": "https://www.icd.uni-stuttgart.de/projects/buga-wood-pavilion-2019/"
+        },
+        {
+          "label": "ICD：HygroShell",
+          "url": "https://www.icd.uni-stuttgart.de/projects/hygroshell/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 29,
+      "category": "現代への接続",
+      "title": "Maison Fibre（2021）——ドミノ・システムの50分の1の重さ",
+      "body": "2021年のヴェネチア・ビエンナーレに出した Maison Fibre は、ル・コルビュジエのドミノ・システムと同じ平面で、3層の建物を繊維でつくった実物大の展示です。上階の繊維の構造体は、1平方メートルあたり9.9kg。材料の体積は、部材の体積の2%未満です。ドミノ・システムと比べて、重さは50分の1だとされています。",
+      "detail": "素材は主にガラス繊維と炭素繊維で、鉱物系や天然の繊維への展開も想定されています。連携先は FibR GmbH、Teijin Carbon Europe、Trimble Solutions Germany で、IntCDC の資金で進められました。",
+      "links": [
+        {
+          "label": "ICD：Maison Fibre",
+          "url": "https://www.icd.uni-stuttgart.de/projects/maison-fibre/"
+        }
+      ],
+      "related_people": []
+    },
+    {
+      "day": 30,
+      "category": "現代への接続",
+      "title": "次に見るもの",
+      "body": "ICD の仕事は、展示用のパビリオンから、実際に使われる建物（Blumer-Lehmann 本社）と、実証床へ移っています。『Material Computation』の、材料の振る舞いを設計の計算に入れるという考え方は、乾燥で自分で曲がる木材や、繊維の向きを設計する構造のなかで、具体的な形になりました。次は、ICD のプロジェクト一覧と、IntCDC の成果を、順に見ていくのがよさそうです。",
+      "links": [
+        {
+          "label": "ICD：プロジェクト一覧",
+          "url": "https://www.icd.uni-stuttgart.de/projects/"
+        },
+        {
+          "label": "IntCDC",
+          "url": "https://www.intcdc.uni-stuttgart.de/"
+        },
+        {
+          "label": "ITKE：Research Pavilions",
+          "url": "https://www.itke.uni-stuttgart.de/research-pavilions"
+        },
+        {
+          "label": "Wikimedia Commons：Achim Menges",
+          "url": "https://commons.wikimedia.org/wiki/Category:Achim_Menges"
+        }
+      ],
+      "related_people": []
+    }
+  ],
+  "resources": {
+    "books": [
+      {
+        "title": "Computational Design Thinking",
+        "author": "Achim Menges・Sean Ahlquist（編）",
+        "year": 2011,
+        "note": "計算設計の重要な論考を集めた論集（Wiley）",
+        "url": "https://icd.uni-stuttgart.de/publications/books-journals/computational-design-thinking-2"
+      },
+      {
+        "title": "Material Computation: Higher Integration in Morphogenetic Design（Architectural Design 82-2）",
+        "author": "Achim Menges（編）",
+        "year": 2012,
+        "note": "材料の振る舞いを計算で設計に取り込む特集号（Wiley）",
+        "url": "https://www.goodreads.com/book/show/170688157-material-computation"
+      }
+    ],
+    "articles": [
+      {
+        "title": "University of Stuttgart creates biomimetic pavilions for the Bundesgartenschau",
+        "publisher": "Dezeen",
+        "year": 2019,
+        "url": "https://www.dezeen.com/2019/05/08/university-stuttgart-biomimetic-pavilion-bundesgartenschau-horticultural-show/"
+      },
+      {
+        "title": "University of Stuttgart makes Urbach Tower from self-shaping wood",
+        "publisher": "Dezeen",
+        "year": 2019,
+        "url": "https://www.dezeen.com/2019/06/03/university-of-stuttgart-urbach-tower-self-shaping-wood/"
+      },
+      {
+        "title": "Landesgartenschau Exhibition Hall / ICD/ITKE/IIGS University of Stuttgart",
+        "publisher": "ArchDaily",
+        "year": 2014,
+        "url": "https://www.archdaily.com/520897/landesgartenschau-exhibition-hall-icd-itke-iigs-university-of-stuttgart"
+      },
+      {
+        "title": "Robotically fabricated pavilion by University of Stuttgart students is based on sea-urchin shells",
+        "publisher": "Dezeen",
+        "year": 2016,
+        "url": "https://www.dezeen.com/2016/05/05/robotically-fabricated-pavilion-university-of-stuttgart-students-plywood-icd-itke/"
+      },
+      {
+        "title": "Leibniz Prize awarded to Prof. Achim Menges",
+        "publisher": "University of Stuttgart",
+        "year": 2023,
+        "url": "https://www.uni-stuttgart.de/en/university/news/all/Leibniz-Prize-awarded-to-Prof.-Achim-Menges/"
+      }
+    ],
+    "videos": [
+      {
+        "title": "BUGA Wood Pavilion, Bundesgartenschau Heilbronn 2019",
+        "platform": "Vimeo",
+        "url": "https://vimeo.com/372594657"
+      },
+      {
+        "title": "ICD/ITKE Research Pavilion 2016-17",
+        "platform": "Vimeo",
+        "url": "https://vimeo.com/212719153"
+      },
+      {
+        "title": "Urbach Tower — Remstal Gartenschau 2019",
+        "platform": "Vimeo",
+        "url": "https://vimeo.com/419050044"
+      }
+    ],
+    "archives": [
+      {
+        "label": "ICD：プロジェクト一覧",
+        "url": "https://www.icd.uni-stuttgart.de/projects/"
+      },
+      {
+        "label": "IntCDC（エクセレンス・クラスター）",
+        "url": "https://www.intcdc.uni-stuttgart.de/"
+      },
+      {
+        "label": "ITKE：Research Pavilions",
+        "url": "https://www.itke.uni-stuttgart.de/research-pavilions"
+      },
+      {
+        "label": "Achim Menges 公式サイト",
+        "url": "https://www.achimmenges.net/"
+      },
+      {
+        "label": "Wikimedia Commons：Achim Menges",
+        "url": "https://commons.wikimedia.org/wiki/Category:Achim_Menges"
+      }
+    ]
+  },
+  "wrap_prompts": [
+    "ロボットが組む接合と、人が組む接合で、設計者の判断が残るのはどこか？",
+    "展示パビリオンで成立した技術が、実際の建物へ移るとき、最初にぶつかる壁は何か？",
+    "素材が自分で形を決める（乾燥で曲がる木材など）とき、設計は何を決めることになるか？"
+  ],
+  "generated": "2026-10-07"
+}
