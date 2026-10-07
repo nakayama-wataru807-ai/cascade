@@ -83,7 +83,7 @@
       "links": [
         {
           "label": "Thames & Hudson 版",
-          "url": "https://thamesandhudson.com/modern-architecture-a-critical-history-9780500204443"
+          "url": "https://www.thamesandhudsonusa.com/books/modern-architecture-a-critical-history-softcover-fifth"
         }
       ],
       "related_people": []
@@ -296,7 +296,7 @@
       "day": 22,
       "category": "系譜(下流)",
       "title": "ヨーン・ウツソン——テクトニックな隠喩",
-      "body": "ウツソンの章は「トランスカルチュラルな形式とテクトニックな隠喩」。バウスヴェア教会（1976）では、外はプレキャストの工業的な箱、内は雲のように打ち上がった現場打ちの折板天井。工業と手仕事、普遍と地域が一つの断面に共存します。批判的地域主義の実例としてよく引かれます。",
+      "body": "ウツソンの章は「トランスカルチュラルな形式とテクトニックな隠喩」。バウスヴェア教会（1976）は、外がプレキャストコンクリートの白い板で組まれた工業的な箱です。内部では、現場打ちの鉄筋コンクリートによる曲面のシェルが、雲のようにうねる天井をつくり、トップライトの光を受けます。工業と手仕事、普遍と地域が一つの断面に共存します。批判的地域主義の実例としてよく引かれます。",
       "image": {
         "src": "img/2026-09/day22.jpg",
         "mode": "embed",
@@ -327,7 +327,7 @@
       "day": 25,
       "category": "エピソード",
       "title": "コロンビアでの半世紀",
-      "body": "1972年から50年以上、フランプトンはコロンビア GSAPP で教え続けました。世界中の建築学生が彼の講義と『近代建築』を通ってきています。90代の現在も執筆を続け、2025年には新著『Architecture and the Public World』を出しました。",
+      "body": "1972年から50年以上、フランプトンはコロンビア GSAPP で教え続けました。世界中の建築学生が彼の講義と『近代建築』を通ってきています。90代の現在もその論考は読まれ続け、2024年には、1980年代以降の論考を集めた論集『Architecture and the Public World』（Bloomsbury、Miodrag Mitrašinović 編）が刊行されました。",
       "related_people": []
     },
     {
@@ -341,7 +341,7 @@
       "day": 27,
       "category": "批判",
       "title": "「批判的地域主義」の一人歩き",
-      "body": "皮肉なことに、フランプトンが「様式ではない」と念を押した批判的地域主義は、木や石を使った地方の建築を指すラベルとして消費されていきました。抵抗の姿勢が、消費されるスタイルに回収される——彼自身が警告していた事態が、彼の概念に起きたのです。",
+      "body": "フランプトンは、批判的地域主義は様式ではなく、普遍化する文明に抵抗する姿勢だと説きました。ところが実際には、地元の木や石を使った地方の建築に貼る「地域らしさ」のラベルとして広まっていきました。抵抗の姿勢が、消費されるスタイルに回収されたのです。本人が警告していた事態が、彼自身の概念に起きました。",
       "related_people": []
     },
     {
@@ -386,15 +386,15 @@
         "title": "近代建築 その批判的歴史（Modern Architecture: A Critical History）",
         "author": "Kenneth Frampton",
         "year": 1980,
-        "note": "邦訳あり（青土社）。第5版 2020",
-        "url": "https://thamesandhudson.com/modern-architecture-a-critical-history-9780500204443"
+        "note": "邦訳『現代建築史』（中村敏男訳、青土社、2003）。第5版 2020",
+        "url": "https://www.thamesandhudsonusa.com/books/modern-architecture-a-critical-history-softcover-fifth"
       },
       {
         "title": "Labour, Work and Architecture: Collected Essays on Architecture and Design",
         "author": "Kenneth Frampton",
         "year": 2002,
         "note": "「批判的地域主義に向けて」を含む評論集",
-        "url": "https://www.phaidon.com/store/architecture/labour-work-and-architecture-9780714841809/"
+        "url": "https://www.phaidon.com/store/architecture/labour-work-and-architecture-collected-essays-on-architecture-and-design-9780714840802/"
       },
       {
         "title": "A Genealogy of Modern Architecture: Comparative Critical Analysis of Built Form",
@@ -404,34 +404,55 @@
         "url": "https://www.lars-mueller-publishers.com/genealogy-modern-architecture"
       },
       {
-        "title": "建築の四要素・様式論（Die vier Elemente der Baukunst / Der Stil）",
-        "author": "Gottfried Semper",
-        "year": 1851,
-        "note": "フランプトンの上流。被覆理論",
-        "url": "https://www.getty.edu/publications/virtuallibrary/9780892365975.html"
+        "title": "建築の四要素ほか（The Four Elements of Architecture and Other Writings）",
+        "author": "Gottfried Semper（Mallgrave・Herrmann 英訳）",
+        "year": 1989,
+        "note": "原典 Die vier Elemente der Baukunst は 1851 年。フランプトンの上流",
+        "url": "https://en.wikipedia.org/wiki/The_Four_Elements_of_Architecture"
+      },
+      {
+        "title": "Style in the Technical and Tectonic Arts, or, Practical Aesthetics（『様式論』の英訳）",
+        "author": "Gottfried Semper（Mallgrave・Robinson 英訳）",
+        "year": 2004,
+        "note": "被覆理論を含む主著 Der Stil（1860–63）。Getty Research Institute",
+        "url": "https://www.cca.qc.ca/en/search/details/library/publication/51003928"
+      },
+      {
+        "title": "モダン・ムーブメントの建築家たち 1920–1970",
+        "author": "ケネス・フランプトン",
+        "year": 2023,
+        "note": "19人の建築家の作品を構法の面から読む（パル）",
+        "url": "https://www.ehonnavi.net/ehon00.asp?no=330079"
+      },
+      {
+        "title": "Architecture and the Public World",
+        "author": "Kenneth Frampton（Miodrag Mitrašinović 編）",
+        "year": 2024,
+        "note": "1980年代以降の論考集（Bloomsbury）",
+        "url": "https://www.cca.qc.ca/en/search/details/library/publication/1412153869"
       }
     ],
     "articles": [
       {
         "title": "Towards a Critical Regionalism: Six Points for an Architecture of Resistance",
-        "publisher": "in『The Anti-Aesthetic』(ed. Hal Foster)",
+        "publisher": "『The Anti-Aesthetic』（Hal Foster 編）所収。リンクは解説（Wikipedia）",
         "year": 1983,
-        "url": "https://monoskop.org/images/8/8f/Foster_Hal_ed_The_Anti-Aesthetic_Essays_on_Postmodern_Culture.pdf"
+        "url": "https://en.wikipedia.org/wiki/Critical_regionalism"
       },
       {
         "title": "Rappel à l'Ordre: The Case for the Tectonic",
-        "publisher": "Architectural Design",
+        "publisher": "Architectural Design。リンクは解説論文（PUCP、スペイン語）",
         "year": 1990,
-        "url": "https://www.tandfonline.com/"
+        "url": "https://revistas.pucp.edu.pe/index.php/arquitectura/article/view/22338"
+      },
+      {
+        "title": "Kenneth Frampton to Receive the Golden Lion Lifetime Achievement Award",
+        "publisher": "Architect Magazine",
+        "year": 2018,
+        "url": "https://www.architectmagazine.com/practice/kenneth-frampton-to-receive-the-golden-lion-lifetime-achievement-award-at-the-venice-architecture-biennale_o"
       }
     ],
     "videos": [
-      {
-        "title": "Kenneth Frampton — Golden Lion for Lifetime Achievement (La Biennale di Venezia)",
-        "platform": "YouTube / labiennale",
-        "length": "—",
-        "url": "https://www.labiennale.org/en/architecture/2018/golden-lion-lifetime-achievement-kenneth-frampton"
-      },
       {
         "title": "Kenneth Frampton lectures at Columbia GSAPP",
         "platform": "YouTube / Columbia GSAPP",
@@ -446,7 +467,7 @@
       },
       {
         "label": "The Pritzker/Soane Medal 2019 lecture 記録",
-        "url": "https://www.soane.org/whats-on/lectures-courses/soane-medal-lecture-2019-kenneth-frampton"
+        "url": "https://world-architects.com/en/architecture-news/headlines/2019-soane-medal-to-kenneth-frampton"
       }
     ]
   },
