@@ -1963,6 +1963,7 @@ function showToast(msg) {
 // 1日1トピックのニュース形式で表示し、メモは store.personStudy に端末保存（同期あり）。
 const PS = { data: null, month: null, tab: 'today', tried: false, openDay: null };
 
+const PS_HABIT = 'h31';    // メモ保存で自動チェックする習慣（人物研究）
 function psMonth() {
   const d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
@@ -2079,11 +2080,13 @@ function psWireMemo(day) {
     const ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0')
       + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
     s.notes[day].push({ ts, text: txt });
+    ensureToday();
+    store.habits.logs[todayStr()][PS_HABIT] = true;
     saveStore();
     inp.value = '';
     document.getElementById('ps-notes').innerHTML = psNotesHTML(day);
     if ('vibrate' in navigator) navigator.vibrate(30);
-    showToast('メモを保存しました');
+    showToast('メモを保存しました（人物研究 ✓）');
   });
 }
 
@@ -2148,8 +2151,10 @@ function psRenderBody() {
   body.innerHTML = h;
   const mm = document.getElementById('ps-mm-save');
   if (mm) mm.addEventListener('click', () => {
-    psSlot().monthMemo = document.getElementById('ps-monthmemo').value;
-    saveStore(); showToast('保存しました');
+    const mmText = document.getElementById('ps-monthmemo').value;
+    psSlot().monthMemo = mmText;
+    if (mmText.trim()) { ensureToday(); store.habits.logs[todayStr()][PS_HABIT] = true; }
+    saveStore(); showToast(mmText.trim() ? '保存しました（人物研究 ✓）' : '保存しました');
   });
 }
 
