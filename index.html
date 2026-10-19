@@ -1593,6 +1593,7 @@ document.getElementById('arrival-save-btn').addEventListener('click', saveArriva
 document.getElementById('arrival-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveArrivalTime(); });
 
 // ── ワークアウト時間の入力・記録 ──
+const WORKOUT_HABIT = 'h12';    // ワークアウト記録で自動チェックする習慣（朝トレ）
 function saveWorkout() {
   const input = document.getElementById('workout-input');
   const val = parseInt(input.value, 10);
@@ -1601,12 +1602,14 @@ function saveWorkout() {
   const ex = store.workoutLog.find(w => w.date === t);
   if (ex) ex.minutes = val;
   else store.workoutLog.push({ date: t, minutes: val });
+  // 1分以上を記録したら、今日の習慣「朝トレ」を自動チェックする（人物研究 h31・外国語独り言 h33 と同じ方式）
+  if (val > 0) { ensureToday(); store.habits.logs[t][WORKOUT_HABIT] = true; }
   saveStore();
   input.value = '';
   input.blur();
   renderWorkoutChart();
   if ('vibrate' in navigator) navigator.vibrate(30);
-  showToast(`ワークアウト ${val}分 を記録しました`);
+  showToast(val > 0 ? `ワークアウト ${val}分 を記録しました（朝トレ ✓）` : `ワークアウト ${val}分 を記録しました`);
 }
 
 document.getElementById('workout-save-btn').addEventListener('click', saveWorkout);
