@@ -170,6 +170,7 @@ function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 function ensureToday() {
+  store.lang = (store.lang && typeof store.lang === 'object') ? store.lang : {};   // 保存データが無い端末でも動くように
   store.habits = store.habits || { definitions: [], logs: {} };
   store.habits.logs = store.habits.logs || {};
   const t = todayStr();
