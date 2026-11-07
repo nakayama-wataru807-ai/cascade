@@ -9,9 +9,6 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Cascade</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
   /* ── モノクロ基調（白／インク／グレー1色）＋アクセント1色 ── */
@@ -38,9 +35,10 @@
   --ki-deep: #1A1A1A;
   --take: #1A1A1A;
 
-  --font-mincho: 'Noto Sans JP', system-ui, sans-serif;
-  --font-gothic: 'Noto Sans JP', system-ui, sans-serif;
-  --font-latin: 'Inter', system-ui, sans-serif;
+  /* 2026-11-07: 起動を軽くするため、ウェブフォント（Noto Sans JP・Inter）をやめてシステム書体にした（起動時の転送の約95%がフォントだった） */
+  --font-mincho: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP", system-ui, sans-serif;
+  --font-gothic: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP", system-ui, sans-serif;
+  --font-latin: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
   --r1: 0; --r2: 3px; --r3: 4px; --r4: 8px;
   --ease-struct: cubic-bezier(0.2, 0.6, 0.2, 1);
   --ease-snap: cubic-bezier(0.2, 0.6, 0.2, 1);
@@ -546,6 +544,20 @@ html, body {
   padding-bottom: 2px;
 }
 
+/* ── 連続日数（アプリ全体。2026-11-07 再設計）── */
+.streak-hero { padding: 6px 0 24px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.streak-main { display: flex; align-items: baseline; gap: 10px; }
+.streak-num { font-family: var(--font-latin); font-size: 68px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ink); }
+.streak-unit { font-family: var(--font-gothic); font-size: 15px; font-weight: 700; color: var(--ink-soft); }
+.streak-dots { display: flex; gap: 8px; margin-top: 16px; }
+.streak-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--line-strong); box-sizing: border-box; }
+.streak-dot.on { background: var(--ink); border-color: var(--ink); }
+.streak-dot.today { border-color: var(--accent); }
+.streak-dot.today.on { background: var(--accent); }
+.streak-sub { display: flex; gap: 14px; margin-top: 14px; font-size: 12px; color: var(--ink-mute); letter-spacing: 0.02em; }
+.streak-goal { margin-top: 10px; font-size: 13px; color: var(--ink-soft); }
+.home-streak { display: block; margin: -14px 0 24px; padding: 0; background: none; border: none; cursor: pointer; text-align: left; font-family: var(--font-gothic); font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+
 /* ── Intersection Observer reveal ── */
 /* スクロール連動の出現演出は廃止（クラスは残置・視覚効果なし）*/
 .reveal { opacity: 1; transform: none; }
@@ -676,6 +688,7 @@ html, body {
     <section class="view active" id="view-home">
       <div class="home-date" id="home-date"></div>
       <div class="home-weekday" id="home-weekday"></div>
+      <button class="home-streak" id="home-streak" type="button"></button>
 
       <div class="range-seg" id="range-seg">
         <button data-range="14">14日</button>
@@ -838,6 +851,7 @@ html, body {
     <!-- Habit Stack -->
     <section class="view" id="view-habits">
       <h2 class="screen-title">習慣スタック</h2>
+      <div class="streak-hero" id="streak-hero"></div>
       <div id="habit-list"></div>
       <div class="heatmap-section">
         <div class="heatmap-title">今週の記録</div>
@@ -1045,6 +1059,57 @@ function habitStreak(id) {
   return missed > 0 ? -missed : 0;
 }
 
+// ── 連続日数（アプリ全体。2026-11-07 再設計）──
+// 1日に STREAK_MIN 個以上の習慣を達成した日を「記録した日」と数える（推奨値で採用。変えるときはここだけ）。
+// 今日がまだ基準に届いていない間は、昨日までの連続日数をそのまま見せる（今日は猶予）。
+const STREAK_MIN = 3;
+function dayCount(dateStr) {
+  const log = store.habits.logs[dateStr];
+  if (!log) return 0;
+  const ids = new Set(store.habits.definitions.map(h => h.id));
+  let n = 0;
+  for (const k of Object.keys(log)) if (log[k] && ids.has(k)) n++;
+  return n;
+}
+function appStreak() {
+  const counted = ds => dayCount(ds) >= STREAK_MIN;
+  const todayOk = counted(dateToStr(new Date()));
+  const c = new Date();
+  if (!todayOk) c.setDate(c.getDate() - 1);
+  let current = 0;
+  while (counted(dateToStr(c))) { current++; c.setDate(c.getDate() - 1); }
+  const first = Object.keys(store.habits.logs).sort()[0];
+  let best = 0, run = 0;
+  if (first) {
+    const p = new Date(first + 'T00:00:00');
+    const endStr = dateToStr(new Date());
+    while (dateToStr(p) <= endStr) {
+      if (counted(dateToStr(p))) { run++; if (run > best) best = run; } else run = 0;
+      p.setDate(p.getDate() + 1);
+    }
+  }
+  const dots = [];
+  for (let i = 6; i >= 0; i--) {
+    const q = new Date(); q.setDate(q.getDate() - i);
+    dots.push({ on: counted(dateToStr(q)), today: i === 0 });
+  }
+  return { current, best, todayOk, todayCount: dayCount(todayStr()), dots };
+}
+function renderStreakHero() {
+  const s = appStreak();
+  const need = STREAK_MIN - s.todayCount;
+  const el = document.getElementById('streak-hero');
+  if (el) {
+    el.innerHTML =
+      '<div class="streak-main"><span class="streak-num">' + s.current + '</span><span class="streak-unit">日連続</span></div>'
+      + '<div class="streak-dots">' + s.dots.map(d => '<span class="streak-dot' + (d.on ? ' on' : '') + (d.today ? ' today' : '') + '"></span>').join('') + '</div>'
+      + '<div class="streak-sub"><span>最高 ' + s.best + '日</span><span>1日' + STREAK_MIN + '個以上で記録</span></div>'
+      + '<div class="streak-goal">' + (s.todayOk ? '今日は記録済みです' : '今日はあと' + need + '個で記録できます') + '</div>';
+  }
+  const h = document.getElementById('home-streak');
+  if (h) h.textContent = s.current + '日連続' + (s.todayOk ? '' : '（今日あと' + need + '個）');
+}
+
 function ensureToday() {
   const t = todayStr();
   if (!store.habits.logs[t]) store.habits.logs[t] = {};
@@ -1126,14 +1191,20 @@ function navigate(viewId) {
   document.querySelector(`.nav-item[data-view="${viewId}"]`)?.classList.add('active');
   if (viewId === 'home') renderHome();
   if (viewId === 'habits') renderHabits();
-  if (viewId === 'person') renderPerson();
-  if (viewId === 'lang') renderLang();
+  if (viewId === 'person') { ensurePersonLoaded(); renderPerson(); }
+  if (viewId === 'lang') { ensureLangLoaded(); renderLang(); }
   activateReveal();
 }
+
+// 人物・語学のデータ JSON は、そのタブを初めて開いたときに読む（起動時の通信を減らすため）
+let psLoadStarted = false, lgLoadStarted = false;
+function ensurePersonLoaded() { if (!psLoadStarted) { psLoadStarted = true; loadPerson(); } }
+function ensureLangLoaded() { if (!lgLoadStarted) { lgLoadStarted = true; loadLang(); } }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => navigate(btn.dataset.view));
 });
+document.getElementById('home-streak').addEventListener('click', () => navigate('habits'));
 
 // ── Intersection Observer for reveal ──
 const revealObserver = new IntersectionObserver((entries) => {
@@ -1148,6 +1219,7 @@ function activateReveal() {
 
 // ── Home ──
 function renderHome() {
+  renderStreakHero();
   ensureToday();
   const d = new Date();
   const DAYS = ['日','月','火','水','木','金','土'];
@@ -1201,7 +1273,7 @@ function buildLineChartSVG(data, { fmt, invert, ariaLabel, color = CHART_COLORS.
     const v = invert ? lo + (hi - lo) * frac : hi - (hi - lo) * frac;
     const y = (padT + plotH * frac).toFixed(1);
     grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="rgba(0,0,0,0.10)" stroke-width="1"/>`;
-    grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-family="'Inter',sans-serif" font-size="9" fill="#6B6B6B">${fmt(v)}</text>`;
+    grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-family="-apple-system,'Helvetica Neue',Arial,sans-serif" font-size="9" fill="#6B6B6B">${fmt(v)}</text>`;
   }
 
   const pts = data.map((d, i) => `${xAt(i).toFixed(1)},${yAt(d.value).toFixed(1)}`).join(' ');
@@ -1221,7 +1293,7 @@ function buildLineChartSVG(data, { fmt, invert, ariaLabel, color = CHART_COLORS.
     }
     if (i === 0 || i === n - 1 || (n > 4 && i === Math.floor((n - 1) / 2))) {
       const md = d.date.slice(5).replace('-', '/');
-      xlabels += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-family="'Inter',sans-serif" font-size="9" fill="#6B6B6B">${md}</text>`;
+      xlabels += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-family="-apple-system,'Helvetica Neue',Arial,sans-serif" font-size="9" fill="#6B6B6B">${md}</text>`;
     }
   });
 
@@ -1903,6 +1975,7 @@ function renderHabits() {
     list.appendChild(item);
   });
 
+  renderStreakHero();
   renderHeatmap();
 }
 
@@ -1921,6 +1994,7 @@ function toggleHabit(id, el) {
     streakEl.textContent = s !== 0 ? `${s}日` : '';
     streakEl.classList.toggle('missed', s < 0);
   }
+  renderStreakHero();
   renderHeatmap();
 }
 
@@ -2520,8 +2594,6 @@ function init() {
   activateReveal();
   loadStudyMenu();
   loadWorkoutMenu();
-  loadPerson();
-  loadLang();
 
   const t = todayStr();
   if (store.settings.lastWakeDate !== t) {
