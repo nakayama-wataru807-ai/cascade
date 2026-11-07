@@ -629,6 +629,7 @@ html, body {
 .ps-empty { font-size: 15px; color: var(--ink-mute); line-height: 2; text-align: center; padding: 44px 14px; }
 
 /* ── 語学（1日1動詞・つぶやき・復習）── */
+.lg-moved { display: block; margin: -14px 0 18px; font-size: 12px; color: var(--ink-mute); text-decoration: none; letter-spacing: 0.04em; }
 .lg-tabs { display: flex; gap: 22px; border-bottom: 1px solid var(--line); }
 .lg-tab { padding: 8px 0; font-size: 13px; font-family: var(--font-gothic); background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; color: var(--ink-mute); cursor: pointer; }
 .lg-tab.active { border-bottom-color: var(--accent); color: var(--ink); font-weight: 700; }
@@ -869,6 +870,7 @@ html, body {
     <!-- 語学（1日1動詞・つぶやき・復習） -->
     <section class="view" id="view-lang">
       <h2 class="screen-title">語学</h2>
+      <a class="lg-moved" href="./lang/">語学アプリ（別アプリ）で開く ▸</a>
       <div id="lg-root"></div>
     </section>
   </main>
@@ -2667,6 +2669,15 @@ async function pullBankFromRemote() {
   } catch (e) {}
 }
 setTimeout(pullBankFromRemote, 3000);
+
+// 語学アプリなど別のアプリで保存データを変えたあとに戻ってきたとき、最新を読み直す
+// （古い内容のまま保存して、別アプリの進捗を上書きしないため）。入力中の文字が消えないよう、再描画は習慣・語学のみ。
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;
+  store = loadStore();
+  const v = curView();
+  if (v === 'habits' || v === 'lang') navigate(v);
+});
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});

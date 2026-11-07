@@ -1,4 +1,4 @@
-const CACHE = 'cascade-v13';
+const CACHE = 'cascade-v14';
 const PRECACHE = ['./index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -10,7 +10,8 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      // 同じオリジンの他アプリ（語学・ideas-app など）のキャッシュは消さない。自分の古い版（cascade-*）だけ消す
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('cascade-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -32,6 +33,9 @@ self.addEventListener('fetch', e => {
   // （= cascade 本体のキー）に上書き保存してしまい、オフライン時に cascade が
   // ドリル画面になる。
   if (url.pathname.includes('/kenchiku/') || url.pathname.includes('/fp3/')) return;
+  // 語学アプリ（/lang/・自前の Service Worker）のページは触らない（HTML 分岐で './index.html' を上書きしてしまうため）。
+  // 本体が読む語学データ（/lang/*.json）は、下のデータ JSON の分岐で従来どおり扱う。
+  if (url.pathname.includes('/lang/') && !url.pathname.endsWith('.json')) return;
 
   const isHTML = req.mode === 'navigate'
     || req.destination === 'document'

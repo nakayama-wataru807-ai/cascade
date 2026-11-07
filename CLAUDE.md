@@ -25,6 +25,15 @@ Claude Code 向けの運用メモ。ユーザー向け説明は README.md を参
 
 口座残高は手入力ではなく、PC 側の `General/scripts/bank_balance_update.py` が三井住友の入出金メールから推定し、非公開リポジトリ `personal_sync` の `cascade/state.json` の `bankLog` に今日の日付の1件（`src:'mail'`・`unknown`・`ts` つき）を書く。アプリは起動の3秒後（30分に1回まで）に同期先の `bankLog` だけを取り込み（`pullBankFromRemote`）、ホームの口座残高に「入出金メールから自動計算」と注記する。同じ日付の合流は `ts` が新しい方を採る（`mergeLogs`。手入力にも `ts` が付く。`ts` が無いログは従来どおり端末優先）。基準の残高の置き方・金額不明の扱いは Vault `General/Automation/夜の改善ループ_設計_2026-11-07.md` と `/end` の手順を参照。
 
+## 語学アプリ（`lang/`・2026-11-07 に本体から切り出し。改善カード IC-3 の手順3）
+
+語学は別アプリになった: <https://nakayama-wataru807-ai.github.io/cascade/lang/>。自前の `manifest.json`・`sw.js`（スコープ `/cascade/lang/`）・`icons/` を持ち、ホーム画面に単独で追加できる（約29KB。本体は約115KB）。データは従来どおり `lang/de.json`・`lang/ko.json`（動詞は末尾に足すだけ）。
+
+- **保存**: 本体と同じ localStorage キー `cascade_v1` を共有する。語学アプリが書くのは `store.lang` と、つぶやきの自動チェック（習慣 `h33`）だけ。保存のたびに最新を読み直し（`saveStore`）、他のスライスは触らない。別アプリから戻ったときも読み直す（`visibilitychange`。本体側にも同じ処理を入れた）。
+- **同期**: 語学の進捗だけを `personal_sync/cascade/state.json` に合流して書く（`syncLang`・`mergeLang`）。トークンは本体と共有（`cascade_gh_v1`）。同期先の形式が読めないときは上書きしない。
+- **本体の語学タブ**: 当面は残し、上部に「語学アプリで開く」リンクを置いた。新アプリで問題ないと確認できてから本体のタブを外す（計画の手順6）。それまでは、語学のロジックを直すときは `lang/index.html` と本体の両方に反映する（`lang/index.html` は本体のコードを切り出したもの）。
+- **Service Worker**: 本体の `sw.js` は `/lang/` のページ（HTML）を扱わず、キャッシュの掃除も自分の `cascade-*` だけにした。同じオリジンの `fp3/sw.js`・`kenchiku/sw.js` は、まだ他アプリのキャッシュも消す作りのまま（未対応）。
+
 ## 更新手順
 
 `~/projects/cascade/` を編集 → `git -C ~/projects/cascade push`（SSH 接続済み、GitHub Pages が自動反映、反映1〜3分）。
