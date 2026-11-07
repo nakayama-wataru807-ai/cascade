@@ -318,6 +318,7 @@ html, body {
   padding-top: 14px;
   border-top: 1px solid var(--line);
 }
+.bank-auto { display: block; margin-top: 4px; font-size: 11px; color: var(--ink-mute); }
 .chart-today-line b {
   font-family: var(--font-latin);
   font-weight: 600;
@@ -1062,7 +1063,7 @@ function habitStreak(id) {
 // ── 連続日数（アプリ全体。2026-11-07 再設計）──
 // 1日に STREAK_MIN 個以上の習慣を達成した日を「記録した日」と数える（推奨値で採用。変えるときはここだけ）。
 // 今日がまだ基準に届いていない間は、昨日までの連続日数をそのまま見せる（今日は猶予）。
-const STREAK_MIN = 3;
+const STREAK_MIN = 5;
 function dayCount(dateStr) {
   const log = store.habits.logs[dateStr];
   if (!log) return 0;
@@ -1351,6 +1352,9 @@ function renderBankChart() {
   const todayRec = all.find(b => b.date === t);
   todayLine.innerHTML = todayRec
     ? `今日の口座残高<b>${fmtYen(todayRec.amount)} 円</b>`
+      + (todayRec.src === 'mail'
+        ? `<span class="bank-auto">入出金メールから自動計算${todayRec.unknown ? '（金額不明の入金・送金' + todayRec.unknown + '件は含みません）' : ''}</span>`
+        : '')
     : '今日はまだ口座残高を記録していません';
   if (log.length === 0) {
     container.innerHTML = emptyChartMsg('上の欄に今日の口座残高を入力してください。');
@@ -1543,8 +1547,9 @@ function saveBank() {
   if (isNaN(val) || val < 0) { showToast('正しい口座残高を入力してください'); return; }
   const t = todayStr();
   const ex = store.bankLog.find(b => b.date === t);
-  if (ex) ex.amount = val;
-  else store.bankLog.push({ date: t, amount: val });
+  // ts は「どちらが新しいか」の印。メール自動計算の記録（src=mail）より後の手入力が、同期で負けないようにする
+  if (ex) { ex.amount = val; ex.ts = Date.now(); delete ex.src; delete ex.unknown; }
+  else store.bankLog.push({ date: t, amount: val, ts: Date.now() });
   saveStore();
   input.value = '';
   input.blur();
@@ -1839,7 +1844,13 @@ async function ghApi(method, url, body) {
 function mergeLogs(remote, local, dateKey) {
   const m = new Map();
   (remote || []).forEach(e => e && e[dateKey] && m.set(e[dateKey], e));
-  (local  || []).forEach(e => e && e[dateKey] && m.set(e[dateKey], e));
+  (local  || []).forEach(e => {
+    if (!e || !e[dateKey]) return;
+    const r = m.get(e[dateKey]);
+    // 同じ日付で remote の ts が新しければ remote を採る（口座残高のメール自動更新用）。ts が無い記録は従来どおり local を採る
+    if (r && r.ts && (!e.ts || r.ts > e.ts)) return;
+    m.set(e[dateKey], e);
+  });
   return [...m.values()].sort((a, b) => String(a[dateKey]).localeCompare(String(b[dateKey])));
 }
 function mergeStore(remote, local) {
@@ -2635,6 +2646,27 @@ function loadWorkoutMenu() {
 }
 
 init();
+
+// 口座残高は、PC 側が入出金メールから計算して同期先（personal_sync）に書く。アプリを開いたあと、
+// 同期先の残高だけを取り込む（30分に1回まで。起動の通信を増やさないよう、少し待ってから）。
+async function pullBankFromRemote() {
+  if (!gh.token || !gh.repo || syncInFlight) return;
+  try {
+    const last = Number(localStorage.getItem('cascade_bank_pull') || 0);
+    if (Date.now() - last < 30 * 60 * 1000) return;
+    localStorage.setItem('cascade_bank_pull', String(Date.now()));
+    const cur = await ghApi('GET', 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path);
+    if (!cur || !cur.content) return;
+    const remote = JSON.parse(ghB64dec(cur.content)).store;
+    const merged = mergeLogs(remote.bankLog, store.bankLog, 'date');
+    if (JSON.stringify(merged) !== JSON.stringify(store.bankLog)) {
+      store.bankLog = merged;
+      localStorage.setItem(STORE_KEY, JSON.stringify(store));
+      renderBankChart();
+    }
+  } catch (e) {}
+}
+setTimeout(pullBankFromRemote, 3000);
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
