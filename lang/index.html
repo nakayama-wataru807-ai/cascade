@@ -143,6 +143,14 @@ html, body {
 .lg-link { display: block; margin: 14px 0 4px; background: none; border: none; color: var(--ink-mute); font-size: 12px; font-family: var(--font-gothic); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; padding: 0; }
 .lg-empty { font-size: 14px; color: var(--ink-mute); line-height: 1.9; padding: 2px 0 12px; }
 #lg-root [lang="ko"] { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', var(--font-gothic); }
+.sync-box { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); font-family: var(--font-gothic); font-size: 13px; color: var(--ink-soft); }
+.sync-box summary { cursor: pointer; font-weight: 700; color: var(--ink-mute); font-size: 12px; letter-spacing: 0.04em; }
+.sync-note { margin: 10px 0 12px; font-size: 12px; line-height: 1.7; color: var(--ink-mute); }
+.sync-box label { display: block; margin: 10px 0 0; font-size: 12px; color: var(--ink-mute); }
+.sync-box input { display: block; width: 100%; margin-top: 4px; padding: 10px 12px; font-size: 16px; border: 1px solid var(--line-strong); border-radius: var(--r2); background: var(--bg); color: var(--ink); font-family: var(--font-latin); }
+.sync-actions { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.sync-actions button { padding: 10px 16px; background: var(--ink); color: var(--bg); border: none; border-radius: var(--r2); font-family: var(--font-gothic); font-size: 14px; font-weight: 700; cursor: pointer; }
+#sync-state { font-size: 12px; color: var(--ink-mute); }
 </style>
 </head>
 <body>
@@ -152,6 +160,14 @@ html, body {
     <a class="back" href="../">Cascade ▸</a>
   </div>
   <div id="lg-root"></div>
+  <details class="sync-box" id="sync-box">
+    <summary>同期の設定</summary>
+    <p class="sync-note">語学の進捗だけを、非公開のリポジトリに保存し、読み込みます（Cascade 本体と同じ設定）。別の端末や、ホーム画面に追加した直後は、ここにトークンを入れると、これまでの進捗が読み込まれます。</p>
+    <label>リポジトリ<input id="sync-repo" autocomplete="off" autocapitalize="off"></label>
+    <label>ファイルの場所<input id="sync-path" autocomplete="off" autocapitalize="off"></label>
+    <label>トークン<input id="sync-token" type="password" autocomplete="off"></label>
+    <div class="sync-actions"><button id="sync-save" type="button">保存して同期</button><span id="sync-state"></span></div>
+  </details>
 </div>
 <div class="toast" id="toast"></div>
 <script>
@@ -236,7 +252,7 @@ function scheduleSync() {
 }
 async function syncLang() {
   const g = loadGh();
-  if (!g.token || syncInFlight) return;
+  if (!g.token || syncInFlight) return false;
   syncInFlight = true;
   const url = 'https://api.github.com/repos/' + g.repo + '/contents/' + g.path;
   try {
@@ -244,6 +260,7 @@ async function syncLang() {
     let payload = null;
     if (cur && cur.content) { try { payload = JSON.parse(ghB64dec(cur.content)); } catch (e) {} }
     if (!payload || !payload.store) throw new Error('同期先の形式が読めない');   // 読めないときは上書きしない
+    const before = JSON.stringify(store.lang);
     const merged = mergeLang(payload.store.lang, store.lang);
     payload.store.lang = merged;                // 同期先の他のスライスは、そのまま残す
     payload.synced = new Date().toISOString();
@@ -256,11 +273,28 @@ async function syncLang() {
     latest.lang = merged;
     store = latest;
     localStorage.setItem(STORE_KEY, JSON.stringify(latest));
+    g.last = new Date().toISOString();          // 最終同期の時刻（設定は本体と同じキー）
+    localStorage.setItem(GH_KEY, JSON.stringify(g));
+    renderSyncState();
+    if (JSON.stringify(merged) !== before) renderLang();   // 同期先から進捗が入ってきたときだけ描き直す
+    return true;
   } catch (err) {
     syncCooldownUntil = Date.now() + 10 * 60 * 1000;   // 失敗が続くときは10分止める
+    return false;
   } finally {
     syncInFlight = false;
   }
+}
+
+// ── 同期の設定（iPhone では、ホーム画面のアプリごとに保存領域が別になるため、このアプリ自身に設定を持つ）──
+function renderSyncState() {
+  const g = loadGh();
+  const set = id => document.getElementById(id);
+  if (!set('sync-repo')) return;
+  if (document.activeElement !== set('sync-repo')) set('sync-repo').value = g.repo;
+  if (document.activeElement !== set('sync-path')) set('sync-path').value = g.path;
+  set('sync-token').placeholder = g.token ? '（設定済み。変えるときだけ入力）' : 'Cascade 本体と同じトークン';
+  set('sync-state').textContent = g.token ? ('設定済み' + (g.last ? ' ・最終 ' + new Date(g.last).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) : '')) : '未設定';
 }
 
 // ── 語学（1日1動詞・つぶやき・復習）──
@@ -584,6 +618,29 @@ if ('speechSynthesis' in window && speechSynthesis.addEventListener) {
 ensureToday();
 loadLang();
 renderLang();
+renderSyncState();
+document.getElementById('sync-save').addEventListener('click', async () => {
+  const g = loadGh();
+  g.repo = document.getElementById('sync-repo').value.trim() || GH_DEFAULT.repo;
+  g.path = document.getElementById('sync-path').value.trim() || GH_DEFAULT.path;
+  const tk = document.getElementById('sync-token').value.trim();
+  if (tk) g.token = tk;
+  g.auto = true;
+  localStorage.setItem(GH_KEY, JSON.stringify(g));
+  document.getElementById('sync-token').value = '';
+  showToast('同期しています…');
+  const ok = await syncLang();
+  showToast(ok ? '同期しました' : '同期に失敗しました。トークンを確かめてください');
+  renderSyncState();
+});
+// 設定があれば、起動の少しあとに同期先の進捗を取り込む（起動の通信を増やさないよう、30分に1回まで）
+setTimeout(() => {
+  if (!loadGh().token) return;
+  const last = Number(localStorage.getItem('lang_pull') || 0);
+  if (Date.now() - last < 30 * 60 * 1000) return;
+  localStorage.setItem('lang_pull', String(Date.now()));
+  syncLang();
+}, 2000);
 // 別のアプリ（Cascade 本体など）で変更したあとに戻ってきたとき、最新の保存データを読み直す
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) { store = loadStore(); ensureToday(); renderLang(); }

@@ -30,7 +30,7 @@ Claude Code 向けの運用メモ。ユーザー向け説明は README.md を参
 語学は別アプリになった: <https://nakayama-wataru807-ai.github.io/cascade/lang/>。自前の `manifest.json`・`sw.js`（スコープ `/cascade/lang/`）・`icons/` を持ち、ホーム画面に単独で追加できる（約29KB。本体は約115KB）。データは従来どおり `lang/de.json`・`lang/ko.json`（動詞は末尾に足すだけ）。
 
 - **保存**: 本体と同じ localStorage キー `cascade_v1` を共有する。語学アプリが書くのは `store.lang` と、つぶやきの自動チェック（習慣 `h33`）だけ。保存のたびに最新を読み直し（`saveStore`）、他のスライスは触らない。別アプリから戻ったときも読み直す（`visibilitychange`。本体側にも同じ処理を入れた）。
-- **同期**: 語学の進捗だけを `personal_sync/cascade/state.json` に合流して書く（`syncLang`・`mergeLang`）。トークンは本体と共有（`cascade_gh_v1`）。同期先の形式が読めないときは上書きしない。
+- **同期**: 語学の進捗だけを `personal_sync/cascade/state.json` に合流して書く（`syncLang`・`mergeLang`）。同期先の形式が読めないときは上書きしない。**iPhone では、ホーム画面に追加したアプリごとに保存領域が別になる可能性が高い**（未検証）ため、語学アプリ自身に「同期の設定」（リポジトリ・ファイルの場所・トークン。キーは本体と同じ `cascade_gh_v1`）を持たせ、設定があれば起動2秒後（30分に1回まで）に同期先の進捗を取り込む。ホーム画面に追加した直後は、ここにトークンを入れて進捗を取り込む。**1アプリ1機能の分割では、アプリ間の保存共有を当てにせず、同期先（personal_sync）を共通の正本にする**（以降の切り出しも同じ方針）。
 - **本体の語学タブ**: 当面は残し、上部に「語学アプリで開く」リンクを置いた。新アプリで問題ないと確認できてから本体のタブを外す（計画の手順6）。それまでは、語学のロジックを直すときは `lang/index.html` と本体の両方に反映する（`lang/index.html` は本体のコードを切り出したもの）。
 - **Service Worker**: 本体の `sw.js` は `/lang/` のページ（HTML）を扱わず、キャッシュの掃除も自分の `cascade-*` だけにした。同じオリジンの `fp3/sw.js`・`kenchiku/sw.js` は、まだ他アプリのキャッシュも消す作りのまま（未対応）。
 
