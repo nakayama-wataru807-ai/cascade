@@ -1819,8 +1819,8 @@ function mergeStore(remote, local) {
   out.habits = out.habits || { definitions: DEFAULT_HABITS, logs: {} };
   const rl = (remote.habits && remote.habits.logs) || {};
   out.habits.logs = Object.assign({}, rl, (local.habits && local.habits.logs) || {});
-  // 人物研究のメモは月単位でローカルを優先してマージ
-  out.personStudy = Object.assign({}, remote.personStudy || {}, local.personStudy || {});
+  // 人物研究のメモは、月ごとに開いた日・日ごとのメモ・全体メモを合流（人物アプリ person/ と同じ規則）
+  out.personStudy = mergePerson(remote.personStudy, local.personStudy);
   // 語学の進捗は動詞ごと・日付ごとにマージ（別端末の進捗を上書きで失わない）
   out.lang = mergeLang(remote.lang, local.lang);
   return out;
@@ -2235,6 +2235,27 @@ function psDl(txt) {
   a.href = url; a.download = 'person-study-notes-' + (PS.data ? PS.data.month : '') + '.md';
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// ── 人物研究のメモの合流（2026-11-08 に別アプリ person/ へ切り出し。person/index.html の mergePerson と同じ）──
+function mergePerson(remote, local) {
+  const out = JSON.parse(JSON.stringify(local || {}));
+  for (const m of Object.keys(remote || {})) {
+    const r = remote[m];
+    if (!r || typeof r !== 'object') continue;
+    const l = out[m];
+    if (!l) { out[m] = r; continue; }
+    l.opened = Array.from(new Set([].concat(l.opened || [], r.opened || []))).sort((a, b) => a - b);
+    l.notes = l.notes || {};
+    for (const d of Object.keys(r.notes || {})) {
+      const have = l.notes[d] = l.notes[d] || [];
+      const seen = new Set(have.map(n => n.ts + '\n' + n.text));
+      for (const n of r.notes[d]) if (!seen.has(n.ts + '\n' + n.text)) have.push(n);
+      have.sort((a, b) => ((a.ts || '') < (b.ts || '') ? -1 : 1));
+    }
+    if (!l.monthMemo) l.monthMemo = r.monthMemo || '';
+  }
+  return out;
 }
 
 // ── 語学（2026-11-07 に別アプリ lang/ へ切り出し済み）──

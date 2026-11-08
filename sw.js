@@ -1,4 +1,4 @@
-const CACHE = 'cascade-v14';
+const CACHE = 'cascade-v15';
 const PRECACHE = ['./index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -36,6 +36,8 @@ self.addEventListener('fetch', e => {
   // 語学アプリ（/lang/・自前の Service Worker）のページは触らない（HTML 分岐で './index.html' を上書きしてしまうため）。
   // 本体が読む語学データ（/lang/*.json）は、下のデータ JSON の分岐で従来どおり扱う。
   if (url.pathname.includes('/lang/') && !url.pathname.endsWith('.json')) return;
+  // 人物アプリ（/person/・自前の Service Worker）も同様。人物データ（/person-study/）は別のパスなので、下の分岐で従来どおり扱う。
+  if (url.pathname.includes('/person/')) return;
 
   const isHTML = req.mode === 'navigate'
     || req.destination === 'document'

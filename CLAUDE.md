@@ -34,6 +34,15 @@ Claude Code 向けの運用メモ。ユーザー向け説明は README.md を参
 - **本体の語学タブ（撤去済み・2026-11-08）**: 本体から語学の画面・コード・CSS を外し、下部ナビの「語学 ↗」を `./lang/` へのリンクにした。本体に残したのは、同期で `store.lang` を壊さないための `mergeLang` と、保存データの整形（`migrate`）だけ。語学のロジックを直すときは `lang/index.html` だけを直す。
 - **Service Worker**: 本体の `sw.js` は `/lang/` のページ（HTML）を扱わず、キャッシュの掃除も自分の `cascade-*` だけにした。同じオリジンの `fp3/sw.js`・`kenchiku/sw.js` は、まだ他アプリのキャッシュも消す作りのまま（未対応）。
 
+## 人物アプリ（`person/`・2026-11-08 に本体から切り出し。改善カード IC-3 の手順4）
+
+人物研究は別アプリになった: <https://nakayama-wataru807-ai.github.io/cascade/person/>。語学アプリと同じ作り（自前の `manifest.json`・`sw.js`（スコープ `/cascade/person/`、キャッシュ `person-v1`）・`icons/`・「同期の設定」）。月次データ `person-study/<YYYY-MM>.json` は従来の場所のまま（`/person` スキルの出力先は変えない）で、アプリは `../person-study/` から読む。
+
+- **保存**: `store.personStudy` と、メモ保存の自動チェック（習慣 `h31`）だけを書く。保存のたびに最新を読み直し、`mergePerson` で他アプリのメモを失わないようにして書く。
+- **同期**: 人物メモの合流は月ごとに、開いた日の和集合・日ごとのメモ（`ts`＋本文で重複排除）・全体メモ（空のとき取り込む）。本体の `mergeStore` も同じ `mergePerson` を使う（以前は月単位の置き換えで、別端末のメモが消えうた）。同期の設定は語学アプリと同じ方針で、アプリ自身が持つ（キー `cascade_gh_v1`）。
+- **本体の人物タブ**: 動作確認のあと撤去する（撤去したら、この節に日付を書く）。
+- **本体の `sw.js`**: `/person/` のページに触らない（`cascade-v15`）。
+
 ## 更新手順
 
 `~/projects/cascade/` を編集 → `git -C ~/projects/cascade push`（SSH 接続済み、GitHub Pages が自動反映、反映1〜3分）。
