@@ -19,7 +19,7 @@ Claude Code 向けの運用メモ。ユーザー向け説明は README.md を参
 
 ## 起動を軽くする工夫（2026-11-07）
 
-人物・語学のデータ JSON は、そのタブを初めて開いたときに読む（`ensurePersonLoaded`・`ensureLangLoaded`）。起動時に先読みするのは、ホームの「本日のメニュー」に使う `schedule.json`・`workout_schedule.json` のみ。ウェブフォントは使わない。改修の方針（1アプリ1機能への分割）は Vault `General/Cascade/` と Notion「改善カード」を参照。
+起動時に先読みするのは、ホームの「本日のメニュー」に使う `schedule.json`・`workout_schedule.json` のみ。人物・語学のデータは、それぞれ別アプリ（`person/`・`lang/`）が自分で読む。ウェブフォントは使わない。改修の方針（1アプリ1機能への分割）は Vault `General/Cascade/` と Notion「改善カード」を参照。
 
 ## 口座残高の自動更新（2026-11-07 導入。改善カード IC-10）
 
