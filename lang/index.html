@@ -181,7 +181,9 @@ function loadStore() {
   return {};
 }
 let store = loadStore();
-function todayStr() { return dateToStr(new Date()); }
+// 1日の切り替えは午前 5 時（本体 index.html の appNow と同じ。変えるときは 3 か所そろえる）
+function appNow() { return new Date(Date.now() - 5 * 3600 * 1000); }
+function todayStr() { return dateToStr(appNow()); }
 function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }

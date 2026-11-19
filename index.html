@@ -795,14 +795,6 @@ a.nav-item { text-decoration: none; }
       <span class="nav-icon">◎</span>
       <span>習慣</span>
     </button>
-    <a class="nav-item" href="./person/">
-      <span class="nav-icon">☖</span>
-      <span>人物 ↗</span>
-    </a>
-    <a class="nav-item" href="./lang/">
-      <span class="nav-icon">言</span>
-      <span>語学 ↗</span>
-    </a>
   </nav>
 </div>
 
@@ -935,8 +927,14 @@ function saveStore() {
 let store = loadStore();
 
 // ── Date helpers ──
+// 1日の切り替えは 0 時ではなく午前 5 時（2026-11-19 本人指示。夜中の記録をその日のぶんにするため）。
+// 「今日」を決める処理はすべて appNow() を使う。実時刻（起床の打刻・同期の時刻など）は new Date() のまま。
+// lang/index.html・person/index.html にも同じ関数があるので、変えるときは 3 か所そろえる。
+const DAY_START_HOUR = 5;
+function appNow() { return new Date(Date.now() - DAY_START_HOUR * 3600 * 1000); }
+
 function todayStr() {
-  const d = new Date();
+  const d = appNow();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
@@ -948,7 +946,7 @@ function dateToStr(d) {
 // （今日はまだ猶予扱い。記録開始以前まで遡らないよう、最古の記録日を下限にする）
 function habitStreak(id) {
   const logs = store.habits.logs;
-  const d = new Date();
+  const d = appNow();
   const todayDone = !!(logs[dateToStr(d)] && logs[dateToStr(d)][id]);
 
   if (todayDone) {
@@ -986,8 +984,8 @@ function dayCount(dateStr) {
 }
 function appStreak() {
   const counted = ds => dayCount(ds) >= STREAK_MIN;
-  const todayOk = counted(dateToStr(new Date()));
-  const c = new Date();
+  const todayOk = counted(dateToStr(appNow()));
+  const c = appNow();
   if (!todayOk) c.setDate(c.getDate() - 1);
   let current = 0;
   while (counted(dateToStr(c))) { current++; c.setDate(c.getDate() - 1); }
@@ -995,7 +993,7 @@ function appStreak() {
   let best = 0, run = 0;
   if (first) {
     const p = new Date(first + 'T00:00:00');
-    const endStr = dateToStr(new Date());
+    const endStr = dateToStr(appNow());
     while (dateToStr(p) <= endStr) {
       if (counted(dateToStr(p))) { run++; if (run > best) best = run; } else run = 0;
       p.setDate(p.getDate() + 1);
@@ -1003,7 +1001,7 @@ function appStreak() {
   }
   const dots = [];
   for (let i = 6; i >= 0; i--) {
-    const q = new Date(); q.setDate(q.getDate() - i);
+    const q = appNow(); q.setDate(q.getDate() - i);
     dots.push({ on: counted(dateToStr(q)), today: i === 0 });
   }
   return { current, best, todayOk, todayCount: dayCount(todayStr()), dots };
@@ -1030,7 +1028,7 @@ function ensureToday() {
 
 function getWeekDates() {
   const dates = [];
-  const today = new Date();
+  const today = appNow();
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
@@ -1057,7 +1055,7 @@ let wakeClockTimer = null;
 function showWakeGate() {
   const gate = document.getElementById('morning-gate');
   gate.classList.add('open');
-  const d = new Date();
+  const d = appNow();
   const DAYS = ['日','月','火','水','木','金','土'];
   document.getElementById('wake-date').textContent =
     `${d.getMonth()+1}月${d.getDate()}日（${DAYS[d.getDay()]}）`;
@@ -1127,7 +1125,7 @@ function activateReveal() {
 function renderHome() {
   renderStreakHero();
   ensureToday();
-  const d = new Date();
+  const d = appNow();
   const DAYS = ['日','月','火','水','木','金','土'];
   document.getElementById('home-date').textContent = `${d.getMonth()+1}月${d.getDate()}日`;
   document.getElementById('home-weekday').textContent = `${DAYS[d.getDay()]}曜日 — ${d.getFullYear()}`;

@@ -200,7 +200,9 @@ function loadStore() {
   return {};
 }
 let store = loadStore();
-function todayStr() { return dateToStr(new Date()); }
+// 1日の切り替えは午前 5 時（本体 index.html の appNow と同じ。変えるときは 3 か所そろえる）
+function appNow() { return new Date(Date.now() - 5 * 3600 * 1000); }
+function todayStr() { return dateToStr(appNow()); }
 function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
@@ -343,7 +345,7 @@ const PS = { data: null, month: null, tab: 'today', tried: false, openDay: null 
 
 const PS_HABIT = 'h31';    // メモ保存で自動チェックする習慣（人物研究）
 function psMonth() {
-  const d = new Date();
+  const d = appNow();
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
 }
 function psSlot() {
@@ -377,7 +379,7 @@ function renderPerson() {
     root.innerHTML = '<div class="ps-empty">今月の人物研究はまだ準備中です。<br>準備ができるとここに毎日1トピックずつ届きます。</div>';
     return;
   }
-  const today = new Date().getDate();
+  const today = appNow().getDate();
   const total = d.topics.length;
   const doneCount = psSlot().opened.length;
 
@@ -465,7 +467,7 @@ function psWireMemo(day) {
 function psRenderBody() {
   const body = document.getElementById('ps-body');
   const d = PS.data;
-  const today = new Date().getDate();
+  const today = appNow().getDate();
   const total = d.topics.length;
 
   if (PS.tab === 'today') {

@@ -2,7 +2,7 @@
 // ページとデータ JSON は通信優先（新しい動詞・新しい版をすぐ反映。オフラインならキャッシュ）。
 // アイコンなどは、キャッシュにあればそれを返す。
 // 同じオリジンの他アプリ（Cascade・fp3・kenchiku・ideas-app）のキャッシュは消さない。
-const CACHE = 'person-v1';
+const CACHE = 'person-v2';
 const PRECACHE = ['./', './index.html', './manifest.json', './icons/icon-192.png'];
 
 self.addEventListener('install', e => {
