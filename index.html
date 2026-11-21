@@ -10,6 +10,7 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Cascade</title>
 <style>
+#work-card[hidden]{display:none !important}
 :root {
   /* ── モノクロ基調（白／インク／グレー1色）＋アクセント1色 ── */
   --bg: #FFFFFF;
@@ -674,7 +675,7 @@ a.nav-item { text-decoration: none; }
         <div class="chart-today-line" id="departure-today-line"></div>
       </div>
 
-      <div class="card reveal" id="work-card">
+      <div class="card reveal" id="work-card" hidden>
         <div class="label" style="margin-bottom:14px">作業時間 — 全記録</div>
         <div class="weight-input-row">
           <input type="number" id="work-input-h" class="weight-input hm-input" placeholder="0" min="0" max="23" inputmode="numeric" enterkeyhint="next" autocomplete="off">
@@ -817,7 +818,6 @@ const DEFAULT_HABITS = [
   {id:'h21',label:'薬服用',icon:'💊'},
   {id:'h22',label:'プロテイン',icon:'🥤'},
   {id:'h23',label:'朝シャワー',icon:'🚿'},
-  {id:'h33',label:'外国語独り言',icon:'🗣️'},
   {id:'h34',label:'英語シャドーイング',icon:'🎤'},
   {id:'h38',label:'ドイツ語シャドーイング',icon:'🎤'},
   {id:'h39',label:'韓国語シャドーイング',icon:'🎤'},
@@ -829,7 +829,6 @@ const DEFAULT_HABITS = [
   {id:'h17',label:'Vlog',icon:'🎥'},
   {id:'h31',label:'人物研究',icon:'☖'},
   {id:'h18',label:'3Dプリント',icon:'🖨️'},
-  {id:'h14',label:'Pingo',icon:'🎲'},
   {id:'h20',label:'FP',icon:'💰'},
   {id:'h19',label:'建築士勉強',icon:'📐'},
   {id:'h9',label:'建築士アプリ',icon:'📱'},
