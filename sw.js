@@ -1,4 +1,4 @@
-const CACHE = 'cascade-v17';
+const CACHE = 'cascade-v18';
 const PRECACHE = ['./index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
